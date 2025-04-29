@@ -18,12 +18,12 @@
    pip freeze > requirements.txt
    ```
 
-2. **Initialize Django Project**
+2. **Initialize Django Project** DONE
    ```bash
    django-admin startproject entraide_backend .
    ```
 
-3. **Create Core Apps**
+3. **Create Core Apps** DONE
    ```bash
    python manage.py startapp accounts
    python manage.py startapp centers
