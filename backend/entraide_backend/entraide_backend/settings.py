@@ -64,6 +64,8 @@ INSTALLED_APPS = [
     'students',  # students app
     'exams',  # exams app
     'api',  # API app
+    'attendance',  # attendance app
+    'teachers',  # teachers app
     
 ]
 
@@ -188,10 +190,18 @@ REST_FRAMEWORK = {
 
 # JWT settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
+
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+]
 
 LANGUAGES = [
     ('en', _('English')),
