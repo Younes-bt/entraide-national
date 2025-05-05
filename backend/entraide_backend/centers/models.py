@@ -82,7 +82,7 @@ class Center(models.Model):
     # management fields
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
-    supervisor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='supervised_associations', null=True, blank=True)
+    supervisor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='supervised_centers', null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

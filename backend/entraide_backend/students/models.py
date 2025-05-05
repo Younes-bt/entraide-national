@@ -7,7 +7,7 @@ from programs.models import TrainingCourse, TrainingPrograme
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
     exam_id = models.CharField(max_length=20, unique=True)
-    center_id = models.CharField(max_length=20, blank=True, null=True)  # Center ID
+    center_code = models.CharField(max_length=20, blank=True, null=True)  # Center ID
 
 
     center = models.ForeignKey(Center, on_delete=models.CASCADE, related_name='students')

@@ -20,6 +20,7 @@ from django.utils.translation import gettext_lazy as _
 # Load environment variables from .env file
 load_dotenv()
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -52,19 +53,22 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',  # added CORS headers support
     'rest_framework_simplejwt',  # JWT authentication
+    'rest_framework_simplejwt.token_blacklist',  # JWT token blacklist for logout
     'cloudinary',  # for image uploads
     'cloudinary_storage',  # for image storage
     'django.contrib.postgres',  # added for PostgreSQL support
+    'drf_yasg',  # API documentation
 
     # local apps
     'accounts',  # user accounts app
-    'centers',  # centers app
-    'associations',  # associations app
-    'programs', # programs app
-    'students',  # students app
-    'exams',  # exams app
     'api',  # API app
+    'associations',  # associations app
     'attendance',  # attendance app
+    'centers',  # centers app
+    'exams',  # exams app
+    'programs', # programs app
+    'schedule',  # schedule app
+    'students',  # students app
     'teachers',  # teachers app
     
 ]
@@ -109,11 +113,11 @@ WSGI_APPLICATION = 'entraide_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+        'NAME': os.getenv('DB_NAME', 'entraide_db'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -193,9 +197,28 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
 
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
 }
 
 AUTHENTICATION_BACKENDS = [

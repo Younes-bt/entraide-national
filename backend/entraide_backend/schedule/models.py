@@ -1,5 +1,6 @@
 from django.db import models
 from centers.models import Room, Group
+from programs.models import TrainingCourse
 
 # Create your models here.
 
@@ -16,7 +17,7 @@ class Schedule_session(models.Model):
     ])
     start_time = models.TimeField()
     end_time = models.TimeField()
-    training_course = models.ForeignKey('TrainingCourse', on_delete=models.CASCADE, related_name='schedules')
+    training_course = models.ForeignKey(TrainingCourse, on_delete=models.CASCADE, related_name='schedules')
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='schedules', blank=True, null=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='schedules', blank=True, null=True)
     
