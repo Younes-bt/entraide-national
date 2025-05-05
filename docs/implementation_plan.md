@@ -299,7 +299,7 @@
            return f"{self.student.user.get_full_name()} - {self.course.program.name}"
    ```
 
-5. **Exam Models**
+5. **Exam Models** DONE
    ```python
    # filepath: exams/models.py
    from django.db import models

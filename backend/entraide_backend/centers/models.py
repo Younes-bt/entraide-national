@@ -95,3 +95,21 @@ class Center(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField()
+    center = models.ForeignKey(Center, on_delete=models.CASCADE, related_name='groups')
+
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Group'
+        verbose_name_plural = 'Groups'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name

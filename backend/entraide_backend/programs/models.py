@@ -13,7 +13,6 @@ class TrainingPrograme(models.Model):
     def __str__(self):
         return self.name
 
-    
 
 class AnnualCourseDistribution(models.Model):
     programe = models.ForeignKey(TrainingPrograme, on_delete=models.CASCADE, related_name='annual_distributions')
