@@ -186,7 +186,7 @@
             return f'{self.first_name} {self.last_name} - ({self.get_role_display()})'
    ```
 
-2. **Core Models**
+2. **Core Models** DONE
    ```python DONE
    # filepath: associations/models.py
    from django.db import models
@@ -263,7 +263,7 @@
            return f"{self.program.name} at {self.center.name}"
    ```
 
-4. **Student Models**
+4. **Student Models** DONE
    ```python
    # filepath: students/models.py
    from django.db import models
@@ -305,39 +305,84 @@
    from django.db import models
    from programs.models import TrainingCourse
    from students.models import Student, Enrollment
+   from accounts.models import User
+   from django.contrib.postgres.fields import JSONField
+
+   class Question(models.Model):
+       training = models.ForeignKey('programs.TrainingProgram', on_delete=models.CASCADE, related_name='questions')
+       week = models.ForeignKey('programs.TrainingProgramWeek', on_delete=models.CASCADE, related_name='questions', null=True, blank=True)
+       TERM_CHOICES = [
+           ('term1', 'First Term'),
+           ('term2', 'Second Term'),
+       ]
+       term = models.CharField(max_length=10, choices=TERM_CHOICES)
+       TYPE_CHOICES = [
+           ('Theory', 'Theory'),
+           ('Practical', 'Practical'),
+       ]
+       type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+       text = models.TextField()
+       correct_answer = models.CharField(max_length=255)
+       options = JSONField()  # Stores multiple choice options
+       points = models.PositiveIntegerField(default=1)
+       added_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_questions')
+       created_at = models.DateTimeField(auto_now_add=True)
+       edited_at = models.DateTimeField(auto_now=True)
+       
+       def __str__(self):
+           return f"{self.training.name} - {self.get_term_display()} - {self.get_type_display()} - {self.text[:50]}"
 
    class Exam(models.Model):
-       course = models.ForeignKey(TrainingCourse, on_delete=models.CASCADE, related_name='exams')
-       name = models.CharField(max_length=255)
-       date = models.DateField()
-       TYPE_CHOICES = [
-           ('midterm', 'Midterm'),
-           ('final', 'Final'),
+       EXAM_TYPE_CHOICES = [
+           ('term1_theory', 'First Term Theory'),
+           ('term1_practical', 'First Term Practical'),
+           ('term2_theory', 'Second Term Theory'),
+           ('term2_practical', 'Second Term Practical'),
        ]
-       exam_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
-       passing_score = models.DecimalField(max_digits=5, decimal_places=2)
-       
+       exam_type = models.CharField(max_length=20, choices=EXAM_TYPE_CHOICES)
+       student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='exams')
+       training = models.ForeignKey('programs.TrainingProgram', on_delete=models.CASCADE, related_name='exams')
+       questions = models.ManyToManyField(Question, related_name='exams')
+       score = models.IntegerField(default=0)
        created_at = models.DateTimeField(auto_now_add=True)
-       updated_at = models.DateTimeField(auto_now=True)
+       edited_at = models.DateTimeField(auto_now=True)
        
        def __str__(self):
-           return f"{self.name} - {self.course.program.name}"
+           return f"{self.get_exam_type_display()} - {self.student.get_full_name()} - {self.training.name}"
+           
+       def calculate_score(self):
+           """Calculate the total score based on submitted answers"""
+           submissions = self.submissions.all()
+           total_points = sum(submission.points for submission in submissions)
+           self.score = total_points
+           self.save()
+           return total_points
 
-   class ExamResult(models.Model):
-       exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='results')
-       enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE, related_name='exam_results')
-       score = models.DecimalField(max_digits=5, decimal_places=2)
-       passed = models.BooleanField(default=False)
-       comments = models.TextField(blank=True)
-       
+   class Submission(models.Model):
+       student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='submissions')
+       exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='submissions')
+       question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='submissions')
+       student_answer = JSONField()  # Stores student's selected answers
+       points = models.PositiveIntegerField(default=0)  # Points earned for this question
        created_at = models.DateTimeField(auto_now_add=True)
-       updated_at = models.DateTimeField(auto_now=True)
+       edited_at = models.DateTimeField(auto_now=True)
        
        class Meta:
-           unique_together = ['exam', 'enrollment']
+           unique_together = ['exam', 'question', 'student']
            
        def __str__(self):
-           return f"{self.enrollment.student.user.get_full_name()} - {self.exam.name}"
+           return f"{self.student.get_full_name()} - {self.question.text[:30]}"
+           
+       def check_answer(self):
+           """Verify if the student answer matches the correct answer and assign points"""
+           # Logic to check answers and assign points
+           # This would depend on question type (multiple choice, single choice, etc.)
+           if str(self.student_answer) == str(self.question.correct_answer):
+               self.points = self.question.points
+           else:
+               self.points = 0
+           self.save()
+           return self.points
    ```
 
 6. **Attendance Models**
@@ -1723,8 +1768,6 @@ SIMPLE_JWT = {
                          onCheckedChange={() => handleStatusChange(record.enrollment_id, 'late')}
                        />
                      </TableCell>
-                     <TableCell>
-                     ```markdown name=docs/implementation_plan.md
                      <TableCell>
                        <Checkbox
                          checked={record.status === 'excused'}
@@ -3418,8 +3461,6 @@ SIMPLE_JWT = {
      return (
        <div className="space-y-6">
          <div>
-         ```markdown name=docs/implementation_plan.md
-         <div>
            <h1 className="text-2xl font-bold">{t('feedback.title')}</h1>
            <p className="text-gray-600">{t('feedback.description')}</p>
          </div>
@@ -4509,4 +4550,3 @@ This comprehensive plan covers all aspects of developing the enhanced Entraide N
 Each day has clear deliverables, and the architecture is designed to accommodate future scaling. The database design captures the complex relationships between entities, and the role-based access control ensures proper security throughout the system.
 
 The enhanced features address the complete lifecycle of training program management, from enrollment and attendance to performance tracking and analytics, making this a truly comprehensive solution for Entraide National's needs.
-```
