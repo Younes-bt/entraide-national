@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 from .serializers import UserSerializer, UserProfileSerializer
+from api.permissions import IsAdmin, IsCenterSupervisor, IsAssociationSupervisor, IsTrainer, IsStudent, IsAdminOrCenterSupervisor
 
 User = get_user_model()
 
@@ -49,7 +50,13 @@ class UserViewSet(viewsets.ModelViewSet):
             list: List of permission classes based on the current action
         """
         if self.action == 'create' or self.action == 'register':
-            return [AllowAny()]
+            return [IsAdminOrCenterSupervisor()]
+        elif self.action in ['update', 'partial_update', 'destroy']:
+            return [IsAdminOrCenterSupervisor()]
+        elif self.action in ['me', 'profile', 'change_password']:
+            return [IsAuthenticated()]
+        elif self.action == 'logout':
+            return [IsAuthenticated()]
         return super().get_permissions()
     
     def get_serializer_class(self):
