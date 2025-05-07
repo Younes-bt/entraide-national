@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',  # for image storage
     'django.contrib.postgres',  # added for PostgreSQL support
     'drf_yasg',  # API documentation
+    'django_filters',  # for filtering
 
     # local apps
     'accounts',  # user accounts app

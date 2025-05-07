@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { LogOut, Building, Library, Users, UserCog, GraduationCap, BookUser, X } from 'lucide-react'; // Added X icon
+import { LogOut, Building, Library, Users, UserCog, GraduationCap, BookUser, X, LayoutDashboard, UsersRound } from 'lucide-react'; // Added LayoutDashboard and UsersRound icons
 import { LanguageSwitcher } from './language-switcher';
 import { ThemeToggleButton } from './ThemeToggleButton';
 import { cn } from "@/lib/utils"; // Assuming you have this from shadcn setup for class merging
@@ -29,14 +29,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setIsMobileOpen }) => {
   // Define sidebar links based on user role (for admin)
   // TODO: Adapt links based on actual user role if Sidebar becomes generic
   const navLinks = [
-    { href: '/admin/centers', label: 'Centers', icon: Building },
-    { href: '/admin/associations', label: 'Associations', icon: Library },
-    // { href: '/admin/trainings', label: 'Trainings', icon: BookUser }, // Placeholder
-    { href: '/admin/trainers', label: 'Trainers', icon: UserCog },
-    { href: '/admin/students', label: 'Students', icon: GraduationCap },
+    { href: '/admin', label: 'sidebar.dashboard', icon: LayoutDashboard },
+    { href: '/admin/centers', label: 'sidebar.centers', icon: Building },
+    { href: '/admin/associations', label: 'sidebar.associations', icon: Library },
+    { href: '/admin/supervisors', label: 'sidebar.supervisors', icon: UsersRound },
+    { href: '/admin/trainers', label: 'sidebar.trainers', icon: UserCog },
+    { href: '/admin/students', label: 'sidebar.students', icon: GraduationCap },
   ];
 
-  const isActive = (path: string) => location.pathname.startsWith(path);
+  const isActive = (path: string) => {
+    if (path === '/admin') {
+      return location.pathname === '/admin' || location.pathname === '/admin/';
+    }
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <>

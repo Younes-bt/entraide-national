@@ -61,6 +61,7 @@ API requests are subject to rate limiting to ensure fair usage.
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/accounts/', include('accounts.urls')),
+    path('api/centers-app/', include('centers.urls')),
     
     # Use decorated token views with enhanced documentation
     path('api/token/', DecoratedTokenObtainPairView.as_view(), name='token_obtain_pair'),

@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import User
 from cloudinary.models import CloudinaryField
 from django.core.validators import MinValueValidator
+from associations.models import Association
 
 
 class Equipment(models.Model):
@@ -79,6 +80,22 @@ class Center(models.Model):
     instagram_link = models.URLField(max_length=255, blank=True, null=True)
     twitter_link = models.URLField(max_length=255, blank=True, null=True)
 
+    # New affiliation fields
+    association = models.ForeignKey(Association, on_delete=models.SET_NULL, related_name='centers', null=True, blank=True)
+    AFFILIATION_CHOICES = [
+        ('entraide', 'Entraide Nationale'),
+        ('association', 'Association'),
+        ('other', 'Other'),
+    ]
+    affiliated_to = models.CharField(
+        max_length=20,
+        choices=AFFILIATION_CHOICES,
+        default='entraide', # Or another sensible default
+        blank=True,
+        null=True
+    )
+    other_affiliation = models.CharField(max_length=255, blank=True, null=True, help_text="Specify if 'affiliated_to' is 'Other'")
+
     # management fields
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
@@ -95,7 +112,6 @@ class Center(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class Group(models.Model):
     name = models.CharField(max_length=255, unique=True)

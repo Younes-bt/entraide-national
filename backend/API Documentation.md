@@ -373,18 +373,70 @@ Various profile fields that can be updated by the user.
 
 ### Centers Management
 
-The following endpoints will be implemented as part of the next development phase:
+The Centers Management module provides API endpoints for managing centers, rooms, equipment, and groups within centers. The base path for these endpoints is `/api/centers-app/`.
 
-| Endpoint | Method | Description | Authentication Required | Allowed Roles |
-|----------|--------|-------------|------------------------|--------------|
-| `/api/centers/` | GET | List all centers (paginated) | Yes | Any authenticated user |
-| `/api/centers/` | POST | Create a new center | Yes | Admin |
-| `/api/centers/{id}/` | GET | Retrieve a specific center | Yes | Any authenticated user |
-| `/api/centers/{id}/` | PUT | Update a center (full update) | Yes | Admin, Association Supervisor |
-| `/api/centers/{id}/` | PATCH | Update a center (partial update) | Yes | Admin, Association Supervisor |
-| `/api/centers/{id}/` | DELETE | Delete a center | Yes | Admin |
-| `/api/centers/{id}/rooms/` | GET | List all rooms in a center | Yes | Any authenticated user |
-| `/api/centers/{id}/equipment/` | GET | List all equipment in a center | Yes | Any authenticated user |
+**Permissions**:
+- **Admin**: Full CRUD access to Centers. Full CRUD access to Rooms, Equipment, and Groups.
+- **Center Supervisor**: Read-only access to Centers they supervise (via filtering, direct listing of all centers is admin only). Full CRUD access to Rooms, Equipment, and Groups *within the centers they supervise*.
+- **Authenticated Users**: Generally, read-only access if permitted by endpoint configuration (currently most list views are restricted to Admin/Supervisors).
+
+**Filtering**: These endpoints support filtering using `django-filter`. For example, to filter rooms by type: `/api/centers-app/rooms/?type=classroom`.
+
+**Nested Data**:
+- Retrieving a specific `Center` will include a list of its `Rooms` and `Groups`.
+- Retrieving a specific `Room` will include a list of its `Equipment`.
+
+**Endpoints for Centers**
+
+| Endpoint                                | Method        | Description                                                                                                | Allowed Roles         |
+|-----------------------------------------|---------------|------------------------------------------------------------------------------------------------------------|-----------------------|
+| `/api/centers-app/centers/`             | GET           | List all centers (paginated). Supports filtering, searching, and ordering.                                 | Admin                 |
+|                                         |               | Filters: `city`, `affiliated_to`, `association` (ID), `association_name`, `is_active`, `is_verified`, `room_type`, `room_equipment_condition`. |                       |
+|                                         |               | Search: `name`, `description`, `city`, `association__name`, `rooms__name`, `groups__name`.                          |                       |
+| `/api/centers-app/centers/`             | POST          | Create a new center.                                                                                       | Admin                 |
+| `/api/centers-app/centers/{id}/`        | GET           | Retrieve a specific center (includes nested rooms, groups).                                                | Admin                 |
+| `/api/centers-app/centers/{id}/`        | PUT           | Update a center (full update).                                                                             | Admin                 |
+| `/api/centers-app/centers/{id}/`        | PATCH         | Update a center (partial update).                                                                          | Admin                 |
+| `/api/centers-app/centers/{id}/`        | DELETE        | Delete a center.                                                                                           | Admin                 |
+
+**Endpoints for Rooms**
+
+| Endpoint                             | Method        | Description                                                                                                   | Allowed Roles              |
+|--------------------------------------|---------------|---------------------------------------------------------------------------------------------------------------|----------------------------|
+| `/api/centers-app/rooms/`            | GET           | List all rooms (paginated). Admins see all; Supervisors see rooms in their centers. Supports filtering, searching, ordering. | Admin, Center Supervisor |
+|                                      |               | Filters: `center__id`, `type`, `capacity`, `is_available`.                                                      |                            |
+|                                      |               | Search: `name`, `description`.                                                                                |                            |
+| `/api/centers-app/rooms/`            | POST          | Create a new room (must be associated with a center supervised by the user, or any center for Admin).        | Admin, Center Supervisor |
+| `/api/centers-app/rooms/{id}/`       | GET           | Retrieve a specific room (includes nested equipment).                                                           | Admin, Center Supervisor |
+| `/api/centers-app/rooms/{id}/`       | PUT           | Update a room (full update).                                                                                  | Admin, Center Supervisor |
+| `/api/centers-app/rooms/{id}/`       | PATCH         | Update a room (partial update).                                                                               | Admin, Center Supervisor |
+| `/api/centers-app/rooms/{id}/`       | DELETE        | Delete a room.                                                                                                | Admin, Center Supervisor |
+
+**Endpoints for Equipment**
+
+| Endpoint                                | Method        | Description                                                                                                        | Allowed Roles              |
+|-----------------------------------------|---------------|--------------------------------------------------------------------------------------------------------------------|----------------------------|
+| `/api/centers-app/equipment/`           | GET           | List all equipment (paginated). Admins see all; Supervisors see equipment in their centers. Supports filtering, searching, ordering. | Admin, Center Supervisor |
+|                                         |               | Filters: `center__id`, `room__id`, `condition`, `quantity`.                                                          |                            |
+|                                         |               | Search: `name`, `description`.                                                                                     |                            |
+| `/api/centers-app/equipment/`           | POST          | Create new equipment (must be associated with a center supervised by the user, or any center for Admin).          | Admin, Center Supervisor |
+| `/api/centers-app/equipment/{id}/`      | GET           | Retrieve specific equipment.                                                                                       | Admin, Center Supervisor |
+| `/api/centers-app/equipment/{id}/`      | PUT           | Update equipment (full update).                                                                                    | Admin, Center Supervisor |
+| `/api/centers-app/equipment/{id}/`      | PATCH         | Update equipment (partial update).                                                                                 | Admin, Center Supervisor |
+| `/api/centers-app/equipment/{id}/`      | DELETE        | Delete equipment.                                                                                                  | Admin, Center Supervisor |
+
+**Endpoints for Groups**
+
+| Endpoint                              | Method        | Description                                                                                                     | Allowed Roles              |
+|---------------------------------------|---------------|-----------------------------------------------------------------------------------------------------------------|----------------------------|
+| `/api/centers-app/groups/`            | GET           | List all groups (paginated). Admins see all; Supervisors see groups in their centers. Supports filtering, searching, ordering. | Admin, Center Supervisor |
+|                                       |               | Filters: `center__id`.                                                                                          |                            |
+|                                       |               | Search: `name`, `description`.                                                                                  |                            |
+| `/api/centers-app/groups/`            | POST          | Create a new group (must be associated with a center supervised by the user, or any center for Admin).           | Admin, Center Supervisor |
+| `/api/centers-app/groups/{id}/`       | GET           | Retrieve a specific group.                                                                                      | Admin, Center Supervisor |
+| `/api/centers-app/groups/{id}/`       | PUT           | Update a group (full update).                                                                                   | Admin, Center Supervisor |
+| `/api/centers-app/groups/{id}/`       | PATCH         | Update a group (partial update).                                                                                | Admin, Center Supervisor |
+| `/api/centers-app/groups/{id}/`       | DELETE        | Delete a group.                                                                                                 | Admin, Center Supervisor |
 
 ### Programs Management
 

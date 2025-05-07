@@ -18,6 +18,7 @@ import { LanguageSwitcher } from '@/components/language-switcher';
 import { useTranslation } from 'react-i18next';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext'; // Import AuthProvider and useAuth
 import { ThemeToggleButton } from '@/components/ThemeToggleButton'; // Import from new location
+import AdminSupervisorsPage from './pages/admin/AdminSupervisorsPage'; // Import the new page
 
 // Helper to get dashboard path based on role
 const getDashboardPath = (role: string | undefined): string => {
@@ -126,8 +127,8 @@ const PublicLayout = ({ children }: { children: React.ReactNode }) => {
 const AdminRoutes = () => {
   return (
     <Routes>
-      <Route index element={<AdminDashboard />} /> {/* Default admin route */}
-      {/* Add other admin-specific routes here, e.g., centers, students */} 
+      <Route index element={<AdminDashboard />} /> 
+      <Route path="supervisors" element={<AdminSupervisorsPage />} /> {/* Added route */}
       {/* <Route path="centers" element={<AdminCentersPage />} /> */}
       {/* <Route path="students" element={<AdminStudentsPage />} /> */}
       <Route path="*" element={<div>Admin Page Not Found</div>} />

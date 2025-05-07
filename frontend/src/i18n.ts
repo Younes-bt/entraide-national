@@ -34,6 +34,31 @@ const resources = {
         loading: 'Logging in...',
         loginButton: 'Sign In'
       },
+      sidebar: {
+        dashboard: "Dashboard",
+        centers: "Centers",
+        associations: "Associations",
+        supervisors: "Supervisors",
+        trainers: "Trainers",
+        students: "Students"
+      },
+      table: {
+        avatar: "Avatar",
+        fullName: "Full Name",
+        center: "Center",
+        phone: "Phone",
+        actions: "Actions"
+      },
+      actions: {
+        edit: "Edit",
+        delete: "Delete"
+      },
+      supervisors: {
+        fetchError: "Failed to fetch supervisors.",
+        errorTitle: "Error",
+        loading: "Loading supervisors...",
+        noResults: "No supervisors found."
+      },
       // Dashboards (generic)
       adminDashboardTitle: 'Admin Dashboard',
       welcomeAdmin: 'Welcome, Admin!',
@@ -80,6 +105,31 @@ const resources = {
         loading: 'Connexion en cours...',
         loginButton: 'Se Connecter'
       },
+      sidebar: {
+        dashboard: "Tableau de Bord",
+        centers: "Centres",
+        associations: "Associations",
+        supervisors: "Superviseurs",
+        trainers: "Formateurs",
+        students: "Étudiants"
+      },
+      table: {
+        avatar: "Avatar",
+        fullName: "Nom Complet",
+        center: "Centre",
+        phone: "Téléphone",
+        actions: "Actions"
+      },
+      actions: {
+        edit: "Modifier",
+        delete: "Supprimer"
+      },
+      supervisors: {
+        fetchError: "Échec de la récupération des superviseurs.",
+        errorTitle: "Erreur",
+        loading: "Chargement des superviseurs...",
+        noResults: "Aucun superviseur trouvé."
+      },
       // Dashboards (generic)
       adminDashboardTitle: 'Tableau de Bord Admin',
       welcomeAdmin: 'Bienvenue, Admin!',
@@ -125,6 +175,31 @@ const resources = {
         passwordPlaceholder: 'كلمة المرور الخاصة بك',
         loading: 'جارٍ تسجيل الدخول...',
         loginButton: 'الدخول'
+      },
+      sidebar: {
+        dashboard: "لوحة التحكم",
+        centers: "المراكز",
+        associations: "الجمعيات",
+        supervisors: "المشرفين",
+        trainers: "المدربين",
+        students: "الطلاب"
+      },
+      table: {
+        avatar: "الصورة الرمزية",
+        fullName: "الاسم الكامل",
+        center: "المركز",
+        phone: "الهاتف",
+        actions: "الإجراءات"
+      },
+      actions: {
+        edit: "تعديل",
+        delete: "حذف"
+      },
+      supervisors: {
+        fetchError: "فشل في جلب المشرفين.",
+        errorTitle: "خطأ",
+        loading: "جاري تحميل المشرفين...",
+        noResults: "لم يتم العثور على مشرفين."
       },
       // Dashboards (generic)
       adminDashboardTitle: 'لوحة تحكم المسؤول',
