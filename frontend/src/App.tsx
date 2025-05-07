@@ -10,32 +10,14 @@ import StudentDashboard from './pages/student/StudentDashboard';
 import AboutUsPage from './pages/AboutUsPage'; // New page
 import ContactUsPage from './pages/ContactUsPage'; // New page
 import FAQPage from './pages/FAQPage'; // New page
+import DashboardLayout from '@/components/DashboardLayout'; // Import DashboardLayout
 import { Button } from "@/components/ui/button";
 import { ThemeProvider, useTheme } from '@/components/theme-provider';
 import { Moon, Sun, User as UserIcon, LogOut as LogOutIcon, LogIn as LogInIcon } from "lucide-react"; // Import new icons
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { useTranslation } from 'react-i18next';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext'; // Import AuthProvider and useAuth
-
-// Theme toggle button component
-function ThemeToggleButton() {
-  const { theme, setTheme } = useTheme();
-
-  return (
-    <Button 
-      variant="outline" 
-      size="icon"
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-    >
-      {theme === 'dark' ? (
-        <Sun className="h-[1.2rem] w-[1.2rem]" />
-      ) : (
-        <Moon className="h-[1.2rem] w-[1.2rem]" />
-      )}
-      <span className="sr-only">Toggle theme</span>
-    </Button>
-  );
-}
+import { ThemeToggleButton } from '@/components/ThemeToggleButton'; // Import from new location
 
 // Helper to get dashboard path based on role
 const getDashboardPath = (role: string | undefined): string => {
@@ -52,111 +34,114 @@ const getDashboardPath = (role: string | undefined): string => {
 function AppContent() {
   const { t } = useTranslation();
   const { user, logout, isAuthenticated, isLoading } = useAuth();
-  // const navigate = useNavigate(); // Keep if needed elsewhere
 
   const handleLogout = () => {
     logout();
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <nav 
-           className="bg-card text-card-foreground border-b sticky top-0 z-50 w-full shadow-sm"
-      >
-        <div className="container mx-auto flex items-center h-16 px-4">
-          {/* Left: Logo */}
-          <Link to="/" className="mr-6 flex items-center space-x-2">
-            {/* <img src="/logo.svg" alt="Entraide Logo" className="h-6 w-6" /> Placeholder for actual logo */}
-            <span className="font-bold sm:inline-block">{t('navbarLogo')}</span>
-          </Link>
-
-          {/* Center: Navigation Links */}
-          <div className="flex-1 flex justify-center items-center space-x-1 sm:space-x-4">
-            <Link to="/"><Button variant="ghost">{t('home')}</Button></Link>
-            <Link to="/about"><Button variant="ghost">{t('aboutUs')}</Button></Link>
-            <Link to="/contact"><Button variant="ghost">{t('contactUs')}</Button></Link>
-            <Link to="/faq"><Button variant="ghost">{t('faq')}</Button></Link>
-            {/* Example admin/student links - to be moved or conditionally rendered later */}
-            {user?.role === 'admin' && (
-                 <Link to="/admin/dashboard"><Button variant="ghost">{t('adminDashboard')}</Button></Link>
-            )}
-            {user?.role === 'center_supervisor' && (
-                 <Link to="/center/dashboard"><Button variant="ghost">{t('centerDashboard')}</Button></Link>
-            )}
-            {user?.role === 'association_supervisor' && (
-                 <Link to="/association/dashboard"><Button variant="ghost">{t('associationDashboard')}</Button></Link>
-            )}
-            {user?.role === 'trainer' && (
-                 <Link to="/trainer/dashboard"><Button variant="ghost">{t('trainerDashboard')}</Button></Link>
-            )}
-            {user?.role === 'student' && (
-                 <Link to="/student/dashboard"><Button variant="ghost">{t('studentDashboard')}</Button></Link>
-            )}
-          </div>
-
-          {/* Right: Actions & User */}
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            <LanguageSwitcher />
-            <ThemeToggleButton />
-            {isLoading ? (
-              <span className="text-sm">Loading...</span> // Simple loading indicator
-            ) : isAuthenticated() && user ? (
-              <>
-                <span className="text-sm hidden sm:inline">
-                  {t('greeting', { 
-                    firstName: user.first_name || '', 
-                    lastName: user.last_name || '' 
-                  }).trim() || user.email || 'User'}
-                </span>
-                <Button variant="outline" size="icon" onClick={handleLogout} aria-label={t('logout')}>
-                  <LogOutIcon className="h-[1.2rem] w-[1.2rem]" />
-                </Button>
-              </>
-            ) : (
-              <Link to="/login">
-                <Button variant="outline">
-                  <LogInIcon className="h-[1.2rem] w-[1.2rem] sm:mr-2" />
-                  <span className="hidden sm:inline">{t('login')}</span>
-                </Button>
-              </Link>
-            )}
-          </div>
-        </div>
-      </nav>
-
-      {/* Main content area */}
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route 
-            path="/login" 
-            element={
-              isAuthenticated() && user ? (
-                <Navigate to={getDashboardPath(user.role)} replace />
-              ) : (
-                <LoginPage /> 
-              )
-            }
-          />
-          <Route path="/about" element={<AboutUsPage />} />
-          <Route path="/contact" element={<ContactUsPage />} />
-          <Route path="/faq" element={<FAQPage />} />
+    <Routes> {/* Moved Routes to be direct child for simplicity here, layout handled per-route */}
+      {/* Public Routes with Navbar */}
+      <Route path="/" element={<PublicLayout><MainPage /></PublicLayout>} />
+      <Route 
+        path="/login" 
+        element={
+          isAuthenticated() && user ? (
+            <Navigate to={getDashboardPath(user.role)} replace />
+          ) : (
+            <PublicLayout><LoginPage /></PublicLayout> 
+          )
+        }
+      />
+      <Route path="/about" element={<PublicLayout><AboutUsPage /></PublicLayout>} />
+      <Route path="/contact" element={<PublicLayout><ContactUsPage /></PublicLayout>} />
+      <Route path="/faq" element={<PublicLayout><FAQPage /></PublicLayout>} />
           
-          {/* Protected Routes */}
-          <Route path="/admin/dashboard" element={isAuthenticated() && user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/login" replace />} />
-          <Route path="/center/dashboard" element={isAuthenticated() && user?.role === 'center_supervisor' ? <CenterDashboard /> : <Navigate to="/login" replace />} />
-          <Route path="/association/dashboard" element={isAuthenticated() && user?.role === 'association_supervisor' ? <AssociationDashboard /> : <Navigate to="/login" replace />} />
-          <Route path="/trainer/dashboard" element={isAuthenticated() && user?.role === 'trainer' ? <TrainerDashboard /> : <Navigate to="/login" replace />} />
-          <Route path="/student/dashboard" element={isAuthenticated() && user?.role === 'student' ? <StudentDashboard /> : <Navigate to="/login" replace />} />
-          
-          <Route path="*" element={<div className="text-center"><h2>{t('notFoundTitle')}</h2><Link to="/"><Button variant="link">{t('goHome')}</Button></Link></div>} />
-        </Routes>
-      </main>
-    </div>
+      {/* Dashboard Routes with Sidebar Layout */}
+      <Route path="/admin/*" element={isAuthenticated() && user?.role === 'admin' ? <DashboardLayout><AdminRoutes /></DashboardLayout> : <Navigate to="/login" replace />} />
+      {/* Add similar routes for other roles using DashboardLayout */}
+      {/* <Route path="/student/*" element={isAuthenticated() && user?.role === 'student' ? <DashboardLayout><StudentRoutes /></DashboardLayout> : <Navigate to="/login" replace />} /> */}
+      
+      {/* Not Found Route */}
+      <Route path="*" element={<PublicLayout><NotFoundPage /></PublicLayout>} /> 
+    </Routes>
   );
 }
 
-// App wrapper with ThemeProvider and BrowserRouter
+// Create a simple PublicLayout component containing the original navbar
+const PublicLayout = ({ children }: { children: React.ReactNode }) => {
+  const { t } = useTranslation();
+  const { user, logout, isAuthenticated, isLoading } = useAuth();
+  
+  const handleLogout = () => {
+      logout();
+  };
+
+  return (
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
+        <nav className="bg-card text-card-foreground border-b sticky top-0 z-50 w-full shadow-sm">
+            <div className="container mx-auto flex items-center h-16 px-4">
+                <Link to="/" className="mr-6 flex items-center space-x-2">
+                    <span className="font-bold sm:inline-block">{t('navbarLogo')}</span>
+                </Link>
+                <div className="flex-1 flex justify-center items-center space-x-1 sm:space-x-4">
+                    <Link to="/"><Button variant="ghost">{t('home')}</Button></Link>
+                    <Link to="/about"><Button variant="ghost">{t('aboutUs')}</Button></Link>
+                    <Link to="/contact"><Button variant="ghost">{t('contactUs')}</Button></Link>
+                    <Link to="/faq"><Button variant="ghost">{t('faq')}</Button></Link>
+                </div>
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                    <LanguageSwitcher />
+                    <ThemeToggleButton />
+                    {isLoading ? (
+                        <span className="text-sm">Loading...</span>
+                    ) : isAuthenticated() && user ? (
+                        <>
+                            <span className="text-sm hidden sm:inline">
+                                {t('greeting', { firstName: user.first_name || '', lastName: user.last_name || '' }).trim() || user.email || 'User'}
+                            </span>
+                            <Button variant="outline" size="icon" onClick={handleLogout} aria-label={t('logout')}>
+                                <LogOutIcon className="h-[1.2rem] w-[1.2rem]" />
+                            </Button>
+                        </>
+                    ) : (
+                        <Link to="/login">
+                            <Button variant="outline">
+                                <LogInIcon className="h-[1.2rem] w-[1.2rem] sm:mr-2" />
+                                <span className="hidden sm:inline">{t('login')}</span>
+                            </Button>
+                        </Link>
+                    )}
+                </div>
+            </div>
+        </nav>
+        <main className="flex-grow container mx-auto px-4 py-8">
+            {children}
+        </main>
+    </div>
+  );
+};
+
+// Separate Routes for Admin Dashboard
+const AdminRoutes = () => {
+  return (
+    <Routes>
+      <Route index element={<AdminDashboard />} /> {/* Default admin route */}
+      {/* Add other admin-specific routes here, e.g., centers, students */} 
+      {/* <Route path="centers" element={<AdminCentersPage />} /> */}
+      {/* <Route path="students" element={<AdminStudentsPage />} /> */}
+      <Route path="*" element={<div>Admin Page Not Found</div>} />
+    </Routes>
+  );
+};
+
+// Placeholder for NotFoundPage Component
+const NotFoundPage = () => {
+    const { t } = useTranslation();
+    return <div className="text-center"><h2>{t('notFoundTitle')}</h2><Link to="/"><Button variant="link">{t('goHome')}</Button></Link></div>
+};
+
+// Main App component setup
 function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">

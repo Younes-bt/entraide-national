@@ -4,10 +4,12 @@ const AdminDashboard = () => {
   const { t } = useTranslation();
 
   return (
-    <div style={{ padding: '20px' }} className="bg-background text-foreground min-h-screen">
-      <h1>{t('adminDashboardTitle')}</h1>
-      <p>{t('welcomeAdmin')}</p>
-      {/* Admin specific content will go here */}
+    <div>
+      <h1 className="text-3xl font-bold mb-6">{t('adminDashboardTitle')}</h1>
+      <p>
+        Welcome to the admin area. Use the sidebar to navigate different management sections.
+      </p>
+      {/* Add actual dashboard widgets/content here */}
     </div>
   );
 };
