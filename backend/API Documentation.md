@@ -484,17 +484,25 @@ The following endpoints will be implemented as part of the next development phas
 
 ### Association Management
 
-The following endpoints will be implemented as part of the next development phase:
+The base path for these endpoints is `/api/associations/`. These endpoints provide CRUD operations for managing associations.
 
-| Endpoint | Method | Description | Authentication Required | Allowed Roles |
-|----------|--------|-------------|------------------------|--------------|
-| `/api/associations/` | GET | List all associations (paginated) | Yes | Any authenticated user |
-| `/api/associations/` | POST | Create a new association | Yes | Admin |
-| `/api/associations/{id}/` | GET | Retrieve a specific association | Yes | Any authenticated user |
-| `/api/associations/{id}/` | PUT | Update an association (full update) | Yes | Admin |
-| `/api/associations/{id}/` | PATCH | Update an association (partial update) | Yes | Admin |
-| `/api/associations/{id}/` | DELETE | Delete an association | Yes | Admin |
-| `/api/associations/{id}/centers/` | GET | List centers belonging to an association | Yes | Any authenticated user |
+**Permissions**:
+- **Admin**: Full CRUD access to all associations.
+- **Association Supervisor**: Future implementation may restrict write access to associations they supervise. (Currently Admin for write ops).
+- **Any Authenticated User**: Read-only access to list and retrieve associations.
+
+**Filtering & Pagination**:
+- Standard pagination is supported for list views.
+- Filtering capabilities (e.g., by name, city, supervisor) can be added via `django-filter` integration with the `AssociationViewSet`.
+
+| Endpoint                  | Method | Description                                   | Authentication Required | Allowed Roles          |
+|---------------------------|--------|-----------------------------------------------|------------------------|------------------------|
+| `/api/associations/`      | GET    | List all associations (paginated).            | Yes                    | Any authenticated user |
+| `/api/associations/`      | POST   | Create a new association.                     | Yes                    | Admin                  |
+| `/api/associations/{id}/` | GET    | Retrieve a specific association.              | Yes                    | Any authenticated user |
+| `/api/associations/{id}/` | PUT    | Update an association (full update).          | Yes                    | Admin                  |
+| `/api/associations/{id}/` | PATCH  | Update an association (partial update).       | Yes                    | Admin                  |
+| `/api/associations/{id}/` | DELETE | Delete an association.                        | Yes                    | Admin                  |
 
 ### Attendance Management
 

@@ -26,7 +26,7 @@ class Association(models.Model):
 
     # management fields
     is_active = models.BooleanField(default=True)
-    is_verified = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=True)
     supervisor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='supervised_associations', null=True, blank=True)
     contract_start_date = models.DateField(null=True, blank=True)
     contract_end_date = models.DateField(null=True, blank=True)

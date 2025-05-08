@@ -19,6 +19,10 @@ import { useTranslation } from 'react-i18next';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext'; // Import AuthProvider and useAuth
 import { ThemeToggleButton } from '@/components/ThemeToggleButton'; // Import from new location
 import AdminSupervisorsPage from './pages/admin/AdminSupervisorsPage'; // Import the new page
+import AdminCentersPage from './pages/admin/AdminCentersPage'; // Import AdminCentersPage
+import AdminAddCenterPage from './pages/admin/AdminAddCenterPage'; // Import the new page
+import AdminAssociationsPage from './pages/admin/AdminAssociationsPage'; // Import the new Associations page
+import AdminAddAssociationPage from './pages/admin/AdminAddAssociationPage'; // Import the Add Association page
 
 // Helper to get dashboard path based on role
 const getDashboardPath = (role: string | undefined): string => {
@@ -128,8 +132,12 @@ const AdminRoutes = () => {
   return (
     <Routes>
       <Route index element={<AdminDashboard />} /> 
-      <Route path="supervisors" element={<AdminSupervisorsPage />} /> {/* Added route */}
-      {/* <Route path="centers" element={<AdminCentersPage />} /> */}
+      <Route path="supervisors" element={<AdminSupervisorsPage />} />
+      <Route path="centers" element={<AdminCentersPage />} /> 
+      <Route path="centers/add" element={<AdminAddCenterPage />} /> {/* Added route for adding centers */}
+      <Route path="associations" element={<AdminAssociationsPage />} /> {/* Added route for associations */}
+      <Route path="associations/add" element={<AdminAddAssociationPage />} /> {/* Added route for adding associations */}
+      {/* <Route path="centers/edit/:id" element={<AdminEditCenterPage />} /> */} {/* Placeholder for edit route */}
       {/* <Route path="students" element={<AdminStudentsPage />} /> */}
       <Route path="*" element={<div>Admin Page Not Found</div>} />
     </Routes>
