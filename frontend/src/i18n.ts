@@ -46,18 +46,43 @@ const resources = {
         avatar: "Avatar",
         fullName: "Full Name",
         center: "Center",
+        association: "Association",
         phone: "Phone",
         actions: "Actions"
       },
       actions: {
         edit: "Edit",
-        delete: "Delete"
+        delete: "Delete",
+        cancel: "Cancel",
+        addSupervisor: "Add Supervisor",
+        addAssociationSupervisor: "Add Association Supervisor"
       },
       supervisors: {
         fetchError: "Failed to fetch supervisors.",
         errorTitle: "Error",
         loading: "Loading supervisors...",
-        noResults: "No supervisors found."
+        noResults: "No supervisors found.",
+        noCenterResults: "No Center supervisors found.",
+        noAssociationResults: "No Association supervisors found.",
+        addNew: "Add New Supervisor",
+        addNewCenterSupervisor: "Add New Center Supervisor",
+        addNewAssociationSupervisor: "Add New Association Supervisor",
+        addNewTitle: "Add New Supervisor",
+        addNewAssociationTitle: "Add New Association Supervisor",
+        centerSupervisorsTitle: "Center Supervisors",
+        associationSupervisorsTitle: "Association Supervisors",
+        addError: {
+          title: "Error Adding Supervisor",
+          titleAssociation: "Error Adding Association Supervisor",
+          generic: "Could not add supervisor. Please check the details and try again.",
+          genericAssociation: "Could not add association supervisor. Please check the details and try again."
+        },
+        addSuccess: {
+          title: "Success",
+          titleAssociation: "Success Adding Association Supervisor",
+          message: "Supervisor added successfully!",
+          messageAssociation: "Association supervisor added successfully!"
+        }
       },
       // Dashboards (generic)
       adminDashboardTitle: 'Admin Dashboard',
@@ -155,7 +180,97 @@ const resources = {
           errorNameRequired: "Center name is required.",
           errorCreateCenter: "An unexpected error occurred while creating the center.",
           successMessage: "Center created successfully!"
-        }
+        },
+        adminAddAssociationPage: {
+          labelCity: "City",
+          selectCity: "Select City",
+          cities: {
+            ksarElKebir: "Ksar El Kebir",
+            larache: "Larache",
+            boujdian: "Boujdian",
+            ksarBjir: "Ksar Bjir",
+            laouamra: "Laouamra",
+            soukLQolla: "Souk L'Qolla",
+            tatoft: "Tatoft",
+            zouada: "Zouada",
+            ayacha: "Ayacha",
+            bniArouss: "Bni Arouss",
+            bniGarfett: "Bni Garfett",
+            zaaroura: "Zaaroura",
+            ouladOuchih: "Oulad Ouchih",
+            rissanaChamalia: "Rissana Chamalia",
+            rissanaJanoubia: "Rissana Janoubia",
+            sahel: "Sahel",
+            souaken: "Souaken",
+            soukTolba: "Souk Tolba"
+          },
+          title: "Add New Association",
+          labels: {
+            name: "Association Name",
+            description: "Description",
+            email: "Email",
+            phoneNumber: "Phone Number",
+            address: "Address",
+            registrationNumber: "Registration Number",
+            supervisor: "Supervisor",
+            logo: "Logo",
+            website: "Website URL",
+            mapsLink: "Google Maps Link",
+            facebookLink: "Facebook URL",
+            instagramLink: "Instagram URL",
+            twitterLink: "Twitter URL",
+            contractStartDate: "Contract Start Date",
+            contractEndDate: "Contract End Date"
+          },
+          sections: {
+            contactSocialTitle: "Contact & Social Links (Optional)",
+            contractInfoTitle: "Contract Information (Optional)"
+          },
+          placeholders: {
+            websiteExample: "https://example.com"
+          },
+          buttons: {
+            cancel: "Cancel",
+            creating: "Creating...",
+            createAssociation: "Create Association"
+          },
+          messages: {
+            loadingSupervisorsError: "Failed to load potential supervisors.",
+            authTokenNotFound: "Authentication token not found. Please log in.",
+            supervisorNotSelected: "Please select a supervisor.",
+            creationSuccess: "Association created successfully! Redirecting...",
+            creationErrorDefault: "Failed to create association. Server response not JSON.",
+            unknownError: "An unknown error occurred.",
+            supervisorNameDisplay: "{{firstName}} {{lastName}} (ID: {{id}})"
+          },
+          supervisorDropdown: {
+            select: "Select Supervisor",
+            loading: "Loading supervisors...",
+            noneAvailable: "No supervisors available",
+            noAssociationSupervisors: "No association supervisors found.",
+            availableSupervisorsLabel: "Available Supervisors"
+          },
+          requiredField: "*"
+        },
+      },
+      fields: {
+        firstName: "First Name",
+        lastName: "Last Name",
+        email: "Email",
+        password: "Password",
+        phoneNumberOptional: "Phone Number (Optional)",
+        cinOptional: "National ID (CIN) (Optional)",
+        birthDateOptional: "Birth Date (Optional)",
+        birthCityOptional: "Birth City (Optional)",
+        addressOptional: "Address (Optional)",
+        cityOptional: "City (Optional)",
+        profilePictureUrlOptional: "Profile Picture URL (Optional)",
+        profilePictureUrlPlaceholder: "https://example.com/image.png",
+        firstNameFrench: "First Name (French)",
+        lastNameFrench: "Last Name (French)",
+        firstNameArabic: "First Name (Arabic)",
+        lastNameArabic: "Last Name (Arabic)",
+        profilePictureOptional: "Profile Picture (Optional)"
       }
     }
   },
@@ -201,18 +316,43 @@ const resources = {
         avatar: "Avatar",
         fullName: "Nom Complet",
         center: "Centre",
+        association: "Association",
         phone: "Téléphone",
         actions: "Actions"
       },
       actions: {
         edit: "Modifier",
-        delete: "Supprimer"
+        delete: "Supprimer",
+        cancel: "Annuler",
+        addSupervisor: "Ajouter un Superviseur",
+        addAssociationSupervisor: "Ajouter un Superviseur d'Association"
       },
       supervisors: {
         fetchError: "Échec de la récupération des superviseurs.",
         errorTitle: "Erreur",
         loading: "Chargement des superviseurs...",
-        noResults: "Aucun superviseur trouvé."
+        noResults: "Aucun superviseur trouvé.",
+        noCenterResults: "Aucun superviseur de centre trouvé.",
+        noAssociationResults: "Aucun superviseur d'association trouvé.",
+        addNew: "Ajouter un Nouveau Superviseur",
+        addNewCenterSupervisor: "Ajouter un Nouveau Superviseur de Centre",
+        addNewAssociationSupervisor: "Ajouter un Nouveau Superviseur d'Association",
+        addNewTitle: "Ajouter un Nouveau Superviseur",
+        addNewAssociationTitle: "Ajouter un Nouveau Superviseur d'Association",
+        centerSupervisorsTitle: "Superviseurs de Centre",
+        associationSupervisorsTitle: "Superviseurs d'Association",
+        addError: {
+          title: "Erreur lors de l'ajout du superviseur",
+          titleAssociation: "Erreur lors de l'ajout du superviseur d'association",
+          generic: "Impossible d'ajouter le superviseur. Veuillez vérifier les détails et réessayer.",
+          genericAssociation: "Impossible d'ajouter le superviseur d'association. Veuillez vérifier les détails et réessayer."
+        },
+        addSuccess: {
+          title: "Succès",
+          titleAssociation: "Succès lors de l'ajout du superviseur d'association",
+          message: "Superviseur ajouté avec succès !",
+          messageAssociation: "Superviseur d'association ajouté avec succès !"
+        }
       },
       // Dashboards (generic)
       adminDashboardTitle: 'Tableau de Bord Admin',
@@ -310,14 +450,104 @@ const resources = {
           errorNameRequired: "Le nom du centre est requis.",
           errorCreateCenter: "Une erreur inattendue s'est produite lors de la création du centre.",
           successMessage: "Centre créé avec succès !"
+        },
+        adminAddAssociationPage: {
+          labelCity: "Ville",
+          selectCity: "Sélectionner une ville",
+          cities: {
+            ksarElKebir: "Ksar El Kebir",
+            larache: "Larache",
+            boujdian: "Boujdian",
+            ksarBjir: "Ksar Bjir",
+            laouamra: "Laouamra",
+            soukLQolla: "Souk L'Qolla",
+            tatoft: "Tatoft",
+            zouada: "Zouada",
+            ayacha: "Ayacha",
+            bniArouss: "Bni Arouss",
+            bniGarfett: "Bni Garfett",
+            zaaroura: "Zaaroura",
+            ouladOuchih: "Oulad Ouchih",
+            rissanaChamalia: "Rissana Chamalia",
+            rissanaJanoubia: "Rissana Janoubia",
+            sahel: "Sahel",
+            souaken: "Souaken",
+            soukTolba: "Souk Tolba"
+          },
+          title: "Ajouter une Nouvelle Association",
+          labels: {
+            name: "Nom de l'Association",
+            description: "Description",
+            email: "E-mail",
+            phoneNumber: "Numéro de Téléphone",
+            address: "Adresse",
+            registrationNumber: "Numéro d'Enregistrement",
+            supervisor: "Superviseur",
+            logo: "Logo",
+            website: "URL du Site Web",
+            mapsLink: "Lien Google Maps",
+            facebookLink: "URL Facebook",
+            instagramLink: "URL Instagram",
+            twitterLink: "URL Twitter",
+            contractStartDate: "Date de Début du Contrat",
+            contractEndDate: "Date de Fin du Contrat"
+          },
+          sections: {
+            contactSocialTitle: "Contacts et Liens Sociaux (Optionnel)",
+            contractInfoTitle: "Informations sur le Contrat (Optionnel)"
+          },
+          placeholders: {
+            websiteExample: "https://exemple.com"
+          },
+          buttons: {
+            cancel: "Annuler",
+            creating: "Création en cours...",
+            createAssociation: "Créer l'Association"
+          },
+          messages: {
+            loadingSupervisorsError: "Échec du chargement des superviseurs potentiels.",
+            authTokenNotFound: "Jeton d'authentification introuvable. Veuillez vous connecter.",
+            supervisorNotSelected: "Veuillez sélectionner un superviseur.",
+            creationSuccess: "Association créée avec succès ! Redirection...",
+            creationErrorDefault: "Échec de la création de l'association. Réponse du serveur non JSON.",
+            unknownError: "Une erreur inconnue s'est produite.",
+            supervisorNameDisplay: "{{firstName}} {{lastName}} (ID : {{id}})"
+          },
+          supervisorDropdown: {
+            select: "Sélectionner un Superviseur",
+            loading: "Chargement des superviseurs...",
+            noneAvailable: "Aucun superviseur disponible",
+            noAssociationSupervisors: "Aucun superviseur d'association trouvé.",
+            availableSupervisorsLabel: "Superviseurs Disponibles"
+          },
+          requiredField: "*"
         }
+      },
+      fields: {
+        firstName: "Prénom",
+        lastName: "Nom",
+        email: "E-mail",
+        password: "Mot de Passe",
+        phoneNumberOptional: "Numéro de Téléphone (Optionnel)",
+        cinOptional: "CIN (Optionnel)",
+        birthDateOptional: "Date de Naissance (Optionnel)",
+        birthCityOptional: "Ville de Naissance (Optionnel)",
+        addressOptional: "Adresse (Optionnel)",
+        cityOptional: "Ville (Optionnel)",
+        profilePictureUrlOptional: "URL de la Photo de Profil (Optionnel)",
+        profilePictureUrlPlaceholder: "https://example.com/image.png",
+        firstNameFrench: "Prénom (Français)",
+        lastNameFrench: "Nom (Français)",
+        firstNameArabic: "Prénom (Arabe)",
+        lastNameArabic: "Nom (Arabe)",
+        profilePictureOptional: "Photo de Profil (Optionnel)"
       }
     }
   },
   ar: {
     translation: {
       // Navbar
-      navbarLogo: 'التعاضدية الوطنية',
+      navbarLogo: 'التعاون الوطني',
       home: 'الرئيسية',
       aboutUs: 'من نحن',
       contactUs: 'اتصل بنا',
@@ -329,7 +559,7 @@ const resources = {
       // User related
       greeting: 'مرحباً، {{firstName}} {{lastName}}',
       // Main Page
-      welcome: 'مرحباً بكم في التعاضدية الوطنية!',
+      welcome: 'مرحباً بكم في التعاون الوطني!',
       mainPageMessage: 'هذه هي الصفحة العامة الرئيسية.',
       // Login Page
       loginPageTitle: 'تسجيل الدخول إلى حسابك',
@@ -356,18 +586,43 @@ const resources = {
         avatar: "الصورة الرمزية",
         fullName: "الاسم الكامل",
         center: "المركز",
+        association: "الجمعية",
         phone: "الهاتف",
         actions: "الإجراءات"
       },
       actions: {
         edit: "تعديل",
-        delete: "حذف"
+        delete: "حذف",
+        cancel: "إلغاء",
+        addSupervisor: "إضافة مشرف",
+        addAssociationSupervisor: "إضافة مشرف جمعية"
       },
       supervisors: {
         fetchError: "فشل في جلب المشرفين.",
         errorTitle: "خطأ",
         loading: "جاري تحميل المشرفين...",
-        noResults: "لم يتم العثور على مشرفين."
+        noResults: "لم يتم العثور على مشرفين.",
+        noCenterResults: "لم يتم العثور على مشرفي مراكز.",
+        noAssociationResults: "لم يتم العثور على مشرفي جمعيات.",
+        addNew: "إضافة مشرف جديد",
+        addNewCenterSupervisor: "إضافة مشرف مركز جديد",
+        addNewAssociationSupervisor: "إضافة مشرف جمعية جديد",
+        addNewTitle: "إضافة مشرف جديد",
+        addNewAssociationTitle: "إضافة مشرف جمعية جديد",
+        centerSupervisorsTitle: "مشرفو المراكز",
+        associationSupervisorsTitle: "مشرفو الجمعيات",
+        addError: {
+          title: "خطأ في إضافة المشرف",
+          titleAssociation: "خطأ في إضافة مشرف الجمعية",
+          generic: "تعذر إضافة المشرف. يرجى التحقق من التفاصيل والمحاولة مرة أخرى.",
+          genericAssociation: "تعذر إضافة مشرف الجمعية. يرجى التحقق من التفاصيل والمحاولة مرة أخرى."
+        },
+        addSuccess: {
+          title: "نجاح",
+          titleAssociation: "نجاح إضافة مشرف الجمعية",
+          message: "تمت إضافة المشرف بنجاح!",
+          messageAssociation: "تمت إضافة مشرف الجمعية بنجاح!"
+        }
       },
       // Dashboards (generic)
       adminDashboardTitle: 'لوحة تحكم المسؤول',
@@ -432,7 +687,7 @@ const resources = {
         dialogLastUpdated: "آخر تحديث",
         dialogRoomsCount: "عدد الغرف",
         dialogGroupsCount: "عدد المجموعات",
-        affiliationEntraide: "التعاضدية الوطنية",
+        affiliationEntraide: "التعاون الوطني",
         affiliationAssociation: "جمعية",
         confirmDeleteCenter: "هل أنت متأكد أنك تريد حذف المركز رقم {{centerId}}؟",
         loadingAuthAndCenters: "جارٍ المصادقة وتحميل المراكز...",
@@ -465,7 +720,97 @@ const resources = {
           errorNameRequired: "اسم المركز مطلوب.",
           errorCreateCenter: "حدث خطأ غير متوقع أثناء إنشاء المركز.",
           successMessage: "تم إنشاء المركز بنجاح!"
+        },
+        adminAddAssociationPage: {
+          labelCity: "المدينة",
+          selectCity: "اختر مدينة",
+          cities: {
+            ksarElKebir: "القصر الكبير",
+            larache: "العرائش",
+            boujdian: "بوجديان",
+            ksarBjir: "قصر بجير",
+            laouamra: "العوامرة",
+            soukLQolla: "سوق القلة",
+            tatoft: "تاطفت",
+            zouada: "زوادة",
+            ayacha: "عياشة",
+            bniArouss: "بني عروس",
+            bniGarfett: "بني قرفط",
+            zaaroura: "زعرورة",
+            ouladOuchih: "أولاد أوشيح",
+            rissanaChamalia: "ريصانة الشمالية",
+            rissanaJanoubia: "ريصانة الجنوبية",
+            sahel: "الساحل",
+            souaken: "سواكن",
+            soukTolba: "سوق الطلبة"
+          },
+          title: "إضافة جمعية جديدة",
+          labels: {
+            name: "اسم الجمعية",
+            description: "الوصف",
+            email: "البريد الإلكتروني",
+            phoneNumber: "رقم الهاتف",
+            address: "العنوان",
+            registrationNumber: "رقم التسجيل",
+            supervisor: "المشرف",
+            logo: "الشعار",
+            website: "رابط الموقع",
+            mapsLink: "رابط خرائط جوجل",
+            facebookLink: "رابط فيسبوك",
+            instagramLink: "رابط انستجرام",
+            twitterLink: "رابط تويتر",
+            contractStartDate: "تاريخ بدء العقد",
+            contractEndDate: "تاريخ انتهاء العقد"
+          },
+          sections: {
+            contactSocialTitle: "معلومات الاتصال والروابط الاجتماعية (اختياري)",
+            contractInfoTitle: "معلومات العقد (اختياري)"
+          },
+          placeholders: {
+            websiteExample: "https://example.com"
+          },
+          buttons: {
+            cancel: "إلغاء",
+            creating: "جارٍ الإنشاء...",
+            createAssociation: "إنشاء الجمعية"
+          },
+          messages: {
+            loadingSupervisorsError: "فشل تحميل المشرفين المحتملين.",
+            authTokenNotFound: "لم يتم العثور على رمز المصادقة. يرجى تسجيل الدخول.",
+            supervisorNotSelected: "يرجى اختيار مشرف.",
+            creationSuccess: "تم إنشاء الجمعية بنجاح! جارٍ إعادة التوجيه...",
+            creationErrorDefault: "فشل إنشاء الجمعية. استجابة الخادم ليست بتنسيق JSON.",
+            unknownError: "حدث خطأ غير معروف.",
+            supervisorNameDisplay: "{{firstName}} {{lastName}} (المعرف: {{id}})"
+          },
+          supervisorDropdown: {
+            select: "اختر مشرفًا",
+            loading: "جارٍ تحميل المشرفين...",
+            noneAvailable: "لا يوجد مشرفون متاحون",
+            noAssociationSupervisors: "لم يتم العثور على مشرفي جمعيات.",
+            availableSupervisorsLabel: "المشرفون المتاحون"
+          },
+          requiredField: "*"
         }
+      },
+      fields: {
+        firstName: "الاسم الأول",
+        lastName: "اسم العائلة",
+        email: "البريد الإلكتروني",
+        password: "كلمة المرور",
+        phoneNumberOptional: "رقم الهاتف (اختياري)",
+        cinOptional: "رقم البطاقة الوطنية (اختياري)",
+        birthDateOptional: "تاريخ الميلاد (اختياري)",
+        birthCityOptional: "مكان الميلاد (اختياري)",
+        addressOptional: "العنوان (اختياري)",
+        cityOptional: "المدينة (اختياري)",
+        profilePictureUrlOptional: "رابط صورة الملف الشخصي (اختياري)",
+        profilePictureUrlPlaceholder: "https://example.com/image.png",
+        firstNameFrench: "الاسم الأول (فرنسي)",
+        lastNameFrench: "اسم العائلة (فرنسي)",
+        firstNameArabic: "الاسم الأول (عربي)",
+        lastNameArabic: "اسم العائلة (عربي)",
+        profilePictureOptional: "صورة الملف الشخصي (اختياري)"
       }
     }
   }

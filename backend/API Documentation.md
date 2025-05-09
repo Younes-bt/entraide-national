@@ -504,6 +504,78 @@ The base path for these endpoints is `/api/associations/`. These endpoints provi
 | `/api/associations/{id}/` | PATCH  | Update an association (partial update).       | Yes                    | Admin                  |
 | `/api/associations/{id}/` | DELETE | Delete an association.                        | Yes                    | Admin                  |
 
+#### Create a New Association
+
+**Endpoint**: `POST /api/associations/`
+
+**Description**: Creates a new association. This endpoint expects `multipart/form-data` if including a file (e.g., `logo`), otherwise `application/json`.
+
+**Authentication**: Required (Bearer Token)
+
+**Allowed Roles**: `Admin`
+
+**Request Body Fields**:
+
+*   `name` (string, **required**): Name of the association.
+*   `description` (string, **required**): A detailed description of the association.
+*   `supervisor` (integer, **required**): The ID of the user designated as the supervisor for this association.
+*   `logo` (file, optional): An image file for the association's logo.
+*   `phone_number` (string, optional): Contact phone number (e.g., "+1-555-123-4567").
+*   `email` (string, optional, format: email): Contact email address.
+*   `address` (string, optional): Physical street address.
+*   `city` (string, optional): City where the association is based.
+*   `maps_link` (string, optional, format: url): A URL to the association's location on a map service (e.g., Google Maps).
+*   `website` (string, optional, format: url): The association's official website URL.
+*   `facebook_link` (string, optional, format: url): URL to the association's Facebook page.
+*   `instagram_link` (string, optional, format: url): URL to the association's Instagram profile.
+*   `twitter_link` (string, optional, format: url): URL to the association's Twitter profile.
+*   `contract_start_date` (date string, optional, format: `YYYY-MM-DD`): The start date of any relevant contract.
+*   `contract_end_date` (date string, optional, format: `YYYY-MM-DD`): The end date of any relevant contract.
+*   `registration_number` (string, optional): The official registration number of the association.
+    *(Note: While optional in the request, the model defines this as unique if provided.)*
+
+*(Fields like `is_active`, `is_verified` default to `true` on the backend if not provided.)*
+
+**Success Response (201 Created)**:
+Returns the full association object upon successful creation.
+```json
+{
+    "id": 1,
+    "name": "Al Amal Association",
+    "description": "Supporting local youth programs.",
+    "logo": "https://res.cloudinary.com/yourcloud/image/upload/v12345/logos/al_amal_logo.png",
+    "phone_number": "+212600000000",
+    "email": "contact@alamal.ma",
+    "address": "123 Hope Street",
+    "city": "Rabat",
+    "maps_link": "https://maps.google.com/?q=Al+Amal+Association+Rabat",
+    "website": "https://alamal.ma",
+    "facebook_link": "https://facebook.com/alamalrabat",
+    "instagram_link": "https://instagram.com/alamalrabat",
+    "twitter_link": null,
+    "supervisor": 5,
+    "contract_start_date": "2024-01-01",
+    "contract_end_date": "2025-12-31",
+    "registration_number": "ASSOC-RBT-001",
+    "is_active": true,
+    "is_verified": true,
+    "created_at": "2024-05-08T10:30:00Z",
+    "updated_at": "2024-05-08T10:30:00Z"
+}
+```
+
+**Error Responses**:
+-   `400 Bad Request`: If validation fails (e.g., missing required fields, invalid data format). The response body will contain details about the errors.
+    ```json
+    {
+        "name": ["This field is required."],
+        "description": ["This field is required."],
+        "supervisor": ["This field is required."]
+    }
+    ```
+-   `401 Unauthorized`: If the request lacks valid authentication credentials.
+-   `403 Forbidden`: If the authenticated user does not have the `Admin` role.
+
 ### Attendance Management
 
 The following endpoints will be implemented as part of the next development phase:

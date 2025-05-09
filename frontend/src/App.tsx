@@ -23,6 +23,8 @@ import AdminCentersPage from './pages/admin/AdminCentersPage'; // Import AdminCe
 import AdminAddCenterPage from './pages/admin/AdminAddCenterPage'; // Import the new page
 import AdminAssociationsPage from './pages/admin/AdminAssociationsPage'; // Import the new Associations page
 import AdminAddAssociationPage from './pages/admin/AdminAddAssociationPage'; // Import the Add Association page
+import AdminAddSupervisorPage from './pages/admin/AdminAddSupervisorPage'; // Import the new Add Supervisor page
+import AdminAddAssociationSupervisorPage from './pages/admin/AdminAddAssociationSupervisorPage'; // Import the Add Association Supervisor page
 
 // Helper to get dashboard path based on role
 const getDashboardPath = (role: string | undefined): string => {
@@ -133,6 +135,8 @@ const AdminRoutes = () => {
     <Routes>
       <Route index element={<AdminDashboard />} /> 
       <Route path="supervisors" element={<AdminSupervisorsPage />} />
+      <Route path="supervisors/add" element={<AdminAddSupervisorPage />} /> {/* Added route for adding supervisors */}
+      <Route path="supervisors/add-association" element={<AdminAddAssociationSupervisorPage />} /> {/* Added route for adding association supervisors */}
       <Route path="centers" element={<AdminCentersPage />} /> 
       <Route path="centers/add" element={<AdminAddCenterPage />} /> {/* Added route for adding centers */}
       <Route path="associations" element={<AdminAssociationsPage />} /> {/* Added route for associations */}

@@ -56,6 +56,8 @@ class User(AbstractUser):
     # Profile fields
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
+    Arabic_first_name = models.CharField(max_length=30, blank=True, null=True)
+    arabic_last_name = models.CharField(max_length=30, blank=True, null=True)
     profile_picture = CloudinaryField('image', blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
     birth_city = models.CharField(max_length=100, blank=True, null=True)

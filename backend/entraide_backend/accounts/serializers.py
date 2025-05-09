@@ -160,6 +160,7 @@ class UserProfileSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + [
             'profile_picture', 'birth_date', 'birth_city', 
+            'Arabic_first_name', 'arabic_last_name',
             'CIN_id', 'phone_number', 'address', 'city',
             'created_at', 'updated_at'
         ]

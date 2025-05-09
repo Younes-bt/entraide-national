@@ -69,7 +69,7 @@ const AdminAssociationsPage: React.FC = () => {
 
         const data = await response.json();
         console.log("API Response Data for Associations:", data); // Log the data
-        setAssociations(data.results || Array.isArray(data) ? data : []); // Ensure we always set an array
+        setAssociations(data.results || []); // Ensure we always set an array from data.results
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch associations');
