@@ -3,6 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
+import { PlusCircle, ChevronDown } from 'lucide-react'; // Import PlusCircle & ChevronDown
+import AddCenterSupervisorDialog from './components/AddCenterSupervisorDialog'; // Import the new dialog
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"; // Import Dropdown components
 // TODO: Import Input, Textarea, Select from ShadCN if you replace basic HTML form elements
 
 // Based on typical Django REST framework behavior, FKs (association, supervisor) expect IDs.
@@ -13,7 +25,7 @@ interface NewCenterData {
   email?: string;
   address?: string;
   city?: string;
-  logo?: string; // Assuming logo might be handled differently (e.g. upload URL or direct file upload)
+  // logo?: string; // This will now be handled by a separate File state
   affiliated_to?: 'entraide' | 'association' | 'other' | string;
   other_affiliation?: string;
   association?: number | null; // Expects Association ID
@@ -36,22 +48,36 @@ interface Supervisor {
   // Add other relevant fields if needed from API response
 }
 
+// This is the User type from AuthContext, which the dialog will return
+import type { User as AuthUser } from '@/contexts/AuthContext';
+
 const API_BASE_URL = 'http://localhost:8000/api'; // Duplicated for now, consider a shared config
 
 // Function to create a new center
-async function createCenterAPI(newCenter: NewCenterData, token: string | null): Promise<any> { // Return type can be more specific
+async function createCenterAPI(centerData: NewCenterData | FormData, token: string | null): Promise<any> { 
   if (!token) {
     throw new Error('Authentication token not available for creating center.');
   }
-  const response = await fetch(`${API_BASE_URL}/centers-app/centers/`, {
+
+  const isFormData = centerData instanceof FormData;
+  const headers: HeadersInit = {
+    'Authorization': `Bearer ${token}`,
+  };
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  const apiUrl = `${API_BASE_URL}/centers-app/centers/`; // Store URL in a variable
+  console.log('Attempting to POST to URL:', apiUrl); // Log the URL
+
+  const response = await fetch(apiUrl, { // Use the variable
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify(newCenter),
+    headers: headers,
+    body: isFormData ? centerData : JSON.stringify(centerData),
   });
   if (!response.ok) {
+    // Log the response status and URL again on error for clarity
+    console.error(`Error fetching ${response.url}, status: ${response.status}`); 
     const errorData = await response.json().catch(() => ({ detail: 'Failed to create center' }));
     throw new Error(errorData.detail || `Failed to create center. Status: ${response.status}`);
   }
@@ -107,6 +133,16 @@ async function fetchSupervisorsAPI(token: string | null): Promise<Supervisor[]> 
   return supervisors;
 }
 
+// Add other relevant fields if needed from API response
+
+// Define the city keys (copied from AdminAddAssociationPage for now)
+const cityKeys = [
+  "ksarElKebir", "larache", "boujdian", "ksarBjir", "laouamra", 
+  "soukLQolla", "tatoft", "zouada", "ayacha", "bniArouss", 
+  "bniGarfett", "zaaroura", "ouladOuchih", "rissanaChamalia", 
+  "rissanaJanoubia", "sahel", "souaken", "soukTolba"
+];
+
 const AdminAddCenterPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -131,6 +167,15 @@ const AdminAddCenterPage: React.FC = () => {
   const [associations, setAssociations] = useState<Association[]>([]);
   const [supervisors, setSupervisors] = useState<Supervisor[]>([]);
   const [dataLoadingError, setDataLoadingError] = useState<string | null>(null);
+  const [isAddCenterSupervisorDialogOpen, setIsAddCenterSupervisorDialogOpen] = useState(false); // Dialog state
+  const [supervisorAddedMessage, setSupervisorAddedMessage] = useState<string | null>(null);
+  const [selectedCityName, setSelectedCityName] = useState<string>(""); // For displaying selected city
+  const [logoFile, setLogoFile] = useState<File | null>(null); // State for logo file
+
+  useEffect(() => {
+    // Initialize selectedCityName with translated placeholder
+    setSelectedCityName(t('adminCentersPage.addDialog.selectCityPlaceholder', 'Select City'));
+  }, [t]);
 
   useEffect(() => {
     const loadDropdownData = async () => {
@@ -154,6 +199,16 @@ const AdminAddCenterPage: React.FC = () => {
     loadDropdownData();
   }, [accessToken]);
 
+  useEffect(() => {
+    // Update city name if language changes or if newCenterData.city is reset
+    if (newCenterData.city && cityKeys.includes(newCenterData.city)) {
+        setSelectedCityName(t(`adminCentersPage.adminAddAssociationPage.cities.${newCenterData.city}`));
+    } else {
+        setSelectedCityName(t('adminCentersPage.addDialog.selectCityPlaceholder', 'Select City'));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t, newCenterData.city]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     let processedValue: string | number | null = value;
@@ -168,6 +223,19 @@ const AdminAddCenterPage: React.FC = () => {
     }));
   };
 
+  const handleCitySelect = (cityKey: string) => {
+    setNewCenterData(prev => ({ ...prev, city: cityKey }));
+    // setSelectedCityName is handled by the useEffect watching newCenterData.city and t
+  };
+
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setLogoFile(e.target.files[0]);
+    } else {
+      setLogoFile(null);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError(null);
@@ -177,16 +245,62 @@ const AdminAddCenterPage: React.FC = () => {
     }
     try {
       setLoading(true);
-      await createCenterAPI(newCenterData, accessToken);
-      // TODO: Show success notification (e.g., using a toast library)
-      alert(t('adminCentersPage.addDialog.successMessage')); // Placeholder success message
-      navigate('/admin/centers'); // Navigate back to the list page
+
+      let submissionData: NewCenterData | FormData = newCenterData;
+
+      if (logoFile) {
+        const formData = new FormData();
+        // Append all string/number fields from newCenterData
+        Object.entries(newCenterData).forEach(([key, value]) => {
+          if (value !== null && value !== undefined) {
+            formData.append(key, String(value)); // Ensure value is string for FormData
+          }
+        });
+        formData.append('logo', logoFile);
+        submissionData = formData;
+      } else {
+        // If no logo, ensure newCenterData doesn't accidentally have a `logo` property from previous state if it was a string
+        const { ...dataWithoutLogoProperty } = newCenterData as any; // Type assertion to allow delete
+        delete dataWithoutLogoProperty.logo; 
+        submissionData = dataWithoutLogoProperty as NewCenterData;
+      }
+
+      await createCenterAPI(submissionData, accessToken);
+      alert(t('adminCentersPage.addDialog.successMessage')); 
+      navigate('/admin/centers'); 
     } catch (err: any) {
       console.error('Failed to create center:', err);
       setSubmitError(err.message || t('adminCentersPage.addDialog.errorCreateCenter'));
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCenterSupervisorCreated = (newSupervisor: AuthUser) => {
+    // Map AuthUser to the local Supervisor interface
+    const newSupervisorEntry: Supervisor = {
+      id: newSupervisor.id,
+      username: newSupervisor.username || `${newSupervisor.first_name}${newSupervisor.last_name}`.toLowerCase(), // Fallback for username
+      first_name: newSupervisor.first_name,
+      last_name: newSupervisor.last_name,
+      email: newSupervisor.email,
+      // Add arabic names here if/when Supervisor interface supports them
+    };
+
+    setSupervisors(prev => {
+        const newList = prev.filter(s => s.id !== newSupervisorEntry.id);
+        newList.push(newSupervisorEntry);
+        // Sort alphabetically by first name, then last name, then username
+        return newList.sort((a, b) => {
+            const nameA = `${a.first_name || ''} ${a.last_name || ''}`.trim() || a.username;
+            const nameB = `${b.first_name || ''} ${b.last_name || ''}`.trim() || b.username;
+            return nameA.localeCompare(nameB);
+        });
+    });
+    setNewCenterData(prev => ({ ...prev, supervisor: newSupervisorEntry.id }));
+    setIsAddCenterSupervisorDialogOpen(false); // Close dialog
+    setSupervisorAddedMessage(t('adminCentersPage.addDialog.messages.centerSupervisorAddedSuccessfully', 'New center supervisor added and selected.'));
+    setTimeout(() => setSupervisorAddedMessage(null), 3000); // Clear message after 3s
   };
 
   return (
@@ -232,7 +346,26 @@ const AdminAddCenterPage: React.FC = () => {
         {/* City Field */}
         <div>
           <label htmlFor="city" className="block text-sm font-medium">{t('adminCentersPage.addDialog.labelCity')}</label>
-          <input type="text" name="city" id="city" value={newCenterData.city || ''} onChange={handleInputChange} className="mt-1 block w-full px-3 py-2 border border-input rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" />
+          {/* <input type="text" name="city" id="city" value={newCenterData.city || ''} onChange={handleInputChange} className="mt-1 block w-full px-3 py-2 border border-input rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" /> */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="w-full justify-between mt-1">
+                {selectedCityName}
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
+              <DropdownMenuLabel>{t('adminCentersPage.addDialog.selectCityPlaceholder', 'Select City')}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup value={newCenterData.city} onValueChange={handleCitySelect}>
+                {cityKeys.map((cityKey) => (
+                  <DropdownMenuRadioItem key={cityKey} value={cityKey}>
+                    {t(`adminCentersPage.adminAddAssociationPage.cities.${cityKey}`)} 
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Affiliated To Select Field */}
@@ -274,7 +407,21 @@ const AdminAddCenterPage: React.FC = () => {
         
         {/* Supervisor Select Field */}
          <div>
-          <label htmlFor="supervisor" className="block text-sm font-medium">{t('adminCentersPage.addDialog.labelSupervisor')} ({t('common.optional')})</label>
+            <div className="flex items-center justify-between mb-1">
+              <label htmlFor="supervisor" className="block text-sm font-medium">
+                {t('adminCentersPage.addDialog.labelSupervisor')} ({t('common.optional')})
+              </label>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsAddCenterSupervisorDialogOpen(true)}
+                className="p-1 h-auto text-sm"
+              >
+                <PlusCircle className="h-4 w-4 mr-1" />
+                {t('adminCentersPage.addDialog.buttons.addSupervisorShort', 'Add New')}
+              </Button>
+            </div>
           <select
             name="supervisor"
             id="supervisor"
@@ -291,10 +438,22 @@ const AdminAddCenterPage: React.FC = () => {
           </select>
         </div>
         
-        {/* TODO: Logo upload field if needed */}
+        {/* Logo Upload Field */}
+        <div>
+          <label htmlFor="logo" className="block text-sm font-medium">{t('adminCentersPage.addDialog.labelLogo', 'Center Logo')} ({t('common.optional')})</label>
+          <input 
+            type="file" 
+            name="logo" 
+            id="logo" 
+            onChange={handleLogoChange} 
+            accept="image/*" 
+            className="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90" 
+          />
+        </div>
 
         {dataLoadingError && <p className="text-sm text-red-600 mt-2 text-center">{dataLoadingError}</p>}
         {submitError && <p className="text-sm text-red-600 mt-2 text-center">{submitError}</p>}
+        {supervisorAddedMessage && <p className="text-sm text-green-600 mt-2 text-center">{supervisorAddedMessage}</p>}
         
         <div className="flex justify-end space-x-3 pt-4">
           <Button type="button" variant="outline" onClick={() => navigate('/admin/centers')} disabled={loading}>
@@ -305,6 +464,12 @@ const AdminAddCenterPage: React.FC = () => {
           </Button>
         </div>
       </form>
+
+      <AddCenterSupervisorDialog
+        isOpen={isAddCenterSupervisorDialogOpen}
+        onOpenChange={setIsAddCenterSupervisorDialogOpen}
+        onSupervisorCreated={handleCenterSupervisorCreated}
+      />
     </div>
   );
 };

@@ -37,12 +37,15 @@ class CenterSerializer(serializers.ModelSerializer):
     # association = AssociationSerializer(read_only=True)
 
     supervisor_username = serializers.ReadOnlyField(source='supervisor.username')
+    supervisor_first_name = serializers.ReadOnlyField(source='supervisor.first_name')
+    supervisor_last_name = serializers.ReadOnlyField(source='supervisor.last_name')
+    logo_url = serializers.SerializerMethodField()
 
 
     class Meta:
         model = Center
         fields = [
-            'id', 'name', 'description', 'logo', 
+            'id', 'name', 'description', 'logo', 'logo_url',
             'phone_number', 'email', 'address', 'city', 'maps_link',
             'website', 'facebook_link', 'instagram_link', 'twitter_link',
             'association', # This will be a PrimaryKeyRelatedField by default for writing
@@ -51,8 +54,15 @@ class CenterSerializer(serializers.ModelSerializer):
             'is_active', 'is_verified', 
             'supervisor', # This will be a PrimaryKeyRelatedField for writing
             'supervisor_username', # For reading the username
+            'supervisor_first_name',
+            'supervisor_last_name',
             'rooms', 
             'groups',
             'created_at', 'updated_at'
         ]
         read_only_fields = ['is_verified'] # Example: is_verified might be admin-only internal flag 
+
+    def get_logo_url(self, obj):
+        if obj.logo and hasattr(obj.logo, 'url'):
+            return obj.logo.url
+        return None

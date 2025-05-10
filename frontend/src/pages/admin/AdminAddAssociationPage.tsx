@@ -15,9 +15,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"; // Import Dropdown components
-import { ChevronDown } from 'lucide-react'; // For dropdown trigger icon
+import { ChevronDown, PlusCircle } from 'lucide-react'; // Added PlusCircle
 import { useAuth } from '@/contexts/AuthContext';
 import type { User } from '@/contexts/AuthContext'; // Corrected import for User type
+import AddSupervisorDialog from './components/AddSupervisorDialog'; // Import the new dialog
 
 // Define the city keys
 const cityKeys = [
@@ -77,6 +78,7 @@ const AdminAddAssociationPage: React.FC = () => {
   const [selectedSupervisorName, setSelectedSupervisorName] = useState<string>(t('adminCentersPage.adminAddAssociationPage.supervisorDropdown.select'));
   const [selectedCityName, setSelectedCityName] = useState<string>(t('adminCentersPage.adminAddAssociationPage.selectCity')); // For displaying selected city
   const [isFetchingSupervisors, setIsFetchingSupervisors] = useState<boolean>(false);
+  const [isAddSupervisorDialogOpen, setIsAddSupervisorDialogOpen] = useState(false); // State for dialog
 
   useEffect(() => {
     const fetchAllUsers = async (page = 1, accumulatedUsers: User[] = []): Promise<User[]> => {
@@ -138,7 +140,12 @@ const AdminAddAssociationPage: React.FC = () => {
     if (formData.supervisor) {
         const selected = supervisorsList.find(s => s.id === formData.supervisor);
         if (selected) {
-            setSelectedSupervisorName(t('adminCentersPage.adminAddAssociationPage.messages.supervisorNameDisplay', { firstName: selected.first_name, lastName: selected.last_name, id: selected.id }));
+            setSelectedSupervisorName(t('adminCentersPage.adminAddAssociationPage.messages.supervisorNameDisplayWithArabic', { 
+                firstName: selected.first_name, 
+                lastName: selected.last_name, 
+                arabicFirstName: selected.arabic_first_name,
+                arabicLastName: selected.arabic_last_name
+            }));
         }
     } else {
         // if form data for supervisor is empty (e.g. after reset), set to placeholder
@@ -180,11 +187,37 @@ const AdminAddAssociationPage: React.FC = () => {
     const selected = supervisorsList.find(s => s.id === supervisorId);
     if (selected) {
         setFormData(prev => ({ ...prev, supervisor: supervisorId }));
-        setSelectedSupervisorName(t('adminCentersPage.adminAddAssociationPage.messages.supervisorNameDisplay', { firstName: selected.first_name, lastName: selected.last_name, id: selected.id }));
+        setSelectedSupervisorName(t('adminCentersPage.adminAddAssociationPage.messages.supervisorNameDisplayWithArabic', { 
+            firstName: selected.first_name, 
+            lastName: selected.last_name, 
+            arabicFirstName: selected.arabic_first_name,
+            arabicLastName: selected.arabic_last_name
+        }));
     } else {
         setFormData(prev => ({ ...prev, supervisor: '' }));
+        // If value is empty or not found, reset to placeholder
         setSelectedSupervisorName(t('adminCentersPage.adminAddAssociationPage.supervisorDropdown.select'));
     }
+  };
+
+  const handleSupervisorCreated = (newSupervisor: User) => {
+    setSupervisorsList(prev => {
+      // Avoid duplicates and sort
+      const newList = prev.filter(s => s.id !== newSupervisor.id);
+      newList.push(newSupervisor);
+      return newList.sort((a, b) => `${a.first_name} ${a.last_name}`.localeCompare(`${b.first_name} ${b.last_name}`));
+    });
+    setFormData(prev => ({ ...prev, supervisor: newSupervisor.id }));
+    setSelectedSupervisorName(t('adminCentersPage.adminAddAssociationPage.messages.supervisorNameDisplayWithArabic', { 
+        firstName: newSupervisor.first_name, 
+        lastName: newSupervisor.last_name, 
+        arabicFirstName: newSupervisor.arabic_first_name,
+        arabicLastName: newSupervisor.arabic_last_name
+    }));
+    setIsAddSupervisorDialogOpen(false); // Close dialog
+    setSuccessMessage(t('adminCentersPage.adminAddAssociationPage.messages.supervisorAddedSuccessfully', 'New supervisor added and selected.'));
+    // Clear supervisor-specific success message after a few seconds
+    setTimeout(() => setSuccessMessage(null), 3000);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -326,7 +359,21 @@ const AdminAddAssociationPage: React.FC = () => {
         </div>
         
         <div>
-          <Label htmlFor="supervisor">{t('adminCentersPage.adminAddAssociationPage.labels.supervisor')} <span className="text-red-500">{t('adminCentersPage.adminAddAssociationPage.requiredField')}</span></Label>
+          <div className="flex items-center justify-between mb-1">
+            <Label htmlFor="supervisor">
+              {t('adminCentersPage.adminAddAssociationPage.labels.supervisor')} <span className="text-red-500">{t('adminCentersPage.adminAddAssociationPage.requiredField')}</span>
+            </Label>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsAddSupervisorDialogOpen(true)}
+              className="p-1 h-auto text-sm"
+            >
+              <PlusCircle className="h-4 w-4 mr-1" />
+              {t('adminCentersPage.adminAddAssociationPage.buttons.addSupervisorShort', 'Add New')}
+            </Button>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="w-full justify-between mt-1">
@@ -343,7 +390,12 @@ const AdminAddAssociationPage: React.FC = () => {
                 <DropdownMenuRadioGroup value={formData.supervisor?.toString()} onValueChange={handleSupervisorSelect}>
                   {supervisorsList.map((supervisor) => (
                     <DropdownMenuRadioItem key={supervisor.id} value={supervisor.id.toString()}>
-                      {t('adminCentersPage.adminAddAssociationPage.messages.supervisorNameDisplay', { firstName: supervisor.first_name, lastName: supervisor.last_name, id: supervisor.id })}
+                      {t('adminCentersPage.adminAddAssociationPage.messages.supervisorNameDisplayWithArabic', { 
+                          firstName: supervisor.first_name, 
+                          lastName: supervisor.last_name, 
+                          arabicFirstName: supervisor.arabic_first_name,
+                          arabicLastName: supervisor.arabic_last_name
+                      })}
                     </DropdownMenuRadioItem>
                   ))}
                 </DropdownMenuRadioGroup>
@@ -407,6 +459,12 @@ const AdminAddAssociationPage: React.FC = () => {
           </Button>
         </div>
       </form>
+
+      <AddSupervisorDialog
+        isOpen={isAddSupervisorDialogOpen}
+        onOpenChange={setIsAddSupervisorDialogOpen}
+        onSupervisorCreated={handleSupervisorCreated}
+      />
     </div>
   );
 };

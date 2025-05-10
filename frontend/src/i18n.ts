@@ -55,7 +55,8 @@ const resources = {
         delete: "Delete",
         cancel: "Cancel",
         addSupervisor: "Add Supervisor",
-        addAssociationSupervisor: "Add Association Supervisor"
+        addAssociationSupervisor: "Add Association Supervisor",
+        added: "Added"
       },
       supervisors: {
         fetchError: "Failed to fetch supervisors.",
@@ -75,14 +76,28 @@ const resources = {
           title: "Error Adding Supervisor",
           titleAssociation: "Error Adding Association Supervisor",
           generic: "Could not add supervisor. Please check the details and try again.",
-          genericAssociation: "Could not add association supervisor. Please check the details and try again."
+          genericAssociation: "Could not add association supervisor. Please check the details and try again.",
+          authRequired: "Authentication required.",
+          genericDialog: "Failed to add supervisor.",
+          titleDialog: "Error",
+          genericCenterDialog: "Failed to add center supervisor.",
+          titleCenterDialog: "Error Adding Center Supervisor"
         },
         addSuccess: {
           title: "Success",
           titleAssociation: "Success Adding Association Supervisor",
           message: "Supervisor added successfully!",
-          messageAssociation: "Association supervisor added successfully!"
-        }
+          messageAssociation: "Association supervisor added successfully!",
+          titleDialog: "Success",
+          messageDialog: "Supervisor added successfully!",
+          messageCenterDialog: "Center supervisor added successfully!",
+          titleCenterDialog: "Center Supervisor Added"
+        },
+        // Dialog specific translations
+        addNewDialogTitle: "Add New Association Supervisor",
+        addNewDialogDescription: "Fill in the details to create a new supervisor. Email and password will be auto-generated.",
+        addNewCenterSupervisorDialogTitle: "Add New Center Supervisor",
+        addNewCenterSupervisorDialogDescription: "Fill in the details to create a new center supervisor. Email and password will be auto-generated."
       },
       // Dashboards (generic)
       adminDashboardTitle: 'Admin Dashboard',
@@ -115,6 +130,7 @@ const resources = {
         tableHeaderLogo: "Logo",
         tableHeaderName: "Name",
         tableHeaderAffiliatedTo: "Affiliated To",
+        tableHeaderSupervisorName: "Supervisor Name",
         tableHeaderPhone: "Phone",
         tableHeaderActions: "Actions",
         logoAlt: "{{name}} logo",
@@ -179,7 +195,15 @@ const resources = {
           submitButton: "Create Center",
           errorNameRequired: "Center name is required.",
           errorCreateCenter: "An unexpected error occurred while creating the center.",
-          successMessage: "Center created successfully!"
+          successMessage: "Center created successfully!",
+          selectCityPlaceholder: "Select City",
+          labelLogo: "Center Logo",
+          buttons: {
+            addSupervisorShort: "Add New Supervisor"
+          },
+          messages: {
+            centerSupervisorAddedSuccessfully: "New center supervisor added and selected."
+          }
         },
         adminAddAssociationPage: {
           labelCity: "City",
@@ -232,7 +256,8 @@ const resources = {
           buttons: {
             cancel: "Cancel",
             creating: "Creating...",
-            createAssociation: "Create Association"
+            createAssociation: "Create Association",
+            addSupervisorShort: "Add New"
           },
           messages: {
             loadingSupervisorsError: "Failed to load potential supervisors.",
@@ -241,7 +266,9 @@ const resources = {
             creationSuccess: "Association created successfully! Redirecting...",
             creationErrorDefault: "Failed to create association. Server response not JSON.",
             unknownError: "An unknown error occurred.",
-            supervisorNameDisplay: "{{firstName}} {{lastName}} (ID: {{id}})"
+            supervisorNameDisplay: "{{firstName}} {{lastName}} (ID: {{id}})",
+            supervisorNameDisplayWithArabic: "{{firstName}} {{lastName}} ({{arabicFirstName}} {{arabicLastName}})",
+            supervisorAddedSuccessfully: "New supervisor added and selected."
           },
           supervisorDropdown: {
             select: "Select Supervisor",
@@ -250,7 +277,33 @@ const resources = {
             noAssociationSupervisors: "No association supervisors found.",
             availableSupervisorsLabel: "Available Supervisors"
           },
-          requiredField: "*"
+          requiredField: "*",
+          addError: {
+            title: "Error",
+            titleAssociation: "Error",
+            generic: "Could not add supervisor. Please check the details and try again.",
+            genericAssociation: "Could not add association supervisor. Please check the details and try again.",
+            authRequired: "Authentication required.",
+            genericDialog: "Échec de l'ajout du superviseur.",
+            titleDialog: "Erreur",
+            genericCenterDialog: "Échec de l'ajout du superviseur de centre.",
+            titleCenterDialog: "Erreur d'ajout du superviseur de centre"
+          },
+          addSuccess: {
+            title: "Succès",
+            titleAssociation: "Succès lors de l'ajout du superviseur d'association",
+            message: "Superviseur ajouté avec succès !",
+            messageAssociation: "Superviseur d'association ajouté avec succès !",
+            titleDialog: "Succès",
+            messageDialog: "Superviseur ajouté avec succès !",
+            messageCenterDialog: "Superviseur de centre ajouté avec succès !",
+            titleCenterDialog: "Superviseur de centre ajouté"
+          },
+          // Dialog specific translations
+          addNewDialogTitle: "Ajouter un Nouveau Superviseur d'Association",
+          addNewDialogDescription: "Remplissez les détails pour créer un nouveau superviseur. L'email et le mot de passe seront auto-générés.",
+          addNewCenterSupervisorDialogTitle: "Ajouter un Nouveau Superviseur de Centre",
+          addNewCenterSupervisorDialogDescription: "Remplissez les détails pour créer un nouveau superviseur de centre. L'email et le mot de passe seront auto-générés."
         },
       },
       fields: {
@@ -325,7 +378,8 @@ const resources = {
         delete: "Supprimer",
         cancel: "Annuler",
         addSupervisor: "Ajouter un Superviseur",
-        addAssociationSupervisor: "Ajouter un Superviseur d'Association"
+        addAssociationSupervisor: "Ajouter un Superviseur d'Association",
+        added: "Ajouté"
       },
       supervisors: {
         fetchError: "Échec de la récupération des superviseurs.",
@@ -345,14 +399,28 @@ const resources = {
           title: "Erreur lors de l'ajout du superviseur",
           titleAssociation: "Erreur lors de l'ajout du superviseur d'association",
           generic: "Impossible d'ajouter le superviseur. Veuillez vérifier les détails et réessayer.",
-          genericAssociation: "Impossible d'ajouter le superviseur d'association. Veuillez vérifier les détails et réessayer."
+          genericAssociation: "Impossible d'ajouter le superviseur d'association. Veuillez vérifier les détails et réessayer.",
+          authRequired: "Authentification requise.",
+          genericDialog: "Échec de l'ajout du superviseur.",
+          titleDialog: "Erreur",
+          genericCenterDialog: "Échec de l'ajout du superviseur de centre.",
+          titleCenterDialog: "Erreur d'ajout du superviseur de centre"
         },
         addSuccess: {
           title: "Succès",
           titleAssociation: "Succès lors de l'ajout du superviseur d'association",
           message: "Superviseur ajouté avec succès !",
-          messageAssociation: "Superviseur d'association ajouté avec succès !"
-        }
+          messageAssociation: "Superviseur d'association ajouté avec succès !",
+          titleDialog: "Succès",
+          messageDialog: "Superviseur ajouté avec succès !",
+          messageCenterDialog: "Superviseur de centre ajouté avec succès !",
+          titleCenterDialog: "Superviseur de centre ajouté"
+        },
+        // Dialog specific translations
+        addNewDialogTitle: "Ajouter un Nouveau Superviseur d'Association",
+        addNewDialogDescription: "Remplissez les détails pour créer un nouveau superviseur. L'email et le mot de passe seront auto-générés.",
+        addNewCenterSupervisorDialogTitle: "Ajouter un Nouveau Superviseur de Centre",
+        addNewCenterSupervisorDialogDescription: "Remplissez les détails pour créer un nouveau superviseur de centre. L'email et le mot de passe seront auto-générés."
       },
       // Dashboards (generic)
       adminDashboardTitle: 'Tableau de Bord Admin',
@@ -385,6 +453,7 @@ const resources = {
         tableHeaderLogo: "Logo",
         tableHeaderName: "Nom",
         tableHeaderAffiliatedTo: "Affilié À",
+        tableHeaderSupervisorName: "Nom du Superviseur",
         tableHeaderPhone: "Téléphone",
         tableHeaderActions: "Actions",
         logoAlt: "Logo de {{name}}",
@@ -449,7 +518,15 @@ const resources = {
           submitButton: "Créer le Centre",
           errorNameRequired: "Le nom du centre est requis.",
           errorCreateCenter: "Une erreur inattendue s'est produite lors de la création du centre.",
-          successMessage: "Centre créé avec succès !"
+          successMessage: "Centre créé avec succès !",
+          selectCityPlaceholder: "Sélectionner une ville",
+          labelLogo: "Logo du Centre",
+          buttons: {
+            addSupervisorShort: "Ajouter Nouveau Sup."
+          },
+          messages: {
+            centerSupervisorAddedSuccessfully: "Nouveau superviseur de centre ajouté et sélectionné."
+          }
         },
         adminAddAssociationPage: {
           labelCity: "Ville",
@@ -502,7 +579,8 @@ const resources = {
           buttons: {
             cancel: "Annuler",
             creating: "Création en cours...",
-            createAssociation: "Créer l'Association"
+            createAssociation: "Créer l'Association",
+            addSupervisorShort: "Ajouter"
           },
           messages: {
             loadingSupervisorsError: "Échec du chargement des superviseurs potentiels.",
@@ -511,7 +589,9 @@ const resources = {
             creationSuccess: "Association créée avec succès ! Redirection...",
             creationErrorDefault: "Échec de la création de l'association. Réponse du serveur non JSON.",
             unknownError: "Une erreur inconnue s'est produite.",
-            supervisorNameDisplay: "{{firstName}} {{lastName}} (ID : {{id}})"
+            supervisorNameDisplay: "{{firstName}} {{lastName}} (ID : {{id}})",
+            supervisorNameDisplayWithArabic: "{{firstName}} {{lastName}} ({{arabicFirstName}} {{arabicLastName}})",
+            supervisorAddedSuccessfully: "Nouveau superviseur ajouté et sélectionné."
           },
           supervisorDropdown: {
             select: "Sélectionner un Superviseur",
@@ -520,7 +600,33 @@ const resources = {
             noAssociationSupervisors: "Aucun superviseur d'association trouvé.",
             availableSupervisorsLabel: "Superviseurs Disponibles"
           },
-          requiredField: "*"
+          requiredField: "*",
+          addError: {
+            title: "Error",
+            titleAssociation: "Error",
+            generic: "Could not add supervisor. Please check the details and try again.",
+            genericAssociation: "Could not add association supervisor. Please check the details and try again.",
+            authRequired: "Authentication required.",
+            genericDialog: "Échec de l'ajout du superviseur.",
+            titleDialog: "Erreur",
+            genericCenterDialog: "Échec de l'ajout du superviseur de centre.",
+            titleCenterDialog: "Erreur d'ajout du superviseur de centre"
+          },
+          addSuccess: {
+            title: "Succès",
+            titleAssociation: "Succès lors de l'ajout du superviseur d'association",
+            message: "Superviseur ajouté avec succès !",
+            messageAssociation: "Superviseur d'association ajouté avec succès !",
+            titleDialog: "Succès",
+            messageDialog: "Superviseur ajouté avec succès !",
+            messageCenterDialog: "Superviseur de centre ajouté avec succès !",
+            titleCenterDialog: "Superviseur de centre ajouté"
+          },
+          // Dialog specific translations
+          addNewDialogTitle: "Ajouter un Nouveau Superviseur d'Association",
+          addNewDialogDescription: "Remplissez les détails pour créer un nouveau superviseur. L'email et le mot de passe seront auto-générés.",
+          addNewCenterSupervisorDialogTitle: "Ajouter un Nouveau Superviseur de Centre",
+          addNewCenterSupervisorDialogDescription: "Remplissez les détails pour créer un nouveau superviseur de centre. L'email et le mot de passe seront auto-générés."
         }
       },
       fields: {
@@ -595,7 +701,8 @@ const resources = {
         delete: "حذف",
         cancel: "إلغاء",
         addSupervisor: "إضافة مشرف",
-        addAssociationSupervisor: "إضافة مشرف جمعية"
+        addAssociationSupervisor: "إضافة مشرف جمعية",
+        added: "تمت الإضافة"
       },
       supervisors: {
         fetchError: "فشل في جلب المشرفين.",
@@ -615,14 +722,28 @@ const resources = {
           title: "خطأ في إضافة المشرف",
           titleAssociation: "خطأ في إضافة مشرف الجمعية",
           generic: "تعذر إضافة المشرف. يرجى التحقق من التفاصيل والمحاولة مرة أخرى.",
-          genericAssociation: "تعذر إضافة مشرف الجمعية. يرجى التحقق من التفاصيل والمحاولة مرة أخرى."
+          genericAssociation: "تعذر إضافة مشرف الجمعية. يرجى التحقق من التفاصيل والمحاولة مرة أخرى.",
+          authRequired: "المصادقة مطلوبة.",
+          genericDialog: "فشل إضافة المشرف.",
+          titleDialog: "خطأ",
+          genericCenterDialog: "فشل إضافة مشرف المركز.",
+          titleCenterDialog: "خطأ في إضافة مشرف المركز"
         },
         addSuccess: {
           title: "نجاح",
           titleAssociation: "نجاح إضافة مشرف الجمعية",
           message: "تمت إضافة المشرف بنجاح!",
-          messageAssociation: "تمت إضافة مشرف الجمعية بنجاح!"
-        }
+          messageAssociation: "تمت إضافة مشرف الجمعية بنجاح!",
+          titleDialog: "نجاح",
+          messageDialog: "تمت إضافة المشرف بنجاح!",
+          messageCenterDialog: "تمت إضافة مشرف المركز بنجاح!",
+          titleCenterDialog: "تمت إضافة مشرف المركز"
+        },
+        // Dialog specific translations
+        addNewDialogTitle: "إضافة مشرف جمعية جديد",
+        addNewDialogDescription: "املأ التفاصيل لإنشاء مشرف جديد. سيتم إنشاء البريد الإلكتروني وكلمة المرور تلقائيًا.",
+        addNewCenterSupervisorDialogTitle: "إضافة مشرف مركز جديد",
+        addNewCenterSupervisorDialogDescription: "املأ التفاصيل لإنشاء مشرف مركز جديد. سيتم إنشاء البريد الإلكتروني وكلمة المرور تلقائيًا."
       },
       // Dashboards (generic)
       adminDashboardTitle: 'لوحة تحكم المسؤول',
@@ -655,6 +776,7 @@ const resources = {
         tableHeaderLogo: "الشعار",
         tableHeaderName: "الاسم",
         tableHeaderAffiliatedTo: "تابع لـ",
+        tableHeaderSupervisorName: "اسم المشرف",
         tableHeaderPhone: "الهاتف",
         tableHeaderActions: "الإجراءات",
         logoAlt: "شعار {{name}}",
@@ -719,7 +841,15 @@ const resources = {
           submitButton: "إنشاء المركز",
           errorNameRequired: "اسم المركز مطلوب.",
           errorCreateCenter: "حدث خطأ غير متوقع أثناء إنشاء المركز.",
-          successMessage: "تم إنشاء المركز بنجاح!"
+          successMessage: "تم إنشاء المركز بنجاح!",
+          selectCityPlaceholder: "اختر مدينة",
+          labelLogo: "شعار المركز",
+          buttons: {
+            addSupervisorShort: "إضافة مشرف جديد"
+          },
+          messages: {
+            centerSupervisorAddedSuccessfully: "تمت إضافة مشرف مركز جديد وتم اختياره."
+          }
         },
         adminAddAssociationPage: {
           labelCity: "المدينة",
@@ -772,7 +902,8 @@ const resources = {
           buttons: {
             cancel: "إلغاء",
             creating: "جارٍ الإنشاء...",
-            createAssociation: "إنشاء الجمعية"
+            createAssociation: "إنشاء الجمعية",
+            addSupervisorShort: "إضافة جديد"
           },
           messages: {
             loadingSupervisorsError: "فشل تحميل المشرفين المحتملين.",
@@ -781,7 +912,9 @@ const resources = {
             creationSuccess: "تم إنشاء الجمعية بنجاح! جارٍ إعادة التوجيه...",
             creationErrorDefault: "فشل إنشاء الجمعية. استجابة الخادم ليست بتنسيق JSON.",
             unknownError: "حدث خطأ غير معروف.",
-            supervisorNameDisplay: "{{firstName}} {{lastName}} (المعرف: {{id}})"
+            supervisorNameDisplay: "{{firstName}} {{lastName}} (المعرف: {{id}})",
+            supervisorNameDisplayWithArabic: "{{firstName}} {{lastName}} ({{arabicFirstName}} {{arabicLastName}})",
+            supervisorAddedSuccessfully: "تمت إضافة مشرف جديد وتم اختياره."
           },
           supervisorDropdown: {
             select: "اختر مشرفًا",
@@ -790,7 +923,33 @@ const resources = {
             noAssociationSupervisors: "لم يتم العثور على مشرفي جمعيات.",
             availableSupervisorsLabel: "المشرفون المتاحون"
           },
-          requiredField: "*"
+          requiredField: "*",
+          addError: {
+            title: "Error",
+            titleAssociation: "Error",
+            generic: "Could not add supervisor. Please check the details and try again.",
+            genericAssociation: "Could not add association supervisor. Please check the details and try again.",
+            authRequired: "Authentication required.",
+            genericDialog: "Échec de l'ajout du superviseur.",
+            titleDialog: "Erreur",
+            genericCenterDialog: "Échec de l'ajout du superviseur de centre.",
+            titleCenterDialog: "Erreur d'ajout du superviseur de centre"
+          },
+          addSuccess: {
+            title: "Succès",
+            titleAssociation: "Succès lors de l'ajout du superviseur d'association",
+            message: "Superviseur ajouté avec succès !",
+            messageAssociation: "Superviseur d'association ajouté avec succès !",
+            titleDialog: "Succès",
+            messageDialog: "Superviseur ajouté avec succès !",
+            messageCenterDialog: "Superviseur de centre ajouté avec succès !",
+            titleCenterDialog: "Superviseur de centre ajouté"
+          },
+          // Dialog specific translations
+          addNewDialogTitle: "Ajouter un Nouveau Superviseur d'Association",
+          addNewDialogDescription: "Remplissez les détails pour créer un nouveau superviseur. L'email et le mot de passe seront auto-générés.",
+          addNewCenterSupervisorDialogTitle: "Ajouter un Nouveau Superviseur de Centre",
+          addNewCenterSupervisorDialogDescription: "Remplissez les détails pour créer un nouveau superviseur de centre. L'email et le mot de passe seront auto-générés."
         }
       },
       fields: {

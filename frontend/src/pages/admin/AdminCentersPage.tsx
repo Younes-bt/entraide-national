@@ -51,6 +51,8 @@ interface Center {
   is_verified?: boolean;
   supervisor?: number | string | null;
   supervisor_username?: string;
+  supervisor_first_name?: string;
+  supervisor_last_name?: string;
   rooms?: Room[];
   groups?: Group[];
   created_at?: string;
@@ -202,13 +204,14 @@ const AdminCentersPage: React.FC = () => {
                 <TableHead className="w-[80px]">{t('adminCentersPage.tableHeaderLogo')}</TableHead>
                 <TableHead>{t('adminCentersPage.tableHeaderName')}</TableHead>
                 <TableHead>{t('adminCentersPage.tableHeaderAffiliatedTo')}</TableHead>
+                <TableHead>{t('adminCentersPage.tableHeaderSupervisorName')}</TableHead>
                 <TableHead>{t('adminCentersPage.tableHeaderPhone')}</TableHead>
                 <TableHead className="text-right w-[100px]">{t('adminCentersPage.tableHeaderActions')}</TableHead>
              </TableRow>
             </TableHeader>
             <TableBody>
               {centers.map((center) => (
-                <TableRow key={center.id} className="hover:bg-gray-50">
+                <TableRow key={center.id} className="hover:bg-gray-100 dark:hover:bg-gray-800">
                   <TableCell>
                     {center.logo ? (
                       <img src={center.logo} alt={t('adminCentersPage.logoAlt', { name: center.name })} className="h-10 w-10 rounded-full object-cover" />
@@ -220,6 +223,11 @@ const AdminCentersPage: React.FC = () => {
                   </TableCell>
                   <TableCell className="font-medium">{center.name}</TableCell>
                   <TableCell>{getAffiliationDisplay(center)}</TableCell>
+                  <TableCell>
+                    {center.supervisor_first_name && center.supervisor_last_name 
+                      ? `${center.supervisor_first_name} ${center.supervisor_last_name}` 
+                      : center.supervisor_username || t('adminCentersPage.notAvailable')}
+                  </TableCell>
                   <TableCell>{center.phone_number || t('adminCentersPage.notAvailable')}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -281,7 +289,14 @@ const AdminCentersPage: React.FC = () => {
               <InfoRow label={t('adminCentersPage.dialogEmail')} value={selectedCenter.email} t={t} />
               <InfoRow label={t('adminCentersPage.dialogAddress')} value={selectedCenter.address} t={t} />
               <InfoRow label={t('adminCentersPage.dialogCity')} value={selectedCenter.city} t={t}/>
-              <InfoRow label={t('adminCentersPage.dialogSupervisor')} value={selectedCenter.supervisor_username || (selectedCenter.supervisor ? `ID: ${selectedCenter.supervisor}`: t('adminCentersPage.notAvailable'))} />
+              <InfoRow 
+                label={t('adminCentersPage.dialogSupervisor')} 
+                value={
+                  selectedCenter.supervisor_first_name && selectedCenter.supervisor_last_name 
+                    ? `${selectedCenter.supervisor_first_name} ${selectedCenter.supervisor_last_name}` 
+                    : selectedCenter.supervisor_username || (selectedCenter.supervisor ? `ID: ${selectedCenter.supervisor}`: t('adminCentersPage.notAvailable'))
+                } 
+              />
               <InfoRow label={t('adminCentersPage.dialogActive')} value={selectedCenter.is_active ? t('common.yes') : t('common.no')} />
               <InfoRow label={t('adminCentersPage.dialogVerified')} value={selectedCenter.is_verified ? t('common.yes') : t('common.no')} />
               <InfoRow label={t('adminCentersPage.dialogWebsite')} value={selectedCenter.website} link={selectedCenter.website} t={t} />
