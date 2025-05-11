@@ -27,8 +27,8 @@ const LoginPage: React.FC = () => {
       className="flex flex-col items-center justify-center bg-background text-foreground p-4"
       style={{ minHeight: 'calc(100vh - 140px)' }}
     >
-      <div className="w-full max-w-md space-y-6">
-        <div className="text-center">
+      <div className="w-full max-w-md space-y-6 border-2 border-blue-100 rounded-lg">
+        <div className="text-center m-20">
           <h1 className="text-3xl font-bold tracking-tight">{t('loginPageTitle')}</h1>
           <p className="mt-2 text-muted-foreground">{t('login_form_message')}</p>
         </div>

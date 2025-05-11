@@ -4,45 +4,52 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { LogOut, Building, Library, Users, UserCog, GraduationCap, BookUser, X, LayoutDashboard, UsersRound } from 'lucide-react'; // Added LayoutDashboard and UsersRound icons
+import { LogOut, Building, Library, Users, UserCog, GraduationCap, BookUser, X, LayoutDashboard, UsersRound, Home, BookOpen, CheckSquare, Briefcase, CalendarDays, ClipboardCheck } from 'lucide-react'; // Added more icons
 import { LanguageSwitcher } from './language-switcher';
 import { ThemeToggleButton } from './ThemeToggleButton';
-import { cn } from "@/lib/utils"; // Assuming you have this from shadcn setup for class merging
+import { cn } from "@/lib/utils";
+
+export interface NavLink {
+  href: string;
+  label: string; // This will be a translation key
+  icon: React.ElementType;
+  section?: string; // Optional section key for grouping
+}
 
 interface SidebarProps {
   isMobileOpen: boolean;
   setIsMobileOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  navLinks: NavLink[];
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setIsMobileOpen }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setIsMobileOpen, navLinks }) => {
   const { user, logout } = useAuth();
   const { t } = useTranslation();
   const location = useLocation();
 
-  // Close sidebar when a link is clicked on mobile
   const handleLinkClick = () => {
     if (isMobileOpen) {
       setIsMobileOpen(false);
     }
   };
 
-  // Define sidebar links based on user role (for admin)
-  // TODO: Adapt links based on actual user role if Sidebar becomes generic
-  const navLinks = [
-    { href: '/admin', label: 'sidebar.dashboard', icon: LayoutDashboard },
-    { href: '/admin/centers', label: 'sidebar.centers', icon: Building },
-    { href: '/admin/associations', label: 'sidebar.associations', icon: Library },
-    { href: '/admin/supervisors', label: 'sidebar.supervisors', icon: UsersRound },
-    { href: '/admin/trainers', label: 'sidebar.trainers', icon: UserCog },
-    { href: '/admin/students', label: 'sidebar.students', icon: GraduationCap },
-  ];
-
   const isActive = (path: string) => {
-    if (path === '/admin') {
-      return location.pathname === '/admin' || location.pathname === '/admin/';
+    // Exact match for dashboard/index routes, startsWith for others
+    if (path.endsWith('dashboard') || path.endsWith('dashboard/')) {
+      return location.pathname === path || location.pathname === `${path}/`;
     }
     return location.pathname.startsWith(path);
   };
+  
+  // Group links by section
+  const groupedLinks: { [key: string]: NavLink[] } = {};
+  navLinks.forEach(link => {
+    const sectionKey = link.section || 'default';
+    if (!groupedLinks[sectionKey]) {
+      groupedLinks[sectionKey] = [];
+    }
+    groupedLinks[sectionKey].push(link);
+  });
 
   return (
     <>
@@ -55,7 +62,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setIsMobileOpen }) => {
         />
       )}
 
-      {/* Sidebar */}
       <aside 
         className={cn(
           "fixed inset-y-0 left-0 z-40 w-64 flex flex-col h-screen bg-card text-card-foreground border-r p-4",
@@ -63,7 +69,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setIsMobileOpen }) => {
           isMobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        {/* Header with Mobile Close Button */}
         <div className="flex items-center justify-between p-4 border-b mb-4">
           <div className="flex items-center gap-2">
               <Avatar className="h-10 w-10">
@@ -81,22 +86,29 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setIsMobileOpen }) => {
            </Button>
         </div>
 
-        {/* Body: Navigation Links */}
         <nav className="flex-1 space-y-1 px-2 py-4 overflow-y-auto">
-          {navLinks.map((link) => (
-            <Link key={link.href} to={link.href} onClick={handleLinkClick}>
-              <Button 
-                variant={isActive(link.href) ? "secondary" : "ghost"} 
-                className="w-full justify-start"
-              >
-                <link.icon className="mr-2 h-4 w-4" />
-                {t(link.label)} {/* Assuming labels are translation keys */}
-              </Button>
-            </Link>
+          {Object.entries(groupedLinks).map(([sectionKey, links]) => (
+            <div key={sectionKey} className="mb-4">
+              {sectionKey !== 'default' && (
+                <h3 className="px-2 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  {t(`sidebar.sections.${sectionKey}`)}
+                </h3>
+              )}
+              {links.map((link) => (
+                <Link key={link.href} to={link.href} onClick={handleLinkClick}>
+                  <Button 
+                    variant={isActive(link.href) ? "secondary" : "ghost"} 
+                    className="w-full justify-start"
+                  >
+                    <link.icon className="mr-2 h-4 w-4" />
+                    {t(link.label)}
+                  </Button>
+                </Link>
+              ))}
+            </div>
           ))}
         </nav>
 
-        {/* Footer */}
         <div className="mt-auto pt-4 border-t space-y-2 px-2">
           <div className="flex justify-around items-center mb-2">
             <ThemeToggleButton /> 

@@ -40,7 +40,19 @@ const resources = {
         associations: "Associations",
         supervisors: "Supervisors",
         trainers: "Trainers",
-        students: "Students"
+        students: "Students",
+        // Added for Center Supervisor
+        centerInfo: "Center Info",
+        rooms: "Rooms",
+        equipment: "Equipment",
+        schedules: "Schedules",
+        attendance: "Attendance",
+        sections: {
+          overview: "Overview",
+          hr: "HR Management",
+          center: "Center Management",
+          programme: "Programme Management"
+        }
       },
       table: {
         avatar: "Avatar",
@@ -102,14 +114,17 @@ const resources = {
       // Dashboards (generic)
       adminDashboardTitle: 'Admin Dashboard',
       welcomeAdmin: 'Welcome, Admin!',
-      centerDashboardTitle: 'Center Supervisor Dashboard',
-      welcomeCenterSupervisor: 'Welcome, Center Supervisor!',
+      centerDashboardTitle: 'Center Dashboard',
+      welcomeCenterSupervisor: 'Welcome, Center Supervisor! Manage your center from here.',
       associationDashboardTitle: 'Association Supervisor Dashboard',
       welcomeAssociationSupervisor: 'Welcome, Association Supervisor!',
       trainerDashboardTitle: 'Trainer Dashboard',
       welcomeTrainer: 'Welcome, Trainer!',
       studentDashboardTitle: 'Student Dashboard',
       welcomeStudent: 'Welcome, Student!',
+      // Center Students Page
+      centerStudentsPageTitle: 'Manage Center Students',
+      manageCenterStudentsMessage: 'Here you can manage all students registered in your center.',
       // Not Found Page
       notFoundTitle: '404 - Page Not Found',
       goHome: 'Go Home',
@@ -363,7 +378,19 @@ const resources = {
         associations: "Associations",
         supervisors: "Superviseurs",
         trainers: "Formateurs",
-        students: "Étudiants"
+        students: "Étudiants",
+        // Added for Center Supervisor (French)
+        centerInfo: "Infos du Centre",
+        rooms: "Salles",
+        equipment: "Équipement",
+        schedules: "Horaires",
+        attendance: "Présence",
+        sections: {
+          overview: "Aperçu",
+          hr: "Gestion RH",
+          center: "Gestion du Centre",
+          programme: "Gestion des Programmes"
+        }
       },
       table: {
         avatar: "Avatar",
@@ -425,14 +452,17 @@ const resources = {
       // Dashboards (generic)
       adminDashboardTitle: 'Tableau de Bord Admin',
       welcomeAdmin: 'Bienvenue, Admin!',
-      centerDashboardTitle: 'Tableau de Bord Superviseur Centre',
-      welcomeCenterSupervisor: 'Bienvenue, Superviseur Centre!',
+      centerDashboardTitle: 'Tableau de Bord Centre',
+      welcomeCenterSupervisor: 'Bienvenue, Superviseur du Centre ! Gérez votre centre d\'ici.',
       associationDashboardTitle: 'Tableau de Bord Superviseur Association',
       welcomeAssociationSupervisor: 'Bienvenue, Superviseur Association!',
       trainerDashboardTitle: 'Tableau de Bord Formateur',
       welcomeTrainer: 'Bienvenue, Formateur!',
       studentDashboardTitle: 'Tableau de Bord Étudiant',
       welcomeStudent: 'Bienvenue, Étudiant!',
+      // Center Students Page (French)
+      centerStudentsPageTitle: 'Gérer les Étudiants du Centre',
+      manageCenterStudentsMessage: 'Ici, vous pouvez gérer tous les étudiants inscrits dans votre centre.',
       // Not Found Page
       notFoundTitle: '404 - Page Non Trouvée',
       goHome: 'Retour à l\'accueil',
@@ -686,7 +716,19 @@ const resources = {
         associations: "الجمعيات",
         supervisors: "المشرفين",
         trainers: "المدربين",
-        students: "الطلاب"
+        students: "الطلاب",
+        // Added for Center Supervisor (Arabic)
+        centerInfo: "معلومات المركز",
+        rooms: "القاعات",
+        equipment: "المعدات",
+        schedules: "الجداول الزمنية",
+        attendance: "الحاضرين",
+        sections: {
+          overview: "نظرة عامة",
+          hr: "إدارة الموارد البشرية",
+          center: "إدارة المركز",
+          programme: "إدارة البرامج"
+        }
       },
       table: {
         avatar: "الصورة الرمزية",
@@ -749,13 +791,16 @@ const resources = {
       adminDashboardTitle: 'لوحة تحكم المسؤول',
       welcomeAdmin: 'مرحباً، أيها المسؤول!',
       centerDashboardTitle: 'لوحة تحكم مشرف المركز',
-      welcomeCenterSupervisor: 'مرحباً، مشرف المركز!',
+      welcomeCenterSupervisor: 'مرحباً مشرف المركز! قم بإدارة مركزك من هنا.',
       associationDashboardTitle: 'لوحة تحكم مشرف الجمعية',
       welcomeAssociationSupervisor: 'مرحباً، مشرف الجمعية!',
       trainerDashboardTitle: 'لوحة تحكم المدرب',
       welcomeTrainer: 'مرحباً، أيها المدرب!',
       studentDashboardTitle: 'لوحة تحكم الطالب',
       welcomeStudent: 'مرحباً، أيها الطالب!',
+      // Center Students Page (Arabic)
+      centerStudentsPageTitle: 'إدارة طلاب المركز',
+      manageCenterStudentsMessage: 'هنا يمكنك إدارة جميع الطلاب المسجلين في مركزك.',
       // Not Found Page
       notFoundTitle: '404 - الصفحة غير موجودة',
       goHome: 'العودة إلى الرئيسية',

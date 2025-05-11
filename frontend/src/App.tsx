@@ -25,6 +25,7 @@ import AdminAssociationsPage from './pages/admin/AdminAssociationsPage'; // Impo
 import AdminAddAssociationPage from './pages/admin/AdminAddAssociationPage'; // Import the Add Association page
 import AdminAddSupervisorPage from './pages/admin/AdminAddSupervisorPage'; // Import the new Add Supervisor page
 import AdminAddAssociationSupervisorPage from './pages/admin/AdminAddAssociationSupervisorPage'; // Import the Add Association Supervisor page
+import CenterRoutes from './pages/center/CenterRoutes'; // Import CenterRoutes
 
 // Helper to get dashboard path based on role
 const getDashboardPath = (role: string | undefined): string => {
@@ -67,6 +68,7 @@ function AppContent() {
       {/* Dashboard Routes with Sidebar Layout */}
       <Route path="/admin/*" element={isAuthenticated() && user?.role === 'admin' ? <DashboardLayout><AdminRoutes /></DashboardLayout> : <Navigate to="/login" replace />} />
       {/* Add similar routes for other roles using DashboardLayout */}
+      <Route path="/center/*" element={isAuthenticated() && user?.role === 'center_supervisor' ? <DashboardLayout><CenterRoutes /></DashboardLayout> : <Navigate to="/login" replace />} />
       {/* <Route path="/student/*" element={isAuthenticated() && user?.role === 'student' ? <DashboardLayout><StudentRoutes /></DashboardLayout> : <Navigate to="/login" replace />} /> */}
       
       {/* Not Found Route */}

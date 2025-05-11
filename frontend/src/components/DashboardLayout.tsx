@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
+import type { NavLink } from './Sidebar';
 import { Button } from '@/components/ui/button';
-import { Menu } from 'lucide-react';
+import { Menu, LayoutDashboard, Building, Library, UsersRound, UserCog, GraduationCap, Home as HomeIcon, BookOpen, CheckSquare, Briefcase, CalendarDays, ClipboardCheck } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -9,6 +11,29 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const { user } = useAuth();
+
+  let navLinks: NavLink[] = [];
+
+  if (user?.role === 'admin') {
+    navLinks = [
+      { href: '/admin/dashboard', label: 'sidebar.dashboard', icon: LayoutDashboard },
+      { href: '/admin/centers', label: 'sidebar.centers', icon: Building },
+      { href: '/admin/associations', label: 'sidebar.associations', icon: Library },
+      { href: '/admin/supervisors', label: 'sidebar.supervisors', icon: UsersRound },
+    ];
+  } else if (user?.role === 'center_supervisor') {
+    navLinks = [
+      { href: '/center/dashboard', label: 'sidebar.dashboard', icon: LayoutDashboard, section: 'overview' },
+      { section: 'hr', href: '/center/students', label: 'sidebar.students', icon: GraduationCap },
+      { section: 'hr', href: '/center/trainers', label: 'sidebar.trainers', icon: UserCog },
+      { section: 'center', href: '/center/info', label: 'sidebar.centerInfo', icon: HomeIcon },
+      { section: 'center', href: '/center/rooms', label: 'sidebar.rooms', icon: Building },
+      { section: 'center', href: '/center/equipment', label: 'sidebar.equipment', icon: Briefcase },
+      { section: 'programme', href: '/center/schedules', label: 'sidebar.schedules', icon: CalendarDays },
+      { section: 'programme', href: '/center/attendance', label: 'sidebar.attendance', icon: ClipboardCheck },
+    ];
+  }
 
   return (
     <div className="relative flex min-h-screen bg-background">
@@ -16,6 +41,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       <Sidebar 
         isMobileOpen={isMobileSidebarOpen} 
         setIsMobileOpen={setIsMobileSidebarOpen} 
+        navLinks={navLinks}
       />
 
       {/* Main Content Area */}
