@@ -47,11 +47,20 @@ const resources = {
         equipment: "Equipment",
         schedules: "Schedules",
         attendance: "Attendance",
+        trainingPrograms: "Training Programs",
+        trainingCourses: "Training Courses",
+        annualCourseDistribution: "Annual Course Distribution",
+        courses: "Courses",
+        exams: {
+          comingSoon: "Coming Soon"
+        },
         sections: {
           overview: "Overview",
           hr: "HR Management",
           center: "Center Management",
-          programme: "Programme Management"
+          programme: "Programme Management",
+          trainings: "Trainings",
+          exams: "Exams"
         }
       },
       table: {
@@ -60,7 +69,23 @@ const resources = {
         center: "Center",
         association: "Association",
         phone: "Phone",
-        actions: "Actions"
+        actions: "Actions",
+        attendance: "Attendance",
+        trainingPrograms: "Training Programs",
+        trainingCourses: "Training Courses",
+        annualCourseDistribution: "Annual Course Distribution",
+        courses: "Courses",
+        exams: {
+          comingSoon: "Coming Soon"
+        },
+        sections: {
+          overview: "Overview",
+          hr: "HR Management",
+          center: "Center Management",
+          programme: "Programme Management",
+          trainings: "Trainings",
+          exams: "Exams"
+        }
       },
       actions: {
         edit: "Edit",
@@ -339,6 +364,90 @@ const resources = {
         firstNameArabic: "First Name (Arabic)",
         lastNameArabic: "Last Name (Arabic)",
         profilePictureOptional: "Profile Picture (Optional)"
+      },
+      trainingPrograms: {
+        title: "Training Programs",
+        addNew: "Add New Training Program",
+        noPrograms: "No training programs found.",
+        error: {
+          notAuthenticated: "Authentication token is missing. Please log in.",
+          unknown: "An unknown error occurred while fetching programs."
+        }
+      },
+      adminAddTrainingProgram: {
+        title: "Add New Training Program",
+        backButton: "Back to Programs",
+        labels: {
+          name: "Program Name",
+          description: "Description",
+          durationYears: "Duration (Years)",
+          logo: "Logo (Optional)"
+        },
+        placeholders: {
+          name: "Enter program name",
+          description: "Enter program description",
+          durationYears: "e.g., 2"
+        },
+        buttons: {
+          create: "Create Program",
+          creating: "Creating..."
+        },
+        validation: {
+          nameRequired: "Program name is required.",
+          descriptionRequired: "Description is required.",
+          durationRequired: "Duration is required.",
+          durationPositive: "Duration must be a positive number."
+        },
+        messages: {
+          success: "Training program created successfully!",
+          errorDefault: "Failed to create training program. Please check the details and try again.",
+          errorConflict: "A training program with this name already exists."
+        }
+      },
+      centerInfoPage: {
+        tabGeneralInfo: "General Info",
+        tabContactLinks: "Contact & Links",
+        tabRooms: "Rooms",
+        tabGroups: "Groups",
+        generalInfo: {
+          title: "General Information",
+          affiliatedTo: "Affiliated To:",
+          association: "Association:",
+          status: "Status:",
+          active: "Active",
+          inactive: "Inactive",
+          verified: "(Verified)",
+          notVerified: "(Not Verified)",
+          registeredOn: "Registered On:",
+          lastUpdated: "Last Updated:"
+        },
+        contactLinks: {
+          title: "Contact & Links",
+          email: "Email:",
+          phone: "Phone:",
+          address: "Address:",
+          location: "Location:",
+          website: "Website:",
+          facebook: "Facebook:",
+          instagram: "Instagram:",
+          twitter: "Twitter:",
+          viewOnMap: "View on Map",
+          viewProfile: "View Profile"
+        },
+        rooms: {
+          title: "Rooms ({{count}})",
+          description: "Details about the center\\'s available rooms.",
+          capacity: "Capacity:",
+          available: "Available:",
+          equipment: "Equipment:",
+          equipmentItems: "{{count}} item(s)",
+          noRooms: "No rooms listed for this center."
+        },
+        groups: {
+          title: "Groups ({{count}})",
+          description: "Details about the center\\'s student groups.",
+          noGroups: "No groups listed for this center."
+        }
       }
     }
   },
@@ -385,11 +494,20 @@ const resources = {
         equipment: "Équipement",
         schedules: "Horaires",
         attendance: "Présence",
+        trainingPrograms: "Programmes de Formation",
+        trainingCourses: "Cours de Formation",
+        annualCourseDistribution: "Répartition Annuelle des Cours",
+        courses: "Cours",
+        exams: {
+          comingSoon: "Bientôt Disponible"
+        },
         sections: {
           overview: "Aperçu",
           hr: "Gestion RH",
           center: "Gestion du Centre",
-          programme: "Gestion des Programmes"
+          programme: "Gestion des Programmes",
+          trainings: "Formations",
+          exams: "Examens"
         }
       },
       table: {
@@ -398,7 +516,23 @@ const resources = {
         center: "Centre",
         association: "Association",
         phone: "Téléphone",
-        actions: "Actions"
+        actions: "Actions",
+        attendance: "Présence",
+        trainingPrograms: "Programmes de Formation",
+        trainingCourses: "Cours de Formation",
+        annualCourseDistribution: "Répartition Annuelle des Cours",
+        courses: "Cours",
+        exams: {
+          comingSoon: "Bientôt Disponible"
+        },
+        sections: {
+          overview: "Aperçu",
+          hr: "Gestion RH",
+          center: "Gestion du Centre",
+          programme: "Gestion des Programmes",
+          trainings: "Formations",
+          exams: "Examens"
+        }
       },
       actions: {
         edit: "Modifier",
@@ -657,7 +791,7 @@ const resources = {
           addNewDialogDescription: "Remplissez les détails pour créer un nouveau superviseur. L'email et le mot de passe seront auto-générés.",
           addNewCenterSupervisorDialogTitle: "Ajouter un Nouveau Superviseur de Centre",
           addNewCenterSupervisorDialogDescription: "Remplissez les détails pour créer un nouveau superviseur de centre. L'email et le mot de passe seront auto-générés."
-        }
+        },
       },
       fields: {
         firstName: "Prénom",
@@ -671,12 +805,96 @@ const resources = {
         addressOptional: "Adresse (Optionnel)",
         cityOptional: "Ville (Optionnel)",
         profilePictureUrlOptional: "URL de la Photo de Profil (Optionnel)",
-        profilePictureUrlPlaceholder: "https://example.com/image.png",
+        profilePictureUrlPlaceholder: "https://exemple.com/image.png",
         firstNameFrench: "Prénom (Français)",
         lastNameFrench: "Nom (Français)",
         firstNameArabic: "Prénom (Arabe)",
         lastNameArabic: "Nom (Arabe)",
         profilePictureOptional: "Photo de Profil (Optionnel)"
+      },
+      trainingPrograms: {
+        title: "Programmes de Formation",
+        addNew: "Ajouter un Nouveau Programme",
+        noPrograms: "Aucun programme de formation trouvé.",
+        error: {
+          notAuthenticated: "Jeton d'authentification manquant. Veuillez vous connecter.",
+          unknown: "Une erreur inconnue s'est produite lors de la récupération des programmes."
+        }
+      },
+      adminAddTrainingProgram: {
+        title: "Ajouter un Nouveau Programme de Formation",
+        backButton: "Retour aux Programmes",
+        labels: {
+          name: "Nom du Programme",
+          description: "Description",
+          durationYears: "Durée (Années)",
+          logo: "Logo (Optionnel)"
+        },
+        placeholders: {
+          name: "Entrez le nom du programme",
+          description: "Entrez la description du programme",
+          durationYears: "ex: 2"
+        },
+        buttons: {
+          create: "Créer le Programme",
+          creating: "Création en cours..."
+        },
+        validation: {
+          nameRequired: "Le nom du programme est requis.",
+          descriptionRequired: "La description est requise.",
+          durationRequired: "La durée est requise.",
+          durationPositive: "La durée doit être un nombre positif."
+        },
+        messages: {
+          success: "Programme de formation créé avec succès !",
+          errorDefault: "Échec de la création du programme de formation. Veuillez vérifier les détails et réessayer.",
+          errorConflict: "Un programme de formation avec ce nom existe déjà."
+        }
+      },
+      centerInfoPage: {
+        tabGeneralInfo: "Infos Générales",
+        tabContactLinks: "Contact et Liens",
+        tabRooms: "Salles",
+        tabGroups: "Groupes",
+        generalInfo: {
+          title: "Informations Générales",
+          affiliatedTo: "Affilié à :",
+          association: "Association :",
+          status: "Statut :",
+          active: "Actif",
+          inactive: "Inactif",
+          verified: "(Vérifié)",
+          notVerified: "(Non Vérifié)",
+          registeredOn: "Inscrit le :",
+          lastUpdated: "Mis à jour le :"
+        },
+        contactLinks: {
+          title: "Contact et Liens",
+          email: "E-mail :",
+          phone: "Téléphone :",
+          address: "Adresse :",
+          location: "Emplacement :",
+          website: "Site Web :",
+          facebook: "Facebook :",
+          instagram: "Instagram :",
+          twitter: "Twitter :",
+          viewOnMap: "Voir sur la Carte",
+          viewProfile: "Voir le Profil"
+        },
+        rooms: {
+          title: "Salles ({{count}})",
+          description: "Détails sur les salles disponibles du centre.",
+          capacity: "Capacité :",
+          available: "Disponible :",
+          equipment: "Équipement :",
+          equipmentItems: "{{count}} article(s)",
+          noRooms: "Aucune salle répertoriée pour ce centre."
+        },
+        groups: {
+          title: "Groupes ({{count}})",
+          description: "Détails sur les groupes d\\'étudiants du centre.",
+          noGroups: "Aucun groupe répertorié pour ce centre."
+        }
       }
     }
   },
@@ -723,11 +941,20 @@ const resources = {
         equipment: "المعدات",
         schedules: "الجداول الزمنية",
         attendance: "الحاضرين",
+        trainingPrograms: "التكوينات",
+        trainingCourses: "البرامج التكوينية",
+        annualCourseDistribution: "التوزيع السنوي للدورات",
+        courses: "الدروس و البرامج",
+        exams: {
+          comingSoon: "قريباً"
+        },
         sections: {
           overview: "نظرة عامة",
           hr: "إدارة الموارد البشرية",
           center: "إدارة المركز",
-          programme: "إدارة البرامج"
+          programme: "إدارة التكوينات",
+          trainings: "التكوينات",
+          exams: "الامتحانات"
         }
       },
       table: {
@@ -736,7 +963,23 @@ const resources = {
         center: "المركز",
         association: "الجمعية",
         phone: "الهاتف",
-        actions: "الإجراءات"
+        actions: "الإجراءات",
+        attendance: "الحاضرين",
+        trainingPrograms: "برامج التدريب",
+        trainingCourses: "دورات تدريبية",
+        annualCourseDistribution: "التوزيع السنوي للدورات",
+        courses: "الدورات",
+        exams: {
+          comingSoon: "قريباً"
+        },
+        sections: {
+          overview: "نظرة عامة",
+          hr: "إدارة الموارد البشرية",
+          center: "إدارة المركز",
+          programme: "إدارة البرامج",
+          trainings: "التدريبات",
+          exams: "الامتحانات"
+        }
       },
       actions: {
         edit: "تعديل",
@@ -995,7 +1238,7 @@ const resources = {
           addNewDialogDescription: "Remplissez les détails pour créer un nouveau superviseur. L'email et le mot de passe seront auto-générés.",
           addNewCenterSupervisorDialogTitle: "Ajouter un Nouveau Superviseur de Centre",
           addNewCenterSupervisorDialogDescription: "Remplissez les détails pour créer un nouveau superviseur de centre. L'email et le mot de passe seront auto-générés."
-        }
+        },
       },
       fields: {
         firstName: "الاسم الأول",
@@ -1015,6 +1258,90 @@ const resources = {
         firstNameArabic: "الاسم الأول (عربي)",
         lastNameArabic: "اسم العائلة (عربي)",
         profilePictureOptional: "صورة الملف الشخصي (اختياري)"
+      },
+      trainingPrograms: {
+        title: "التكوينات",
+        addNew: "إضافة تكوين جديد",
+        noPrograms: "لم يتم العثور على برامج تكوين.",
+        error: {
+          notAuthenticated: "رمز المصادقة مفقود. يرجى تسجيل الدخول.",
+          unknown: "حدث خطأ غير معروف أثناء جلب برامج التكوين."
+        }
+      },
+      adminAddTrainingProgram: {
+        title: "إضافة برنامج تكوين جديد",
+        backButton: "العودة إلى البرامج",
+        labels: {
+          name: "اسم البرنامج",
+          description: "الوصف",
+          durationYears: "المدة (سنوات)",
+          logo: "الشعار (اختياري)"
+        },
+        placeholders: {
+          name: "أدخل اسم البرنامج",
+          description: "أدخل وصف البرنامج",
+          durationYears: "مثال: 2"
+        },
+        buttons: {
+          create: "إنشاء البرنامج",
+          creating: "جاري الإنشاء..."
+        },
+        validation: {
+          nameRequired: "اسم البرنامج مطلوب.",
+          descriptionRequired: "الوصف مطلوب.",
+          durationRequired: "المدة مطلوبة.",
+          durationPositive: "يجب أن تكون المدة رقمًا موجبًا."
+        },
+        messages: {
+          success: "تم إنشاء برنامج التكوين بنجاح!",
+          errorDefault: "فشل إنشاء برنامج التكوين. يرجى التحقق من التفاصيل والمحاولة مرة أخرى.",
+          errorConflict: "يوجد برنامج تكوين بهذا الاسم بالفعل."
+        }
+      },
+      centerInfoPage: {
+        tabGeneralInfo: "معلومات عامة",
+        tabContactLinks: "الاتصال والروابط",
+        tabRooms: "القاعات",
+        tabGroups: "المجموعات",
+        generalInfo: {
+          title: "معلومات عامة",
+          affiliatedTo: "تابع لـ :",
+          association: "الجمعية :",
+          status: "الحالة :",
+          active: "نشط",
+          inactive: "غير نشط",
+          verified: "(موثق)",
+          notVerified: "(غير موثق)",
+          registeredOn: "مسجل في :",
+          lastUpdated: "آخر تحديث :"
+        },
+        contactLinks: {
+          title: "الاتصال والروابط",
+          email: "البريد الإلكتروني :",
+          phone: "الهاتف :",
+          address: "العنوان :",
+          location: "الموقع :",
+          website: "الموقع الإلكتروني :",
+          facebook: "فيسبوك :",
+          instagram: "انستجرام :",
+          twitter: "تويتر :",
+          viewOnMap: "عرض على الخريطة",
+          viewProfile: "عرض الملف الشخصي"
+        },
+        rooms: {
+          title: "القاعات ({{count}})",
+          description: "تفاصيل حول القاعات المتاحة في المركز.",
+          capacity: "السعة :",
+          available: "متاح :",
+          equipment: "المعدات :",
+          equipmentItems: "{{count}} عنصر(عناصر)",
+          noRooms: "لا توجد قاعات مدرجة لهذا المركز."
+        },
+        groups: {
+          title: "المجموعات ({{count}})",
+          description: "تفاصيل حول مجموعات الطلاب في المركز.",
+          noGroups: "لا توجد مجموعات مدرجة لهذا المركز."
+        }
       }
     }
   }

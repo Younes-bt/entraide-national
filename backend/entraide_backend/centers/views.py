@@ -33,7 +33,9 @@ class IsAdminOrCenterSupervisor(permissions.BasePermission):
         
         # For Room, Equipment, Group, check if user is supervisor of the parent center
         center = None
-        if isinstance(obj, Room):
+        if isinstance(obj, Center):
+            return obj.supervisor == request.user
+        elif isinstance(obj, Room):
             center = obj.center
         elif isinstance(obj, Equipment):
             center = obj.center # Equipment is directly linked to a center as per models.py
@@ -53,7 +55,7 @@ class CenterViewSet(viewsets.ModelViewSet):
         'equipments' # For potential center_equipment_condition filter
     ).all()
     serializer_class = CenterSerializer
-    permission_classes = [permissions.IsAdminUser] # Only admins can CRUD centers
+    permission_classes = [IsAdminOrCenterSupervisor] # <-- MODIFIED THIS LINE
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = CenterFilter # Use the custom FilterSet class
     # filterset_fields can be removed if all fields are handled by CenterFilter or are not needed for simple lookup
@@ -66,6 +68,29 @@ class CenterViewSet(viewsets.ModelViewSet):
     # }
     search_fields = ['name', 'description', 'city', 'association__name', 'rooms__name', 'groups__name'] # Expanded search
     ordering_fields = ['name', 'city', 'created_at', 'updated_at']
+
+    def get_queryset(self): # <-- ADDED THIS METHOD
+        user = self.request.user
+        base_queryset = Center.objects.prefetch_related(
+            'rooms__equipments',
+            'groups',
+            'association',
+            'supervisor',
+            'equipments'
+        )
+        if user.is_staff:
+            return base_queryset.all()
+        # Ensure the user object might have supervised_centers (e.g., they are not an AnonymousUser)
+        # and the related manager exists.
+        if hasattr(user, 'supervised_centers') and user.supervised_centers is not None:
+            return user.supervised_centers.prefetch_related(
+                'rooms__equipments',
+                'groups',
+                'association',
+                # 'supervisor' is already part of the user.supervised_centers context
+                'equipments'
+            ).all()
+        return Center.objects.none()
 
     # To implement filtering for centers based on room types or equipment conditions,
     # we'll likely need a custom FilterSet class. I'll add a placeholder for now.

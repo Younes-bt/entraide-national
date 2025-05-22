@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'; // useEffect for a potential use case
-import { BrowserRouter, Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useNavigate, Navigate, useLocation } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -26,6 +26,10 @@ import AdminAddAssociationPage from './pages/admin/AdminAddAssociationPage'; // 
 import AdminAddSupervisorPage from './pages/admin/AdminAddSupervisorPage'; // Import the new Add Supervisor page
 import AdminAddAssociationSupervisorPage from './pages/admin/AdminAddAssociationSupervisorPage'; // Import the Add Association Supervisor page
 import CenterRoutes from './pages/center/CenterRoutes'; // Import CenterRoutes
+import TrainingProgramsPage from './pages/admin/TrainingProgramsPage'; // Import the new Training Programs page
+import AdminAddTrainingProgramPage from './pages/admin/AdminAddTrainingProgramPage'; // Import the Add Training Program page
+import logoImage from '@/assets/entraide-nationale-maroc-seeklogo.png'; // Import the logo
+import logoImageDark from '@/assets/entraide-nationale-maroc-seeklogo-dark.png'; // Import the dark mode logo
 
 // Helper to get dashboard path based on role
 const getDashboardPath = (role: string | undefined): string => {
@@ -42,6 +46,7 @@ const getDashboardPath = (role: string | undefined): string => {
 function AppContent() {
   const { t } = useTranslation();
   const { user, logout, isAuthenticated, isLoading } = useAuth();
+  const location = useLocation(); // Added useLocation
 
   const handleLogout = () => {
     logout();
@@ -51,13 +56,14 @@ function AppContent() {
     <Routes> {/* Moved Routes to be direct child for simplicity here, layout handled per-route */}
       {/* Public Routes with Navbar */}
       <Route path="/" element={<PublicLayout><MainPage /></PublicLayout>} />
-      <Route 
-        path="/login" 
+      <Route
+        path="/login"
         element={
           isAuthenticated() && user ? (
-            <Navigate to={getDashboardPath(user.role)} replace />
+            // If authenticated, redirect to where they came from, or to their dashboard
+            <Navigate to={location.state?.from?.pathname || getDashboardPath(user.role)} replace state={{ from: location.state?.from }} />
           ) : (
-            <PublicLayout><LoginPage /></PublicLayout> 
+            <PublicLayout><LoginPage /></PublicLayout>
           )
         }
       />
@@ -66,10 +72,10 @@ function AppContent() {
       <Route path="/faq" element={<PublicLayout><FAQPage /></PublicLayout>} />
           
       {/* Dashboard Routes with Sidebar Layout */}
-      <Route path="/admin/*" element={isAuthenticated() && user?.role === 'admin' ? <DashboardLayout><AdminRoutes /></DashboardLayout> : <Navigate to="/login" replace />} />
+      <Route path="/admin/*" element={isAuthenticated() && user?.role === 'admin' ? <DashboardLayout><AdminRoutes /></DashboardLayout> : <Navigate to="/login" replace state={{ from: location }} />} />
       {/* Add similar routes for other roles using DashboardLayout */}
-      <Route path="/center/*" element={isAuthenticated() && user?.role === 'center_supervisor' ? <DashboardLayout><CenterRoutes /></DashboardLayout> : <Navigate to="/login" replace />} />
-      {/* <Route path="/student/*" element={isAuthenticated() && user?.role === 'student' ? <DashboardLayout><StudentRoutes /></DashboardLayout> : <Navigate to="/login" replace />} /> */}
+      <Route path="/center/*" element={isAuthenticated() && user?.role === 'center_supervisor' ? <DashboardLayout><CenterRoutes /></DashboardLayout> : <Navigate to="/login" replace state={{ from: location }} />} />
+      {/* <Route path="/student/*" element={isAuthenticated() && user?.role === 'student' ? <DashboardLayout><StudentRoutes /></DashboardLayout> : <Navigate to="/login" replace state={{ from: location }} />} /> */}
       
       {/* Not Found Route */}
       <Route path="*" element={<PublicLayout><NotFoundPage /></PublicLayout>} /> 
@@ -81,6 +87,7 @@ function AppContent() {
 const PublicLayout = ({ children }: { children: React.ReactNode }) => {
   const { t } = useTranslation();
   const { user, logout, isAuthenticated, isLoading } = useAuth();
+  const { theme } = useTheme(); // Get the current theme
   
   const handleLogout = () => {
       logout();
@@ -91,7 +98,7 @@ const PublicLayout = ({ children }: { children: React.ReactNode }) => {
         <nav className="bg-card text-card-foreground border-b sticky top-0 z-50 w-full shadow-sm">
             <div className="container mx-auto flex items-center h-16 px-4">
                 <Link to="/" className="mr-6 flex items-center space-x-2">
-                    <span className="font-bold sm:inline-block">{t('navbarLogo')}</span>
+                    <img src={theme === 'dark' ? logoImageDark : logoImage} alt={t('navbarLogo')} className="h-10 w-auto" />
                 </Link>
                 <div className="flex-1 flex justify-center items-center space-x-1 sm:space-x-4">
                     <Link to="/"><Button variant="ghost">{t('home')}</Button></Link>
@@ -145,6 +152,8 @@ const AdminRoutes = () => {
       <Route path="associations/add" element={<AdminAddAssociationPage />} /> {/* Added route for adding associations */}
       {/* <Route path="centers/edit/:id" element={<AdminEditCenterPage />} /> */} {/* Placeholder for edit route */}
       {/* <Route path="students" element={<AdminStudentsPage />} /> */}
+      <Route path="training-programs" element={<TrainingProgramsPage />} /> {/* Added route for training programs */}
+      <Route path="training-programs/add" element={<AdminAddTrainingProgramPage />} /> {/* Added route for adding training programs */}
       <Route path="*" element={<div>Admin Page Not Found</div>} />
     </Routes>
   );

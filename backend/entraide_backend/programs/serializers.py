@@ -8,6 +8,15 @@ class TrainingProgrameSerializer(serializers.ModelSerializer):
         model = TrainingPrograme
         fields = '__all__'
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        # Check if the logo exists and has a URL attribute
+        if instance.logo and hasattr(instance.logo, 'url'):
+            representation['logo'] = instance.logo.url
+        elif 'logo' in representation: # Ensure 'logo' key exists even if no logo
+            representation['logo'] = None
+        return representation
+
 class AnnualCourseDistributionSerializer(serializers.ModelSerializer):
     programe = TrainingProgrameSerializer(read_only=True)
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import CenterDashboard from './CenterDashboard';
 import CenterStudentsPage from './CenterStudentsPage';
+import CenterInfoPage from './CenterInfoPage';
 
 const CenterRoutes = () => {
   return (
@@ -9,10 +10,11 @@ const CenterRoutes = () => {
       <Route index element={<CenterDashboard />} />
       <Route path="dashboard" element={<CenterDashboard />} />
       <Route path="students" element={<CenterStudentsPage />} />
+      <Route path="info" element={<CenterInfoPage />} />
       {/* Add other center-specific routes here later */}
       <Route path="*" element={<div>Center Page Not Found</div>} />
     </Routes>
   );
 };
 
-export default CenterRoutes; 
+export default CenterRoutes;

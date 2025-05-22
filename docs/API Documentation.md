@@ -373,48 +373,242 @@ Various profile fields that can be updated by the user.
 
 ### Centers Management
 
-The following endpoints will be implemented as part of the next development phase:
+The Centers Management module provides API endpoints for managing centers, rooms, equipment, and groups within centers. The base path for these endpoints is `/api/centers-app/`.
 
-| Endpoint | Method | Description | Authentication Required | Allowed Roles |
-|----------|--------|-------------|------------------------|--------------|
-| `/api/centers/` | GET | List all centers (paginated) | Yes | Any authenticated user |
-| `/api/centers/` | POST | Create a new center | Yes | Admin |
-| `/api/centers/{id}/` | GET | Retrieve a specific center | Yes | Any authenticated user |
-| `/api/centers/{id}/` | PUT | Update a center (full update) | Yes | Admin, Association Supervisor |
-| `/api/centers/{id}/` | PATCH | Update a center (partial update) | Yes | Admin, Association Supervisor |
-| `/api/centers/{id}/` | DELETE | Delete a center | Yes | Admin |
-| `/api/centers/{id}/rooms/` | GET | List all rooms in a center | Yes | Any authenticated user |
-| `/api/centers/{id}/equipment/` | GET | List all equipment in a center | Yes | Any authenticated user |
+**Permissions**:
+- **Admin**: Full CRUD access to Centers. Full CRUD access to Rooms, Equipment, and Groups.
+- **Center Supervisor**: Read-only access to Centers they supervise (via filtering, direct listing of all centers is admin only). Full CRUD access to Rooms, Equipment, and Groups *within the centers they supervise*.
+- **Authenticated Users**: Generally, read-only access if permitted by endpoint configuration (currently most list views are restricted to Admin/Supervisors).
+
+**Filtering**: These endpoints support filtering using `django-filter`. For example, to filter rooms by type: `/api/centers-app/rooms/?type=classroom`.
+
+**Nested Data**:
+- Retrieving a specific `Center` will include a list of its `Rooms` and `Groups`.
+- Retrieving a specific `Room` will include a list of its `Equipment`.
+
+**Endpoints for Centers**
+
+| Endpoint                                | Method        | Description                                                                                                | Allowed Roles         |
+|-----------------------------------------|---------------|------------------------------------------------------------------------------------------------------------|-----------------------|
+| `/api/centers-app/centers/`             | GET           | List all centers (paginated). Supports filtering, searching, and ordering.                                 | Admin                 |
+|                                         |               | Filters: `city`, `affiliated_to`, `association` (ID), `association_name`, `is_active`, `is_verified`, `room_type`, `room_equipment_condition`. |                       |
+|                                         |               | Search: `name`, `description`, `city`, `association__name`, `rooms__name`, `groups__name`.                          |                       |
+| `/api/centers-app/centers/`             | POST          | Create a new center.                                                                                       | Admin                 |
+| `/api/centers-app/centers/{id}/`        | GET           | Retrieve a specific center (includes nested rooms, groups).                                                | Admin                 |
+| `/api/centers-app/centers/{id}/`        | PUT           | Update a center (full update).                                                                             | Admin                 |
+| `/api/centers-app/centers/{id}/`        | PATCH         | Update a center (partial update).                                                                          | Admin                 |
+| `/api/centers-app/centers/{id}/`        | DELETE        | Delete a center.                                                                                           | Admin                 |
+
+**Endpoints for Rooms**
+
+| Endpoint                             | Method        | Description                                                                                                   | Allowed Roles              |
+|--------------------------------------|---------------|---------------------------------------------------------------------------------------------------------------|----------------------------|
+| `/api/centers-app/rooms/`            | GET           | List all rooms (paginated). Admins see all; Supervisors see rooms in their centers. Supports filtering, searching, ordering. | Admin, Center Supervisor |
+|                                      |               | Filters: `center__id`, `type`, `capacity`, `is_available`.                                                      |                            |
+|                                      |               | Search: `name`, `description`.                                                                                |                            |
+| `/api/centers-app/rooms/`            | POST          | Create a new room (must be associated with a center supervised by the user, or any center for Admin).        | Admin, Center Supervisor |
+| `/api/centers-app/rooms/{id}/`       | GET           | Retrieve a specific room (includes nested equipment).                                                           | Admin, Center Supervisor |
+| `/api/centers-app/rooms/{id}/`       | PUT           | Update a room (full update).                                                                                  | Admin, Center Supervisor |
+| `/api/centers-app/rooms/{id}/`       | PATCH         | Update a room (partial update).                                                                               | Admin, Center Supervisor |
+| `/api/centers-app/rooms/{id}/`       | DELETE        | Delete a room.                                                                                                | Admin, Center Supervisor |
+
+**Endpoints for Equipment**
+
+| Endpoint                                | Method        | Description                                                                                                        | Allowed Roles              |
+|-----------------------------------------|---------------|--------------------------------------------------------------------------------------------------------------------|----------------------------|
+| `/api/centers-app/equipment/`           | GET           | List all equipment (paginated). Admins see all; Supervisors see equipment in their centers. Supports filtering, searching, ordering. | Admin, Center Supervisor |
+|                                         |               | Filters: `center__id`, `room__id`, `condition`, `quantity`.                                                          |                            |
+|                                         |               | Search: `name`, `description`.                                                                                     |                            |
+| `/api/centers-app/equipment/`           | POST          | Create new equipment (must be associated with a center supervised by the user, or any center for Admin).          | Admin, Center Supervisor |
+| `/api/centers-app/equipment/{id}/`      | GET           | Retrieve specific equipment.                                                                                       | Admin, Center Supervisor |
+| `/api/centers-app/equipment/{id}/`      | PUT           | Update equipment (full update).                                                                                    | Admin, Center Supervisor |
+| `/api/centers-app/equipment/{id}/`      | PATCH         | Update equipment (partial update).                                                                                 | Admin, Center Supervisor |
+| `/api/centers-app/equipment/{id}/`      | DELETE        | Delete equipment.                                                                                                  | Admin, Center Supervisor |
+
+**Endpoints for Groups**
+
+| Endpoint                              | Method        | Description                                                                                                     | Allowed Roles              |
+|---------------------------------------|---------------|-----------------------------------------------------------------------------------------------------------------|----------------------------|
+| `/api/centers-app/groups/`            | GET           | List all groups (paginated). Admins see all; Supervisors see groups in their centers. Supports filtering, searching, ordering. | Admin, Center Supervisor |
+|                                       |               | Filters: `center__id`.                                                                                          |                            |
+|                                       |               | Search: `name`, `description`.                                                                                  |                            |
+| `/api/centers-app/groups/`            | POST          | Create a new group (must be associated with a center supervised by the user, or any center for Admin).           | Admin, Center Supervisor |
+| `/api/centers-app/groups/{id}/`       | GET           | Retrieve a specific group.                                                                                      | Admin, Center Supervisor |
+| `/api/centers-app/groups/{id}/`       | PUT           | Update a group (full update).                                                                                   | Admin, Center Supervisor |
+| `/api/centers-app/groups/{id}/`       | PATCH         | Update a group (partial update).                                                                                | Admin, Center Supervisor |
+| `/api/centers-app/groups/{id}/`       | DELETE        | Delete a group.                                                                                                 | Admin, Center Supervisor |
 
 ### Programs Management
 
-The following endpoints will be implemented as part of the next development phase:
+The Programs Management module provides API endpoints for managing training programs, annual course distributions, weekly course plans, and specific training courses. The base path for these endpoints is `/api/programs/`.
 
-| Endpoint | Method | Description | Authentication Required | Allowed Roles |
-|----------|--------|-------------|------------------------|--------------|
-| `/api/programs/` | GET | List all programs (paginated) | Yes | Any authenticated user |
-| `/api/programs/` | POST | Create a new program | Yes | Admin |
-| `/api/programs/{id}/` | GET | Retrieve a specific program | Yes | Any authenticated user |
-| `/api/programs/{id}/` | PUT | Update a program (full update) | Yes | Admin |
-| `/api/programs/{id}/` | PATCH | Update a program (partial update) | Yes | Admin |
-| `/api/programs/{id}/` | DELETE | Delete a program | Yes | Admin |
-| `/api/programs/courses/` | GET | List all courses (paginated) | Yes | Any authenticated user |
-| `/api/programs/courses/my-courses/` | GET | List courses for the current user | Yes | Trainer, Student |
+**Permissions**:
+- **Admin**: Full CRUD access to all program-related data.
+- **Any Authenticated User**: Read-only access to program-related data (e.g., listing and viewing details).
+  *(Specific endpoint permissions can be more granular based on backend implementation).*
+
+**Nested Data**:
+- Retrieving `AnnualCourseDistribution` includes the full `TrainingPrograme` object.
+- Retrieving `WeeklyCoursePlan` includes the full `AnnualCourseDistribution` object (which in turn includes `TrainingPrograme`).
+- Retrieving `TrainingCourse` includes the full `TrainingPrograme`, `Center`, and `User` (trainer) objects.
+
+**Endpoints for Training Programs (`TrainingPrograme`)**
+
+| Endpoint                                       | Method        | Description                               | Authentication Required | Allowed Roles          |
+|------------------------------------------------|---------------|-------------------------------------------|-------------------------|------------------------|
+| `/api/programs/trainingprogrames/`             | GET           | List all training programs (paginated).   | Yes                     | Any authenticated user |
+| `/api/programs/trainingprogrames/`             | POST          | Create a new training program.            | Yes                     | Admin                  |
+| `/api/programs/trainingprogrames/{id}/`        | GET           | Retrieve a specific training program.     | Yes                     | Any authenticated user |
+| `/api/programs/trainingprogrames/{id}/`        | PUT           | Update a training program (full update).  | Yes                     | Admin                  |
+| `/api/programs/trainingprogrames/{id}/`        | PATCH         | Update a training program (partial update).| Yes                     | Admin                  |
+| `/api/programs/trainingprogrames/{id}/`        | DELETE        | Delete a training program.                | Yes                     | Admin                  |
+
+**Example `TrainingPrograme` Object Structure (as seen in GET responses):**
+```json
+{
+    "id": 1,
+    "name": "Advanced Web Development",
+    "description": "A comprehensive program covering modern web technologies.",
+    "duration_years": 2,
+    "logo": "https://res.cloudinary.com/yourcloud/image/upload/v12345/logos/program_logo.png", // Can be null
+    "created_at": "2024-05-01T10:00:00Z",
+    "updated_at": "2024-05-01T10:00:00Z"
+}
+```
+
+**Fields for creating/updating (`POST`, `PUT`, `PATCH`) `TrainingPrograme`:**
+- `name` (string, required): Name of the training program.
+- `description` (string, required): Detailed description of the program.
+- `duration_years` (integer, required): Duration of the program in years.
+- `logo` (image file or URL, optional): Logo image for the program. If providing a file, use `multipart/form-data`.
+
+**Endpoints for Annual Course Distributions (`AnnualCourseDistribution`)**
+
+| Endpoint                                                    | Method        | Description                                           | Authentication Required | Allowed Roles          |
+|-------------------------------------------------------------|---------------|-------------------------------------------------------|-------------------------|------------------------|
+| `/api/programs/annualcoursedistributions/`                  | GET           | List all annual course distributions (paginated).   | Yes                     | Any authenticated user |
+| `/api/programs/annualcoursedistributions/`                  | POST          | Create a new annual course distribution.            | Yes                     | Admin                  |
+| `/api/programs/annualcoursedistributions/{id}/`             | GET           | Retrieve a specific annual course distribution.     | Yes                     | Any authenticated user |
+| `/api/programs/annualcoursedistributions/{id}/`             | PUT           | Update an annual course distribution (full update).  | Yes                     | Admin                  |
+| `/api/programs/annualcoursedistributions/{id}/`             | PATCH         | Update an annual course distribution (partial update).| Yes                     | Admin                  |
+| `/api/programs/annualcoursedistributions/{id}/`             | DELETE        | Delete an annual course distribution.                | Yes                     | Admin                  |
+
+**Endpoints for Weekly Course Plans (`WeeklyCoursePlan`)**
+
+| Endpoint                                                | Method        | Description                                       | Authentication Required | Allowed Roles          |
+|---------------------------------------------------------|---------------|---------------------------------------------------|-------------------------|------------------------|
+| `/api/programs/weeklycourseplans/`                      | GET           | List all weekly course plans (paginated).       | Yes                     | Any authenticated user |
+| `/api/programs/weeklycourseplans/`                      | POST          | Create a new weekly course plan.                | Yes                     | Admin                  |
+| `/api/programs/weeklycourseplans/{id}/`                 | GET           | Retrieve a specific weekly course plan.         | Yes                     | Any authenticated user |
+| `/api/programs/weeklycourseplans/{id}/`                 | PUT           | Update a weekly course plan (full update).      | Yes                     | Admin                  |
+| `/api/programs/weeklycourseplans/{id}/`                 | PATCH         | Update a weekly course plan (partial update).   | Yes                     | Admin                  |
+| `/api/programs/weeklycourseplans/{id}/`                 | DELETE        | Delete a weekly course plan.                    | Yes                     | Admin                  |
+
+**Endpoints for Training Courses (`TrainingCourse`)**
+
+| Endpoint                                            | Method        | Description                                   | Authentication Required | Allowed Roles          |
+|-----------------------------------------------------|---------------|-----------------------------------------------|-------------------------|------------------------|
+| `/api/programs/trainingcourses/`                    | GET           | List all training courses (paginated).        | Yes                     | Any authenticated user |
+| `/api/programs/trainingcourses/`                    | POST          | Create a new training course.                 | Yes                     | Admin                  |
+| `/api/programs/trainingcourses/{id}/`               | GET           | Retrieve a specific training course.          | Yes                     | Any authenticated user |
+| `/api/programs/trainingcourses/{id}/`               | PUT           | Update a training course (full update).       | Yes                     | Admin                  |
+| `/api/programs/trainingcourses/{id}/`               | PATCH         | Update a training course (partial update).    | Yes                     | Admin                  |
+| `/api/programs/trainingcourses/{id}/`               | DELETE        | Delete a training course.                     | Yes                     | Admin                  |
 
 ### Student Management
 
-The following endpoints will be implemented as part of the next development phase:
+The base path for these endpoints is `/api/students/`. These endpoints provide CRUD operations for managing students.
 
-| Endpoint | Method | Description | Authentication Required | Allowed Roles |
-|----------|--------|-------------|------------------------|--------------|
-| `/api/students/` | GET | List all students (paginated) | Yes | Admin, Center Supervisor, Trainer |
-| `/api/students/` | POST | Create a new student | Yes | Admin, Center Supervisor |
-| `/api/students/{id}/` | GET | Retrieve a specific student | Yes | Admin, Center Supervisor, Trainer |
-| `/api/students/{id}/` | PUT | Update a student (full update) | Yes | Admin, Center Supervisor |
-| `/api/students/{id}/` | PATCH | Update a student (partial update) | Yes | Admin, Center Supervisor |
-| `/api/students/{id}/` | DELETE | Delete a student | Yes | Admin, Center Supervisor |
-| `/api/students/enrollments/` | GET | List all enrollments (paginated) | Yes | Admin, Center Supervisor |
-| `/api/students/enrollments/my-enrollments/` | GET | List enrollments for the current student | Yes | Student |
+**Permissions**:
+- **Admin, Center Supervisor**: Full CRUD access to student records. Can view all students.
+- **Authenticated Users (e.g., Students, Trainers)**: Can view their own student profile (if one exists). Cannot create, update, or delete other students.
+
+**Filtering & Pagination**:
+- Standard pagination is supported for list views.
+- Filtering capabilities (e.g., by center, program) can be added via `django-filter` integration with the `StudentViewSet` if needed in the future.
+
+| Endpoint                 | Method        | Description                                                                                                | Authentication Required | Allowed Roles                                     |
+|--------------------------|---------------|------------------------------------------------------------------------------------------------------------|-------------------------|---------------------------------------------------|
+| `/api/students/`         | GET           | List students. Admins/Supervisors see all; others see their own profile. (Paginated)                        | Yes                     | Admin, Center Supervisor, Any authenticated user  |
+| `/api/students/`         | POST          | Create a new student. Automatically creates an associated User account. Requires `first_name` and `last_name`. | Yes                     | Admin, Center Supervisor                          |
+| `/api/students/{id}/`    | GET           | Retrieve a specific student. Admins/Supervisors see any; others can only see their own.                      | Yes                     | Admin, Center Supervisor, Any authenticated user  |
+| `/api/students/{id}/`    | PUT           | Update a student (full update).                                                                            | Yes                     | Admin, Center Supervisor                          |
+| `/api/students/{id}/`    | PATCH         | Update a student (partial update).                                                                         | Yes                     | Admin, Center Supervisor                          |
+| `/api/students/{id}/`    | DELETE        | Delete a student. (Associated User account is also deleted due to CASCADE).                                | Yes                     | Admin, Center Supervisor                          |
+
+#### Create a New Student
+
+**Endpoint**: `POST /api/students/`
+
+**Description**: Creates a new student profile. This process automatically creates an associated `User` account with the `student` role. The user's email is generated based on their first and last name (e.g., `firstname.lastname@entraide-larache.com`), and a default password is set.
+**Important**: The default password set during account creation is insecure and intended for immediate change by the user or an administrator. Implement a secure password reset or initial setup flow.
+
+**Authentication**: Required (Bearer Token)
+
+**Allowed Roles**: `Admin`, `Center Supervisor`
+
+**Request Body Fields**:
+
+*   `first_name` (string, **required**): Student's first name. Used for User account creation.
+*   `last_name` (string, **required**): Student's last name. Used for User account creation.
+*   `exam_id` (string, **required**, unique): Unique examination ID for the student.
+*   `center` (integer, **required**): ID of the `Center` the student belongs to.
+*   `program` (integer, **required**): ID of the `TrainingPrograme` the student is enrolled in.
+*   `academic_year` (string, **required**): Academic year (e.g., "2023-2024").
+*   `joining_date` (date string, **required**, format: `YYYY-MM-DD`): Date the student joined.
+*   `center_code` (string, optional): Specific code related to the center, if applicable.
+*   `training_course` (integer, optional): ID of the specific `TrainingCourse` if applicable.
+*   `group` (integer, optional): ID of the `Group` the student is assigned to, if applicable.
+
+**Example Request Body**:
+```json
+{
+    "first_name": "Fatima",
+    "last_name": "Zahra",
+    "exam_id": "STU789012",
+    "center": 1,
+    "program": 1,
+    "academic_year": "2024-2025",
+    "joining_date": "2024-09-01",
+    "center_code": "C001-S2"
+}
+```
+
+**Success Response (201 Created)**:
+Returns the full student object, including information about the automatically created user.
+```json
+{
+    "id": 123,
+    "exam_id": "STU789012",
+    "center_code": "C001-S2",
+    "center": 1, // Or a string representation if StringRelatedField is used in the GET serializer
+    "program": 1, // Or a string representation
+    "academic_year": "2024-2025",
+    "joining_date": "2024-09-01",
+    "training_course": null, // Or relevant ID/string
+    "group": null, // Or relevant ID/string
+    "user_info": "Fatima Zahra - (Student)", // String representation from User model
+    "created_at": "2024-07-29T10:30:00Z",
+    "updated_at": "2024-07-29T10:30:00Z"
+}
+```
+
+**Error Responses**:
+-   `400 Bad Request`: If validation fails (e.g., missing required fields like `first_name`, `last_name`, `exam_id`, or invalid data format). The response body will contain details about the errors.
+    ```json
+    {
+        "first_name": ["This field is required."],
+        "exam_id": ["student with this exam id already exists."]
+        // ... other errors
+    }
+    ```
+    ```json
+    {
+        "user_creation_error": "Failed to create user account: [Details from User model/manager validation]"
+    }
+    ```
+-   `401 Unauthorized`: If the request lacks valid authentication credentials.
+-   `403 Forbidden`: If the authenticated user does not have the required role (`Admin` or `Center Supervisor`).
 
 ### Teacher Management
 
@@ -432,17 +626,97 @@ The following endpoints will be implemented as part of the next development phas
 
 ### Association Management
 
-The following endpoints will be implemented as part of the next development phase:
+The base path for these endpoints is `/api/associations/`. These endpoints provide CRUD operations for managing associations.
 
-| Endpoint | Method | Description | Authentication Required | Allowed Roles |
-|----------|--------|-------------|------------------------|--------------|
-| `/api/associations/` | GET | List all associations (paginated) | Yes | Any authenticated user |
-| `/api/associations/` | POST | Create a new association | Yes | Admin |
-| `/api/associations/{id}/` | GET | Retrieve a specific association | Yes | Any authenticated user |
-| `/api/associations/{id}/` | PUT | Update an association (full update) | Yes | Admin |
-| `/api/associations/{id}/` | PATCH | Update an association (partial update) | Yes | Admin |
-| `/api/associations/{id}/` | DELETE | Delete an association | Yes | Admin |
-| `/api/associations/{id}/centers/` | GET | List centers belonging to an association | Yes | Any authenticated user |
+**Permissions**:
+- **Admin**: Full CRUD access to all associations.
+- **Association Supervisor**: Future implementation may restrict write access to associations they supervise. (Currently Admin for write ops).
+- **Any Authenticated User**: Read-only access to list and retrieve associations.
+
+**Filtering & Pagination**:
+- Standard pagination is supported for list views.
+- Filtering capabilities (e.g., by name, city, supervisor) can be added via `django-filter` integration with the `AssociationViewSet`.
+
+| Endpoint                  | Method | Description                                   | Authentication Required | Allowed Roles          |
+|---------------------------|--------|-----------------------------------------------|------------------------|------------------------|
+| `/api/associations/`      | GET    | List all associations (paginated).            | Yes                    | Any authenticated user |
+| `/api/associations/`      | POST   | Create a new association.                     | Yes                    | Admin                  |
+| `/api/associations/{id}/` | GET    | Retrieve a specific association.              | Yes                    | Any authenticated user |
+| `/api/associations/{id}/` | PUT    | Update an association (full update).          | Yes                    | Admin                  |
+| `/api/associations/{id}/` | PATCH  | Update an association (partial update).       | Yes                    | Admin                  |
+| `/api/associations/{id}/` | DELETE | Delete an association.                        | Yes                    | Admin                  |
+
+#### Create a New Association
+
+**Endpoint**: `POST /api/associations/`
+
+**Description**: Creates a new association. This endpoint expects `multipart/form-data` if including a file (e.g., `logo`), otherwise `application/json`.
+
+**Authentication**: Required (Bearer Token)
+
+**Allowed Roles**: `Admin`
+
+**Request Body Fields**:
+
+*   `name` (string, **required**): Name of the association.
+*   `description` (string, **required**): A detailed description of the association.
+*   `supervisor` (integer, **required**): The ID of the user designated as the supervisor for this association.
+*   `logo` (file, optional): An image file for the association's logo.
+*   `phone_number` (string, optional): Contact phone number (e.g., "+1-555-123-4567").
+*   `email` (string, optional, format: email): Contact email address.
+*   `address` (string, optional): Physical street address.
+*   `city` (string, optional): City where the association is based.
+*   `maps_link` (string, optional, format: url): A URL to the association's location on a map service (e.g., Google Maps).
+*   `website` (string, optional, format: url): The association's official website URL.
+*   `facebook_link` (string, optional, format: url): URL to the association's Facebook page.
+*   `instagram_link` (string, optional, format: url): URL to the association's Instagram profile.
+*   `twitter_link` (string, optional, format: url): URL to the association's Twitter profile.
+*   `contract_start_date` (date string, optional, format: `YYYY-MM-DD`): The start date of any relevant contract.
+*   `contract_end_date` (date string, optional, format: `YYYY-MM-DD`): The end date of any relevant contract.
+*   `registration_number` (string, optional): The official registration number of the association.
+    *(Note: While optional in the request, the model defines this as unique if provided.)*
+
+*(Fields like `is_active`, `is_verified` default to `true` on the backend if not provided.)*
+
+**Success Response (201 Created)**:
+Returns the full association object upon successful creation.
+```json
+{
+    "id": 1,
+    "name": "Al Amal Association",
+    "description": "Supporting local youth programs.",
+    "logo": "https://res.cloudinary.com/yourcloud/image/upload/v12345/logos/al_amal_logo.png",
+    "phone_number": "+212600000000",
+    "email": "contact@alamal.ma",
+    "address": "123 Hope Street",
+    "city": "Rabat",
+    "maps_link": "https://maps.google.com/?q=Al+Amal+Association+Rabat",
+    "website": "https://alamal.ma",
+    "facebook_link": "https://facebook.com/alamalrabat",
+    "instagram_link": "https://instagram.com/alamalrabat",
+    "twitter_link": null,
+    "supervisor": 5,
+    "contract_start_date": "2024-01-01",
+    "contract_end_date": "2025-12-31",
+    "registration_number": "ASSOC-RBT-001",
+    "is_active": true,
+    "is_verified": true,
+    "created_at": "2024-05-08T10:30:00Z",
+    "updated_at": "2024-05-08T10:30:00Z"
+}
+```
+
+**Error Responses**:
+-   `400 Bad Request`: If validation fails (e.g., missing required fields, invalid data format). The response body will contain details about the errors.
+    ```json
+    {
+        "name": ["This field is required."],
+        "description": ["This field is required."],
+        "supervisor": ["This field is required."]
+    }
+    ```
+-   `401 Unauthorized`: If the request lacks valid authentication credentials.
+-   `403 Forbidden`: If the authenticated user does not have the `Admin` role.
 
 ### Attendance Management
 

@@ -8,6 +8,9 @@ import { LogOut, Building, Library, Users, UserCog, GraduationCap, BookUser, X, 
 import { LanguageSwitcher } from './language-switcher';
 import { ThemeToggleButton } from './ThemeToggleButton';
 import { cn } from "@/lib/utils";
+import { useTheme } from '@/components/theme-provider';
+import logoImage from '@/assets/entraide-nationale-maroc-seeklogo.png';
+import logoImageDark from '@/assets/entraide-nationale-maroc-seeklogo-dark.png';
 
 export interface NavLink {
   href: string;
@@ -26,6 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setIsMobileOpen, navLin
   const { user, logout } = useAuth();
   const { t } = useTranslation();
   const location = useLocation();
+  const { theme } = useTheme();
 
   const handleLinkClick = () => {
     if (isMobileOpen) {
@@ -70,14 +74,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setIsMobileOpen, navLin
         )}
       >
         <div className="flex items-center justify-between p-4 border-b mb-4">
-          <div className="flex items-center gap-2">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={user?.profile_picture || undefined} alt={`${user?.first_name} ${user?.last_name}`} />
-                <AvatarFallback>{user?.first_name?.charAt(0)}{user?.last_name?.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div>
-                 <p className="font-semibold text-md leading-none">{user?.first_name} {user?.last_name}</p>
-                 <p className="text-xs text-muted-foreground leading-none mt-1">{user?.role_display || user?.role}</p>
+          <div className="flex flex-col items-center gap-2 text-center w-full">
+              <img 
+                src={theme === 'dark' ? logoImageDark : logoImage} 
+                alt="Entraide Nationale Logo" 
+                className="h-12 w-auto mb-2"
+              />
+              <div className="flex flex-col items-center">
+                <Avatar className="h-10 w-10 mb-1">
+                  <AvatarImage src={user?.profile_picture || undefined} alt={`${user?.first_name} ${user?.last_name}`} />
+                  <AvatarFallback>{user?.first_name?.charAt(0)}{user?.last_name?.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                   <p className="font-semibold text-md leading-none">{user?.first_name} {user?.last_name}</p>
+                   <p className="text-xs text-muted-foreground leading-none mt-1">{user?.role_display || user?.role}</p>
+                </div>
               </div>
           </div>
            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMobileOpen(false)}>

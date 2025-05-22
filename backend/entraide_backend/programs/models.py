@@ -1,12 +1,14 @@
 from django.db import models
 from accounts.models import User
 from centers.models import Center
+from cloudinary.models import CloudinaryField
 
 
 class TrainingPrograme(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     duration_years = models.PositiveSmallIntegerField() # Duration in years eg. 1, 2
+    logo = CloudinaryField('image', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

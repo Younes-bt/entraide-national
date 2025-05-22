@@ -18,9 +18,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   if (user?.role === 'admin') {
     navLinks = [
       { href: '/admin/dashboard', label: 'sidebar.dashboard', icon: LayoutDashboard },
-      { href: '/admin/centers', label: 'sidebar.centers', icon: Building },
-      { href: '/admin/associations', label: 'sidebar.associations', icon: Library },
-      { href: '/admin/supervisors', label: 'sidebar.supervisors', icon: UsersRound },
+      { href: '/admin/centers', label: 'sidebar.centers', icon: Building, section: 'hr' },
+      { href: '/admin/associations', label: 'sidebar.associations', icon: Library, section: 'hr' },
+      { href: '/admin/supervisors', label: 'sidebar.supervisors', icon: UsersRound, section: 'hr' },
+      { href: '/admin/trainers', label: 'sidebar.trainers', icon: UserCog, section: 'hr' },
+      { href: '/admin/students', label: 'sidebar.students', icon: GraduationCap, section: 'hr' },
+      { href: '/admin/training-programs', label: 'sidebar.trainingPrograms', icon: Briefcase, section: 'trainings' },
+      { href: '/admin/training-courses', label: 'sidebar.trainingCourses', icon: BookOpen, section: 'trainings' },
+      { href: '/admin/annual-course-distribution', label: 'sidebar.annualCourseDistribution', icon: CalendarDays, section: 'trainings' },
+      { href: '/admin/courses', label: 'sidebar.courses', icon: CheckSquare, section: 'trainings' },
+      { href: '#', label: 'sidebar.exams.comingSoon', icon: CheckSquare, section: 'exams' },
     ];
   } else if (user?.role === 'center_supervisor') {
     navLinks = [

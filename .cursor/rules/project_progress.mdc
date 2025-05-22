@@ -1,0 +1,44 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Entraide National Project Summary
+
+This project is a full-stack web application aiming to manage various aspects of an organization.
+
+## Project Structure:
+
+-   **Backend (`backend/`):** A Django project serving a REST API.
+    -   Contains apps for `accounts`, `associations`, `centers`, `attendance`, `exams`, `programs`, `students`, `teachers`, and `schedule`.
+    -   Utilizes Django REST Framework, dj-rest-auth for authentication, django-filter for data filtering, and django-cloudinary-storage for file uploads.
+    -   Uses Python and PostgreSQL (`psycopg2`).
+
+-   **Frontend (`frontend/`):** A React application built with TypeScript.
+    -   Uses Vite for the build process.
+    -   Styled with Tailwind CSS.
+    -   Handles internationalization (`i18next`) with translations in English, French, and Arabic.
+    -   Likely focuses on an admin dashboard interface.
+    -   Use Shadcn UI for UI compenents.  
+
+-   **Documentation (`docs/`):** Contains various documentation files.
+    -   Includes detailed [API Documentation.md](mdc:docs/API Documentation.md) and [backend_documentation.md](mdc:docs/backend_documentation.md).
+    -   Contains an [implementation_plan.md](mdc:docs/implementation_plan.md) and flowcharts like [User Flow.drawio](mdc:docs/User Flow.drawio) and [exams Flowchart.drawio](mdc:docs/exams Flowchart.drawio).
+
+## Recent Progress (Based on Diff):
+
+Significant work has been completed on integrating **Training Programs**:
+
+-   **Backend:** The `TrainingPrograme` model was updated to include a `logo` field using Cloudinary.
+-   **Documentation:** The [API Documentation.md](mdc:backend/API Documentation.md) in the backend directory was updated to reflect the new logo field.
+-   **Frontend:** New pages and routing were added under the admin section for viewing and adding training programs. The sidebar navigation now includes these new links under a "Trainings" section.
+-   **Internationalization:** Translations (EN, FR, AR) were added for all new Training Program related text elements (labels, placeholders, messages).
+
+
+
+
+
+
+
+
+This rule provides a quick overview of the project's main components and highlights the recent focus on the Training Programs feature.

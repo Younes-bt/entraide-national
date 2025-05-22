@@ -463,6 +463,25 @@ The Programs Management module provides API endpoints for managing training prog
 | `/api/programs/trainingprogrames/{id}/`        | PATCH         | Update a training program (partial update).| Yes                     | Admin                  |
 | `/api/programs/trainingprogrames/{id}/`        | DELETE        | Delete a training program.                | Yes                     | Admin                  |
 
+**Example `TrainingPrograme` Object Structure (as seen in GET responses):**
+```json
+{
+    "id": 1,
+    "name": "Advanced Web Development",
+    "description": "A comprehensive program covering modern web technologies.",
+    "duration_years": 2,
+    "logo": "https://res.cloudinary.com/yourcloud/image/upload/v12345/logos/program_logo.png", // Can be null
+    "created_at": "2024-05-01T10:00:00Z",
+    "updated_at": "2024-05-01T10:00:00Z"
+}
+```
+
+**Fields for creating/updating (`POST`, `PUT`, `PATCH`) `TrainingPrograme`:**
+- `name` (string, required): Name of the training program.
+- `description` (string, required): Detailed description of the program.
+- `duration_years` (integer, required): Duration of the program in years.
+- `logo` (image file or URL, optional): Logo image for the program. If providing a file, use `multipart/form-data`.
+
 **Endpoints for Annual Course Distributions (`AnnualCourseDistribution`)**
 
 | Endpoint                                                    | Method        | Description                                           | Authentication Required | Allowed Roles          |
