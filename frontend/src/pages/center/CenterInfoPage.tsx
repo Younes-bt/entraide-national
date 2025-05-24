@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { apiClient } from '@/lib/apiClient';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -75,6 +76,7 @@ const CenterInfoPage: React.FC = () => {
   const [centerData, setCenterData] = useState<Center | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCenterInfo = async () => {
@@ -219,7 +221,11 @@ const CenterInfoPage: React.FC = () => {
             <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {centerData.rooms && centerData.rooms.length > 0 ? (
                 centerData.rooms.map(room => (
-                  <Card key={room.id} className="flex flex-col">
+                  <Card 
+                    key={room.id} 
+                    className="flex flex-col cursor-pointer hover:shadow-lg transition-shadow"
+                    onClick={() => navigate(`/center/rooms/${room.id}`)}
+                  >
                     <CardHeader className="pb-2">
                       <CardTitle className="text-lg">{room.name}</CardTitle>
                       {room.type && <CardDescription>{room.type}</CardDescription>}
