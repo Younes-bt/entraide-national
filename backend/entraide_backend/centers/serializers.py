@@ -11,11 +11,17 @@ class EquipmentSerializer(serializers.ModelSerializer):
 
 class RoomSerializer(serializers.ModelSerializer):
     equipments = EquipmentSerializer(many=True, read_only=True) # Nested equipment for reads
+    picture_url = serializers.SerializerMethodField() # Added for full picture URL
 
     class Meta:
         model = Room
-        fields = ['id', 'name', 'description', 'type', 'capacity', 'is_available', 'picture', 'center', 'equipments', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'description', 'type', 'capacity', 'is_available', 'picture', 'picture_url', 'center', 'equipments', 'created_at', 'updated_at']
         # 'center' will be a PK by default, which is good for writes.
+
+    def get_picture_url(self, obj):
+        if obj.picture and hasattr(obj.picture, 'url'):
+            return obj.picture.url
+        return None
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
