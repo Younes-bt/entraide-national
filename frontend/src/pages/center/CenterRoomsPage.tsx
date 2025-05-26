@@ -10,6 +10,14 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Loader2, Home, Users, CalendarDays, CheckCircle, XCircle, Package, Tv, HelpCircle, Zap, Wrench, ShieldAlert, ShieldCheck, Building, PlusCircle, Eye } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 // Interface for Equipment
 interface Equipment {
@@ -227,21 +235,30 @@ const CenterRoomsPage: React.FC = () => {
                       <Package className="mr-2 h-5 w-5 text-indigo-500" />
                       {t('centerInfoPage.rooms.equipment')} ({room.equipments.length})
                     </h4>
-                    <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
-                      {room.equipments.map(equip => (
-                        <Card key={equip.id} className="p-2 bg-slate-50 dark:bg-slate-800/50 text-xs">
-                           <div className="flex items-center justify-between">
-                            <strong className="font-medium">{equip.name}</strong>
-                            {equip.condition && <Badge variant={getConditionBadgeVariant(equip.condition)}>{t(`equipmentConditions.${equip.condition}`, equip.condition)}</Badge>}
-                          </div>
-                          {equip.description && <p className="text-muted-foreground text-xs mt-0.5">{equip.description}</p>}
-                          <div className="flex items-center justify-between mt-1 text-muted-foreground">
-                            <span>{t('centerInfoPage.equipment.quantity')}: {equip.quantity ?? 'N/A'}</span>
-                             {equip.picture && <a href={equip.picture} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-xs">{t('centerInfoPage.equipment.viewPicture')}</a>}
-                          </div>
-                        </Card>
-                      ))}
-                    </div>
+                    <Table className="mt-2">
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="p-2">{t('centerInfoPage.equipment.name', 'Name')}</TableHead>
+                          <TableHead className="p-2 text-center w-[60px]">{t('centerInfoPage.equipment.quantityShort', 'Qty')}</TableHead>
+                          <TableHead className="p-2 hidden sm:table-cell">{t('centerInfoPage.equipment.condition', 'Condition')}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {room.equipments.map(equip => (
+                          <TableRow key={equip.id} className="text-xs">
+                            <TableCell className="p-2 font-medium">{equip.name}</TableCell>
+                            <TableCell className="p-2 text-center">{equip.quantity ?? 'N/A'}</TableCell>
+                            <TableCell className="p-2 hidden sm:table-cell">
+                              {equip.condition && 
+                                <Badge variant={getConditionBadgeVariant(equip.condition)} className="text-xs px-1 py-0.5">
+                                  {t('equipmentConditions.' + equip.condition, equip.condition)}
+                                </Badge>
+                              }
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                   </div>
                 </>
               )}

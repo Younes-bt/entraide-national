@@ -2,6 +2,9 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import CenterDashboard from './CenterDashboard';
 import CenterStudentsPage from './CenterStudentsPage';
+import CenterAddNewStudent from './components/CenterAddNewStudent';
+import CenterUpdateStudent from './components/CenterUpdateStudent';
+import CenterStudentDetailsPage from './CenterStudentDetailsPage';
 import CenterInfoPage from './CenterInfoPage';
 import CenterRoomsPage from './CenterRoomsPage';
 import CenterAddRoomPage from './CenterAddRoomPage';
@@ -9,6 +12,8 @@ import CenterRoomDetailsPage from './CenterRoomDetailsPage';
 import CenterEditRoomPage from './CenterEditRoomPage';
 import CenterEquipmentPage from './CenterEquipmentPage';
 import CenterAddEquipmentPage from './CenterAddEquipmentPage';
+import CenterGroupsPage from './CenterGroupsPage';
+import CenterAddGroupPage from './CenterAddGroupPage';
 
 const CenterRoutes = () => {
   return (
@@ -16,6 +21,9 @@ const CenterRoutes = () => {
       <Route index element={<CenterDashboard />} />
       <Route path="dashboard" element={<CenterDashboard />} />
       <Route path="students" element={<CenterStudentsPage />} />
+      <Route path="students/new" element={<CenterAddNewStudent />} />
+      <Route path="students/edit/:studentId" element={<CenterUpdateStudent />} />
+      <Route path="students/:studentId" element={<CenterStudentDetailsPage />} />
       <Route path="info" element={<CenterInfoPage />} />
       <Route path="rooms/add" element={<CenterAddRoomPage />} />
       <Route path="rooms/:roomId/edit" element={<CenterEditRoomPage />} />
@@ -23,6 +31,8 @@ const CenterRoutes = () => {
       <Route path="rooms" element={<CenterRoomsPage />} />
       <Route path="equipment/add" element={<CenterAddEquipmentPage />} />
       <Route path="equipment" element={<CenterEquipmentPage />} />
+      <Route path="groups/add" element={<CenterAddGroupPage />} />
+      <Route path="groups" element={<CenterGroupsPage />} />
       {/* Add other center-specific routes here later */}
       <Route path="*" element={<div>Center Page Not Found</div>} />
     </Routes>

@@ -9,6 +9,14 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, ArrowLeft, Home, Users, CalendarDays, CheckCircle, XCircle, Package, Tv, HelpCircle, Zap, Building, Edit, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Separator } from '@/components/ui/separator';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 // Interfaces (can be shared if they become more complex or used elsewhere)
 interface Equipment {
@@ -213,21 +221,28 @@ const CenterRoomDetailsPage: React.FC = () => {
                     <Package className="mr-3 h-6 w-6 text-indigo-600" /> 
                     {t('centerRoomDetailsPage.sectionTitles.equipmentInRoom')} ({room.equipments.length})
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {room.equipments.map(equip => (
-                    <Card key={equip.id} className="bg-slate-50 dark:bg-slate-800/60 p-4 space-y-1.5">
-                      <CardTitle className="text-md font-medium">{equip.name}</CardTitle>
-                      {equip.description && <CardDescription className="text-xs text-muted-foreground leading-tight">{equip.description}</CardDescription>}
-                      <p className="text-xs"><strong>{t('centerRoomDetailsPage.fields.equipmentCondition')}:</strong> <Badge variant={getConditionBadgeVariant(equip.condition)} className="text-xs px-1.5 py-0.5">{equip.condition ? t(`equipmentConditions.${equip.condition}`, equip.condition) : 'N/A'}</Badge></p>
-                      <p className="text-xs"><strong>{t('centerRoomDetailsPage.fields.equipmentQuantity')}:</strong> {equip.quantity ?? 'N/A'}</p>
-                      {equip.picture_url && 
-                        <a href={equip.picture_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500 hover:underline block mt-1.5">
-                            {t('centerRoomDetailsPage.viewEquipmentPicture')}
-                        </a>
-                       }
-                    </Card>
-                  ))}
-                </div>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{t('centerRoomDetailsPage.fields.equipmentName', 'Name')}</TableHead>
+                      <TableHead className="w-[100px] text-center">{t('centerRoomDetailsPage.fields.equipmentQuantity', 'Quantity')}</TableHead>
+                      <TableHead className="hidden md:table-cell">{t('centerRoomDetailsPage.fields.equipmentCondition', 'Condition')}</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {room.equipments.map(equip => (
+                      <TableRow key={equip.id}>
+                        <TableCell className="font-medium">{equip.name}</TableCell>
+                        <TableCell className="text-center">{equip.quantity ?? 'N/A'}</TableCell>
+                        <TableCell className="hidden md:table-cell">
+                          <Badge variant={getConditionBadgeVariant(equip.condition)} className="text-xs px-1.5 py-0.5">
+                            {equip.condition ? t(`equipmentConditions.${equip.condition}`, equip.condition) : 'N/A'}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
             </>
           )}

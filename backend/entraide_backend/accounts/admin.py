@@ -50,7 +50,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('email', 'username', 'password')
         }),
         (_('Profile'), {
-            'fields': ('first_name', 'last_name', 'role', 'profile_picture')
+            'fields': ('first_name', 'last_name', 'Arabic_first_name', 'arabic_last_name', 'role', 'profile_picture')
         }),
         (_('Personal info'), {
             'fields': ('birth_date', 'birth_city', 'CIN_id')

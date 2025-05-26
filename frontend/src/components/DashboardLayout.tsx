@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import type { NavLink } from './Sidebar';
 import { Button } from '@/components/ui/button';
-import { Menu, LayoutDashboard, Building, Library, UsersRound, UserCog, GraduationCap, Home as HomeIcon, BookOpen, CheckSquare, Briefcase, CalendarDays, ClipboardCheck } from 'lucide-react';
+import { Menu, LayoutDashboard, Building, Library, UsersRound, UserCog, GraduationCap, Home as HomeIcon, BookOpen, CheckSquare, Briefcase, CalendarDays, ClipboardCheck, Users } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface DashboardLayoutProps {
@@ -37,6 +37,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       { section: 'center', href: '/center/info', label: 'sidebar.centerInfo', icon: HomeIcon },
       { section: 'center', href: '/center/rooms', label: 'sidebar.rooms', icon: Building },
       { section: 'center', href: '/center/equipment', label: 'sidebar.equipment', icon: Briefcase },
+      { section: 'center', href: '/center/groups', label: 'sidebar.groups', icon: Users },
       { section: 'programme', href: '/center/schedules', label: 'sidebar.schedules', icon: CalendarDays },
       { section: 'programme', href: '/center/attendance', label: 'sidebar.attendance', icon: ClipboardCheck },
     ];

@@ -38,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
             'first_name', 'last_name', 'role',
             'date_joined', 'is_active'
         ]
-        read_only_fields = ['id', 'date_joined', 'is_active']
+        read_only_fields = ['id', 'date_joined']
         extra_kwargs = {
             'email': {'required': True},
             'username': {'required': False}
@@ -130,6 +130,18 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
+class UserIsActiveUpdateSerializer(serializers.ModelSerializer):
+    """
+    A simplified serializer for updating only the is_active status of a User.
+    """
+    class Meta:
+        model = User
+        fields = ['is_active']
+        extra_kwargs = {
+            'is_active': {'required': False} # Allow it to be omitted in PATCH
+        }
+
+
 class UserProfileSerializer(UserSerializer):
     """
     Extended serializer for User model that includes all profile fields.
@@ -208,14 +220,19 @@ class UserProfileSerializer(UserSerializer):
     
     def to_representation(self, instance):
         """
-        Add the role display name to the response.
+        Add the role display name and profile picture URL to the response.
         
         Args:
             instance (User): The user instance
             
         Returns:
-            dict: The serialized representation with role_display added
+            dict: The serialized representation with role_display and profile_picture URL added
         """
         representation = super().to_representation(instance)
         representation['role_display'] = instance.get_role_display()
+        # Explicitly set profile_picture to its URL if it exists
+        if instance.profile_picture and hasattr(instance.profile_picture, 'url'):
+            representation['profile_picture'] = instance.profile_picture.url
+        else:
+            representation['profile_picture'] = None # Or an empty string, depending on frontend expectation
         return representation
