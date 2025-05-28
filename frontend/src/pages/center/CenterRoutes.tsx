@@ -14,6 +14,8 @@ import CenterEquipmentPage from './CenterEquipmentPage';
 import CenterAddEquipmentPage from './CenterAddEquipmentPage';
 import CenterGroupsPage from './CenterGroupsPage';
 import CenterAddGroupPage from './CenterAddGroupPage';
+import CenterTrainersPage from './CenterTrainersPage';
+import CenterAddNewTrainer from './CenterAddNewTrainer';
 
 const CenterRoutes = () => {
   return (
@@ -33,6 +35,8 @@ const CenterRoutes = () => {
       <Route path="equipment" element={<CenterEquipmentPage />} />
       <Route path="groups/add" element={<CenterAddGroupPage />} />
       <Route path="groups" element={<CenterGroupsPage />} />
+      <Route path="trainers" element={<CenterTrainersPage />} />
+      <Route path="trainers/new" element={<CenterAddNewTrainer />} />
       {/* Add other center-specific routes here later */}
       <Route path="*" element={<div>Center Page Not Found</div>} />
     </Routes>

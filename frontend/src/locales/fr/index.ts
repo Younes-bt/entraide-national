@@ -183,7 +183,8 @@ export const fr = {
       actions: {
         viewDetails: "Voir les Détails",
         edit: "Modifier",
-        delete: "Supprimer"
+        delete: "Supprimer",
+        confirmDeactivate: "Êtes-vous sûr de vouloir désactiver cet étudiant ? Il ne pourra plus accéder au système."
       },
       dialogDescription: "Informations détaillées sur l'étudiant.",
       dialogSections: {
@@ -818,6 +819,131 @@ export const fr = {
         missingInfo: "ID de l'étudiant ou jeton d'authentification manquant. Impossible de charger les détails.",
         fetchStudentError: "Échec de la récupération des détails de l'étudiant. Veuillez réessayer.",
         fetchStudentErrorUnknown: "Une erreur inconnue s'est produite lors de la récupération des détails de l'étudiant."
+      }
+    },
+    centerTrainersPage: {
+      pageTitle: "Formateurs à {{centerName}}",
+      pageSubtitle: "Gérez tous les {{count}} formateurs de votre centre.",
+      addNewTrainerButton: "Ajouter Nouveau Formateur",
+      loadingMessage: "Chargement des formateurs du centre...",
+      errorFetching: "Erreur lors de la récupération des données de formateurs pour le superviseur du centre :",
+      errorFetchingDetail: "Échec de la récupération des informations sur les formateurs. Veuillez vous assurer que votre centre existe et que des formateurs y sont inscrits.",
+      noTrainersTitle: "Aucun Formateur Trouvé à {{centerName}}",
+      noTrainersDescription: "Aucun formateur n'est actuellement inscrit dans ce centre. Vous pouvez ajouter des formateurs via le portail de gestion des formateurs.",
+      noTrainersFound: "Aucun formateur trouvé.",
+      noTrainersMatchFilter: "Aucun formateur ne correspond aux filtres actuels.",
+      noCenterAssigned: "Aucun centre n'est actuellement attribué à ce compte superviseur, ou les données du centre n'ont pas pu être récupérées.",
+      noCenterDataTitle: "Données du Centre Non Disponibles",
+      noCenterDataDescription: "Impossible de charger les données du centre. Veuillez réessayer plus tard ou contacter le support.",
+      accessDenied: "Accès refusé. Cette page est réservée aux superviseurs de centre, ou votre ID utilisateur est manquant.",
+      errorAuthNotAvailable: "Utilisateur non authentifié ou token non disponible.",
+      searchPlaceholder: "Rechercher des formateurs par nom, email ou spécialisation...",
+      filterBySpecialization: "Filtrer par Spécialisation",
+      filterByProgram: "Filtrer par Programme",
+      allSpecializations: "Toutes les Spécialisations",
+      allPrograms: "Tous les Programmes",
+      trainersListTitle: "Liste des Formateurs",
+      noSpecialization: "Aucune Spécialisation",
+      openMenu: "Ouvrir le menu",
+      tableHeaders: {
+        trainer: "Formateur",
+        specialization: "Spécialisation",
+        program: "Programme",
+        employmentStatus: "Statut d'Emploi",
+        experience: "Expérience",
+        actions: "Actions",
+        contractWith: "Contrat Avec",
+        contractStart: "Début de Contrat",
+        contractEnd: "Fin de Contrat"
+      },
+      actions: {
+        viewDetails: "Voir les Détails",
+        edit: "Modifier",
+        delete: "Supprimer",
+        deactivate: "Désactiver",
+        confirmDeactivate: "Êtes-vous sûr de vouloir désactiver ce formateur ? Il ne pourra plus accéder au système."
+      },
+      dialogDescription: "Informations détaillées sur le formateur.",
+      dialogSections: {
+        trainerInfo: "Informations du Formateur",
+        personalInfo: "Informations Personnelles",
+        contactInfo: "Coordonnées",
+        profilePicture: "Photo de Profil"
+      },
+      dialogLabels: {
+        specialization: "Spécialisation",
+        program: "Programme",
+        employmentStatus: "Statut d'Emploi",
+        experience: "Années d'Expérience",
+        centerCode: "Code du Centre",
+        user: {
+          email: "Email",
+          username: "Nom d'utilisateur",
+          arabicFirstName: "Prénom en Arabe",
+          arabicLastName: "Nom en Arabe",
+          birthDate: "Date de Naissance",
+          birthCity: "Ville de Naissance",
+          cin: "CIN (Carte d'Identité Nationale)",
+          role: "Rôle",
+          phoneNumber: "Numéro de Téléphone",
+          address: "Adresse",
+          city: "Ville"
+        }
+      },
+      unknownProgram: "Programme Inconnu",
+      errorTitleCritical: "Erreur Critique",
+      checkAssignment: "Veuillez vérifier l'attribution de votre centre ou contacter l'administration.",
+      errorFetchingTrainersTitle: "Erreur lors de la Récupération des Formateurs",
+      errorFetchingTrainersForCenter: "Échec de la récupération des formateurs pour le centre {{centerName}}",
+      contractEnds: "Le Contrat Se Termine"
+    },
+    centerAddNewTrainer: {
+      errors: {
+        authError: "Erreur d'authentification. Veuillez vous assurer que vous êtes connecté et que vous disposez d'un jeton valide.",
+        fetchCenterError: "Échec de la récupération de votre centre supervisé. Veuillez réessayer.",
+        noCenterAssigned: "Vous n'êtes actuellement affecté comme superviseur à aucun centre, ou les données du centre n'ont pas pu être récupérées.",
+        fetchProgramsError: "Échec de la récupération des programmes de formation. Veuillez réessayer.",
+        centerNotLoaded: "Les informations du centre ne sont pas encore chargées. Veuillez patienter ou actualiser.",
+        submitError: "Échec de la création du formateur. Veuillez vérifier les détails et réessayer.",
+        submitErrorUnknown: "Une erreur inconnue s'est produite lors de la soumission du formulaire."
+      },
+      successMessage: "Formateur créé avec succès !",
+      authPrompt: "Veuillez vous connecter pour ajouter un nouveau formateur.",
+      title: "Ajouter un Nouveau Formateur",
+      centerInfo: "Ajout du formateur au centre : {{centerName}}",
+      labels: {
+        firstName: "Prénom (Français)",
+        lastName: "Nom (Français)",
+        arabicFirstName: "Prénom (Arabe)",
+        arabicLastName: "Nom (Arabe)",
+        program: "Programme de Formation",
+        contractWith: "Contrat Avec",
+        contractStartDate: "Date de Début de Contrat",
+        contractEndDate: "Date de Fin de Contrat",
+        cinId: "CIN (Carte d'Identité Nationale) (Optionnel)",
+        phoneNumber: "Numéro de Téléphone (Optionnel)",
+        birthDate: "Date de Naissance (Optionnel)",
+        birthCity: "Ville de Naissance (Optionnel)",
+        address: "Adresse (Optionnel)",
+        city: "Ville (Optionnel)"
+      },
+      placeholders: {
+        selectProgram: "Sélectionnez un programme de formation",
+        selectContractWith: "Sélectionnez le type de contrat",
+        cinId: "ex: AB123456",
+        phoneNumber: "ex: 0600000000",
+        birthCity: "ex: Rabat",
+        address: "ex: 123 Rue Principale, App 4B",
+        city: "ex: Casablanca"
+      },
+      contractChoices: {
+        entraide: "Entraide Nationale",
+        association: "Association"
+      },
+      buttons: {
+        cancel: "Annuler",
+        submitting: "Soumission en cours...",
+        submit: "Créer le Formateur"
       }
     }
   }

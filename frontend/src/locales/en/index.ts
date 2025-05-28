@@ -183,7 +183,8 @@ export const en = {
       actions: {
         viewDetails: "View Details",
         edit: "Edit",
-        delete: "Delete"
+        delete: "Delete",
+        confirmDeactivate: "Are you sure you want to deactivate this student? They will no longer be able to access the system."
       },
       dialogDescription: "Detailed information about the student.",
       dialogSections: {
@@ -818,6 +819,131 @@ export const en = {
         missingInfo: "Student ID or authentication token missing. Cannot load details.",
         fetchStudentError: "Failed to fetch student details. Please try again.",
         fetchStudentErrorUnknown: "An unknown error occurred while fetching student details."
+      }
+    },
+    centerTrainersPage: {
+      pageTitle: "Trainers at {{centerName}}",
+      pageSubtitle: "Manage all {{count}} trainers in your center.",
+      addNewTrainerButton: "Add New Trainer",
+      loadingMessage: "Loading center trainers...",
+      errorFetching: "Error fetching trainer data for center supervisor:",
+      errorFetchingDetail: "Failed to fetch trainer information. Please ensure your center exists and has trainers enrolled.",
+      noTrainersTitle: "No Trainers Found at {{centerName}}",
+      noTrainersDescription: "There are currently no trainers enrolled in this center. You can add trainers through the trainer management portal.",
+      noTrainersFound: "No trainers found.",
+      noTrainersMatchFilter: "No trainers match the current filters.",
+      noCenterAssigned: "No center is currently assigned to this supervisor account, or the center data could not be retrieved.",
+      noCenterDataTitle: "Center Data Not Available",
+      noCenterDataDescription: "Could not load center data. Please try again later or contact support.",
+      accessDenied: "Access denied. This page is for center supervisors, or your user ID is missing.",
+      errorAuthNotAvailable: "User not authenticated or token not available.",
+      searchPlaceholder: "Search trainers by name, email, or specialization...",
+      filterBySpecialization: "Filter by Specialization",
+      filterByProgram: "Filter by Program",
+      allSpecializations: "All Specializations",
+      allPrograms: "All Programs",
+      trainersListTitle: "Trainers List",
+      noSpecialization: "No Specialization",
+      openMenu: "Open menu",
+      tableHeaders: {
+        trainer: "Trainer",
+        specialization: "Specialization",
+        program: "Program",
+        employmentStatus: "Employment Status",
+        experience: "Experience",
+        actions: "Actions",
+        contractWith: "Contract With",
+        contractStart: "Contract Start",
+        contractEnd: "Contract End"
+      },
+      actions: {
+        viewDetails: "View Details",
+        edit: "Edit",
+        delete: "Delete",
+        deactivate: "Deactivate",
+        confirmDeactivate: "Are you sure you want to deactivate this trainer? They will no longer be able to access the system."
+      },
+      unknownProgram: "Unknown Program",
+      errorTitleCritical: "Critical Error",
+      checkAssignment: "Please check your center assignment or contact administration.",
+      errorFetchingTrainersTitle: "Error Fetching Trainers",
+      errorFetchingTrainersForCenter: "Failed to fetch trainers for center {{centerName}}",
+      contractEnds: "Contract Ends",
+      dialogDescription: "Detailed information about the trainer.",
+      dialogSections: {
+        trainerInfo: "Trainer Information",
+        personalInfo: "Personal Information",
+        contactInfo: "Contact Information",
+        profilePicture: "Profile Picture"
+      },
+      dialogLabels: {
+        specialization: "Specialization",
+        program: "Program",
+        employmentStatus: "Employment Status",
+        experience: "Years of Experience",
+        centerCode: "Center Code",
+        user: {
+          email: "Email",
+          username: "Username",
+          arabicFirstName: "Arabic First Name",
+          arabicLastName: "Arabic Last Name",
+          birthDate: "Birth Date",
+          birthCity: "Birth City",
+          cin: "National ID (CIN)",
+          role: "Role",
+          phoneNumber: "Phone Number",
+          address: "Address",
+          city: "City"
+        }
+      }
+    },
+    centerAddNewTrainer: {
+      errors: {
+        authError: "Authentication error. Please ensure you are logged in and have a valid token.",
+        fetchCenterError: "Failed to fetch your supervised center. Please try again.",
+        noCenterAssigned: "You are not currently assigned as a supervisor to any center, or the center data could not be retrieved.",
+        fetchProgramsError: "Failed to fetch training programs. Please try again.",
+        centerNotLoaded: "Center information is not loaded yet. Please wait or refresh.",
+        submitError: "Failed to create trainer. Please check the details and try again.",
+        submitErrorUnknown: "An unknown error occurred while submitting the form."
+      },
+      successMessage: "Trainer created successfully!",
+      authPrompt: "Please log in to add a new trainer.",
+      title: "Add New Trainer",
+      centerInfo: "Adding trainer to center: {{centerName}}",
+      labels: {
+        firstName: "First Name (French)",
+        lastName: "Last Name (French)",
+        arabicFirstName: "First Name (Arabic)",
+        arabicLastName: "Last Name (Arabic)",
+        program: "Training Program",
+        contractWith: "Contract With",
+        contractStartDate: "Contract Start Date",
+        contractEndDate: "Contract End Date",
+        cinId: "National ID (CIN) (Optional)",
+        phoneNumber: "Phone Number (Optional)",
+        birthDate: "Birth Date (Optional)",
+        birthCity: "Birth City (Optional)",
+        address: "Address (Optional)",
+        city: "City (Optional)"
+      },
+      placeholders: {
+        selectProgram: "Select a training program",
+        selectContractWith: "Select contract type",
+        cinId: "e.g., AB123456",
+        phoneNumber: "e.g., 0600000000",
+        birthCity: "e.g., Rabat",
+        address: "e.g., 123 Main St, Apt 4B",
+        city: "e.g., Casablanca"
+      },
+      contractChoices: {
+        entraide: "Entraide National",
+        association: "Association"
+      },
+      buttons: {
+        cancel: "Cancel",
+        submitting: "Submitting...",
+        submit: "Create Trainer"
       }
     }
   }

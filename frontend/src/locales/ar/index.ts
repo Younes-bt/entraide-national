@@ -809,6 +809,131 @@ export const ar = {
         fetchStudentError: "فشل في جلب تفاصيل الطالب. يرجى المحاولة مرة أخرى.",
         fetchStudentErrorUnknown: "حدث خطأ غير معروف أثناء جلب تفاصيل الطالب."
       }
+    },
+    centerTrainersPage: {
+      pageTitle: "المدربين في {{centerName}}",
+      pageSubtitle: "إدارة كل الـ {{count}} مدربين في مركزك.",
+      addNewTrainerButton: "إضافة مدرب جديد",
+      loadingMessage: "جارٍ تحميل مدربي المركز...",
+      errorFetching: "خطأ في جلب بيانات المدربين لمشرف المركز:",
+      errorFetchingDetail: "فشل في جلب معلومات المدربين. يرجى التأكد من وجود مركزك وأن لديه مدربين مسجلين.",
+      noTrainersTitle: "لم يتم العثور على مدربين في {{centerName}}",
+      noTrainersDescription: "لا يوجد حاليًا أي مدربين مسجلين في هذا المركز. يمكنك إضافة مدربين من خلال بوابة إدارة المدربين.",
+      noTrainersFound: "لم يتم العثور على مدربين.",
+      noTrainersMatchFilter: "لا يوجد مدربين يطابقون المرشحات الحالية.",
+      noCenterAssigned: "لا يوجد مركز معين حاليًا لحساب المشرف هذا، أو تعذر استرداد بيانات المركز.",
+      noCenterDataTitle: "بيانات المركز غير متوفرة",
+      noCenterDataDescription: "تعذر تحميل بيانات المركز. يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالدعم.",
+      accessDenied: "الوصول مرفوض. هذه الصفحة مخصصة لمشرفي المراكز، أو أن معرّف المستخدم الخاص بك مفقود.",
+      errorAuthNotAvailable: "المستخدم غير مصادق عليه أو الرمز المميز غير متوفر.",
+      searchPlaceholder: "البحث عن المدربين بالاسم أو البريد الإلكتروني أو التخصص...",
+      filterBySpecialization: "تصفية حسب التخصص",
+      filterByProgram: "تصفية حسب البرنامج",
+      allSpecializations: "جميع التخصصات",
+      allPrograms: "جميع البرامج",
+      trainersListTitle: "قائمة المدربين",
+      noSpecialization: "لا يوجد تخصص",
+      openMenu: "فتح القائمة",
+      tableHeaders: {
+        trainer: "المدرب",
+        specialization: "التخصص",
+        program: "البرنامج",
+        employmentStatus: "حالة التوظيف",
+        experience: "سنوات الخبرة",
+        actions: "الإجراءات",
+        contractWith: "العقد مع",
+        contractStart: "بداية العقد",
+        contractEnd: "ينتهي العقد"
+      },
+      actions: {
+        viewDetails: "عرض التفاصيل",
+        edit: "تعديل",
+        delete: "حذف",
+        deactivate: "إلغاء التفعيل",
+        confirmDeactivate: "هل أنت متأكد أنك تريد إلغاء تفعيل هذا المدرب؟ لن يتمكن من الوصول إلى النظام بعد الآن."
+      },
+      unknownProgram: "برنامج غير معروف",
+      errorTitleCritical: "خطأ جسيم",
+      checkAssignment: "يرجى التحقق من تعيين المركز الخاص بك أو الاتصال بالإدارة.",
+      errorFetchingTrainersTitle: "خطأ في جلب المدربين",
+      errorFetchingTrainersForCenter: "فشل في جلب المدربين للمركز {{centerName}}",
+      contractEnds: "ينتهي العقد",
+      dialogDescription: "معلومات مفصلة عن المدرب.",
+      dialogSections: {
+        trainerInfo: "معلومات المدرب",
+        personalInfo: "المعلومات الشخصية",
+        contactInfo: "معلومات الاتصال",
+        profilePicture: "الصورة الشخصية"
+      },
+      dialogLabels: {
+        specialization: "التخصص",
+        program: "البرنامج",
+        employmentStatus: "حالة التوظيف",
+        experience: "سنوات الخبرة",
+        centerCode: "رمز المركز",
+        user: {
+          email: "البريد الإلكتروني",
+          username: "اسم المستخدم",
+          arabicFirstName: "الاسم الأول (بالعربية)",
+          arabicLastName: "الاسم الأخير (بالعربية)",
+          birthDate: "تاريخ الميلاد",
+          birthCity: "مكان الميلاد",
+          cin: "رقم البطاقة الوطنية",
+          role: "الدور",
+          phoneNumber: "رقم الهاتف",
+          address: "العنوان",
+          city: "المدينة"
+        }
+      }
+    },
+    centerAddNewTrainer: {
+      errors: {
+        authError: "خطأ في المصادقة. يرجى التأكد من تسجيل الدخول وأن لديك رمزًا صالحًا.",
+        fetchCenterError: "فشل في جلب المركز الذي تشرف عليه. يرجى المحاولة مرة أخرى.",
+        noCenterAssigned: "أنت غير معين حاليًا كمشرف على أي مركز، أو تعذر استرداد بيانات المركز.",
+        fetchProgramsError: "فشل في جلب برامج التدريب. يرجى المحاولة مرة أخرى.",
+        centerNotLoaded: "لم يتم تحميل معلومات المركز بعد. يرجى الانتظار أو التحديث.",
+        submitError: "فشل في إنشاء المدرب. يرجى التحقق من التفاصيل والمحاولة مرة أخرى.",
+        submitErrorUnknown: "حدث خطأ غير معروف أثناء إرسال النموذج."
+      },
+      successMessage: "تم إنشاء المدرب بنجاح!",
+      authPrompt: "يرجى تسجيل الدخول لإضافة مدرب جديد.",
+      title: "إضافة مدرب جديد",
+      centerInfo: "إضافة مدرب إلى المركز: {{centerName}}",
+      labels: {
+        firstName: "(بالفرنسية) الاسم الأول",
+        lastName: "(بالفرنسية) الاسم الأخير",
+        arabicFirstName: "الاسم الأول (بالعربية)",
+        arabicLastName: "الاسم الأخير (بالعربية)",
+        program: "برنامج التدريب",
+        contractWith: "العقد مع",
+        contractStartDate: "تاريخ بداية العقد",
+        contractEndDate: "تاريخ نهاية العقد",
+        cinId: "رقم البطاقة الوطنية (اختياري)",
+        phoneNumber: "رقم الهاتف (اختياري)",
+        birthDate: "تاريخ الميلاد (اختياري)",
+        birthCity: "مكان الميلاد (اختياري)",
+        address: "العنوان (اختياري)",
+        city: "المدينة (اختياري)"
+      },
+      placeholders: {
+        selectProgram: "اختر برنامج تدريب",
+        selectContractWith: "اختر نوع العقد",
+        cinId: "مثال: AB123456",
+        phoneNumber: "مثال: 0600000000",
+        birthCity: "مثال: الرباط",
+        address: "مثال: 123 الشارع الرئيسي، شقة 4ب",
+        city: "مثال: الدار البيضاء"
+      },
+      contractChoices: {
+        entraide: "التعاون الوطني",
+        association: "الجمعية"
+      },
+      buttons: {
+        cancel: "إلغاء",
+        submitting: "جارٍ الإرسال...",
+        submit: "إنشاء المدرب"
+      }
     }
   }
 }; 

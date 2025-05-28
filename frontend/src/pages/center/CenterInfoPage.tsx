@@ -150,7 +150,7 @@ const CenterInfoPage: React.FC = () => {
   return (
     <div className="container mx-auto p-4">
       <Card className="mb-6">
-        <CardHeader className="flex flex-row items-center space-x-4 pb-2">
+        <CardHeader className="flex flex-col items-center text-center space-y-4 pb-2">
           <Avatar className="h-20 w-20">
             <AvatarImage src={centerData.logo_url || centerData.logo || undefined} alt={centerData.name} />
             <AvatarFallback>{centerData.name?.substring(0, 2).toUpperCase()}</AvatarFallback>
@@ -162,25 +162,25 @@ const CenterInfoPage: React.FC = () => {
             </CardDescription>
           </div>
         </CardHeader>
-        <CardContent className="pt-2"> 
+        <CardContent className="pt-2 text-center"> 
           <p className="text-muted-foreground mb-4">{centerData.description}</p>
         </CardContent>
       </Card>
 
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-4">
-          <TabsTrigger value="general">{t('centerInfoPage.tabGeneralInfo')}</TabsTrigger>
-          <TabsTrigger value="contact">{t('centerInfoPage.tabContactLinks')}</TabsTrigger>
-          <TabsTrigger value="rooms">{t('centerInfoPage.tabRooms')}</TabsTrigger>
-          <TabsTrigger value="groups">{t('centerInfoPage.tabGroups')}</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-4 bg-green-100 border-green-200 dark:bg-green-800 dark:border-green-700">
+          <TabsTrigger value="general" className="data-[state=active]:bg-green-500 data-[state=active]:text-white hover:bg-green-200 dark:data-[state=active]:bg-green-600 dark:hover:bg-green-700 dark:text-green-100">{t('centerInfoPage.tabGeneralInfo')}</TabsTrigger>
+          <TabsTrigger value="contact" className="data-[state=active]:bg-green-500 data-[state=active]:text-white hover:bg-green-200 dark:data-[state=active]:bg-green-600 dark:hover:bg-green-700 dark:text-green-100">{t('centerInfoPage.tabContactLinks')}</TabsTrigger>
+          <TabsTrigger value="rooms" className="data-[state=active]:bg-green-500 data-[state=active]:text-white hover:bg-green-200 dark:data-[state=active]:bg-green-600 dark:hover:bg-green-700 dark:text-green-100">{t('centerInfoPage.tabRooms')}</TabsTrigger>
+          <TabsTrigger value="groups" className="data-[state=active]:bg-green-500 data-[state=active]:text-white hover:bg-green-200 dark:data-[state=active]:bg-green-600 dark:hover:bg-green-700 dark:text-green-100">{t('centerInfoPage.tabGroups')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general">
           <Card>
-            <CardHeader>
+            <CardHeader className="text-center">
               <CardTitle>{t('centerInfoPage.generalInfo.title')}</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2 text-sm">
+            <CardContent className="space-y-2 text-sm text-center">
               <div><strong>{t('centerInfoPage.generalInfo.affiliatedTo')}</strong> {centerData.affiliated_to}{centerData.affiliated_to === 'other' && centerData.other_affiliation ? ` (${centerData.other_affiliation})` : ''}</div>
               <div><strong>{t('centerInfoPage.generalInfo.association')}</strong> {centerData.association_name || 'N/A'}</div>
               <div>
@@ -196,10 +196,10 @@ const CenterInfoPage: React.FC = () => {
 
         <TabsContent value="contact">
           <Card>
-            <CardHeader>
+            <CardHeader className="text-center">
               <CardTitle>{t('centerInfoPage.contactLinks.title')}</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2 text-sm">
+            <CardContent className="space-y-2 text-sm text-center">
               <div><strong>{t('centerInfoPage.contactLinks.email')}</strong> {centerData.email || 'N/A'}</div>
               <div><strong>{t('centerInfoPage.contactLinks.phone')}</strong> {centerData.phone_number || 'N/A'}</div>
               <div><strong>{t('centerInfoPage.contactLinks.address')}</strong> {`${centerData.address || 'N/A'}, ${centerData.city || 'N/A'}`}</div>
@@ -214,7 +214,7 @@ const CenterInfoPage: React.FC = () => {
 
         <TabsContent value="rooms">
           <Card>
-            <CardHeader>
+            <CardHeader className="text-center">
               <CardTitle>{t('centerInfoPage.rooms.title', { count: centerData.rooms?.length || 0 })}</CardTitle>
               <CardDescription>{t('centerInfoPage.rooms.description')}</CardDescription>
             </CardHeader>
@@ -226,11 +226,11 @@ const CenterInfoPage: React.FC = () => {
                     className="flex flex-col cursor-pointer hover:shadow-lg transition-shadow"
                     onClick={() => navigate(`/center/rooms/${room.id}`)}
                   >
-                    <CardHeader className="pb-2">
+                    <CardHeader className="pb-2 text-center">
                       <CardTitle className="text-lg">{room.name}</CardTitle>
                       {room.type && <CardDescription>{room.type}</CardDescription>}
                     </CardHeader>
-                    <CardContent className="text-sm space-y-1 flex-grow">
+                    <CardContent className="text-sm space-y-1 flex-grow text-center">
                       {room.description && <p className="text-xs text-muted-foreground mb-1">{room.description}</p>}
                       <p><strong>{t('centerInfoPage.rooms.capacity')}</strong> {room.capacity !== undefined ? room.capacity : 'N/A'}</p>
                       <p><strong>{t('centerInfoPage.rooms.available')}</strong> {room.is_available ? t('common.yes') : t('common.no')}</p>
@@ -241,7 +241,7 @@ const CenterInfoPage: React.FC = () => {
                   </Card>
                 ))
               ) : (
-                <p className="col-span-full text-muted-foreground">{t('centerInfoPage.rooms.noRooms')}</p>
+                <p className="col-span-full text-muted-foreground text-center">{t('centerInfoPage.rooms.noRooms')}</p>
               )}
             </CardContent>
           </Card>
@@ -249,7 +249,7 @@ const CenterInfoPage: React.FC = () => {
 
         <TabsContent value="groups">
           <Card>
-            <CardHeader>
+            <CardHeader className="text-center">
               <CardTitle>{t('centerInfoPage.groups.title', { count: centerData.groups?.length || 0 })}</CardTitle>
               <CardDescription>{t('centerInfoPage.groups.description')}</CardDescription>
             </CardHeader>
@@ -257,16 +257,16 @@ const CenterInfoPage: React.FC = () => {
               {centerData.groups && centerData.groups.length > 0 ? (
                 centerData.groups.map(group => (
                   <Card key={group.id} className="flex flex-col">
-                    <CardHeader className="pb-2">
+                    <CardHeader className="pb-2 text-center">
                       <CardTitle className="text-lg">{group.name}</CardTitle>
                     </CardHeader>
-                    <CardContent className="text-sm space-y-1 flex-grow">
+                    <CardContent className="text-sm space-y-1 flex-grow text-center">
                       {group.description && <p className="text-xs text-muted-foreground">{group.description}</p>}
                     </CardContent>
                   </Card>
                 ))
               ) : (
-                <p className="col-span-full text-muted-foreground">{t('centerInfoPage.groups.noGroups')}</p>
+                <p className="col-span-full text-muted-foreground text-center">{t('centerInfoPage.groups.noGroups')}</p>
               )}
             </CardContent>
           </Card>
