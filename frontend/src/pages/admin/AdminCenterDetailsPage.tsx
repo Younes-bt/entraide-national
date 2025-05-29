@@ -477,7 +477,11 @@ const AdminCenterDetailsPage: React.FC = () => {
               {center.rooms && center.rooms.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {center.rooms.map(room => (
-                    <Card key={room.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+                    <Card 
+                      key={room.id} 
+                      className="hover:shadow-lg transition-shadow cursor-pointer"
+                      onClick={() => navigate(`/admin/centers/details/${center.id}/rooms/${room.id}`)}
+                    >
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
                           <CardTitle className="text-lg">{room.name}</CardTitle>
@@ -504,7 +508,15 @@ const AdminCenterDetailsPage: React.FC = () => {
                           )}
                         </div>
                         <div className="pt-2">
-                          <Button variant="outline" size="sm" className="w-full">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-full"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/admin/centers/details/${center.id}/rooms/${room.id}`);
+                            }}
+                          >
                             <Eye className="mr-2 h-4 w-4" />
                             {t('adminCenterDetailsPage.rooms.viewDetails', 'View Details')}
                           </Button>

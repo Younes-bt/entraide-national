@@ -386,7 +386,10 @@ const AdminCentersPage: React.FC = () => {
                   </div>
 
                   {/* Center Name */}
-                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                  <h3 
+                    className="font-semibold text-lg mb-2 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 cursor-pointer hover:underline"
+                    onClick={() => handleViewDetails(center)}
+                  >
                     {center.name}
                   </h3>
 
