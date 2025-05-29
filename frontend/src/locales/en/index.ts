@@ -233,6 +233,23 @@ export const en = {
     adminCentersPage: {
       title: "Manage Centers",
       addNewCenterButton: "Add New Center",
+      searchPlaceholder: "Search centers...",
+      filterByCity: "City",
+      allCities: "All Cities",
+      filterByAffiliation: "Affiliation",
+      allAffiliations: "All Affiliations",
+      affiliationOther: "Other",
+      filterByStatus: "Status",
+      allStatuses: "All",
+      statusActive: "Active",
+      statusInactive: "Inactive",
+      filterByVerified: "Verified",
+      allVerificationStatuses: "All",
+      verifiedOnly: "Verified",
+      unverifiedOnly: "Unverified",
+      clearFilters: "Clear Filters",
+      resultsCount: "Showing {{count}} of {{total}} centers",
+      noCentersMatchFilters: "No centers match your current filters",
       tableHeaderLogo: "Logo",
       tableHeaderName: "Name",
       tableHeaderAffiliatedTo: "Affiliated To",
@@ -944,6 +961,28 @@ export const en = {
         cancel: "Cancel",
         submitting: "Submitting...",
         submit: "Create Trainer"
+      }
+    },
+    centerEditTrainer: {
+      errors: {
+        authError: "Authentication error. Please ensure you are logged in and have a valid token.",
+        fetchCenterError: "Failed to fetch your supervised center. Please try again.",
+        noCenterAssigned: "You are not currently assigned as a supervisor to any center, or the center data could not be retrieved.",
+        fetchProgramsError: "Failed to fetch training programs. Please try again.",
+        fetchTrainerError: "Failed to fetch trainer details. Please try again.",
+        missingInfo: "Trainer ID or authentication token missing. Cannot load details.",
+        missingInfoSubmit: "Trainer ID or center information is missing. Cannot submit update.",
+        submitError: "Failed to update trainer. Please check details and try again.",
+        submitErrorUnknown: "An unknown error occurred while saving changes."
+      },
+      successMessage: "Trainer updated successfully!",
+      authPrompt: "Please log in to edit trainer.",
+      loadingTrainer: "Loading trainer details...",
+      title: "Edit Trainer",
+      editingFor: "Editing trainer: {{trainerEmail}}",
+      buttons: {
+        saving: "Saving...",
+        saveChanges: "Save Changes"
       }
     }
   }

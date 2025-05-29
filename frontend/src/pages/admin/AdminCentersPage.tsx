@@ -1,32 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogClose,
-} from '@/components/ui/dialog';
-import { MoreHorizontal, EyeIcon, Edit2Icon, Trash2Icon, PlusCircle } from 'lucide-react';
+import { MoreHorizontal, EyeIcon, Edit2Icon, Trash2Icon, PlusCircle, Search, Filter } from 'lucide-react';
 
 // Expanded Center interface based on CenterSerializer
 interface Center {
@@ -57,6 +48,7 @@ interface Center {
   groups?: Group[];
   created_at?: string;
   updated_at?: string;
+  logo_url?: string;
 }
 
 interface Room { // Basic Room interface, expand as needed
@@ -112,8 +104,12 @@ const AdminCentersPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [selectedCenter, setSelectedCenter] = useState<Center | null>(null);
-  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState<boolean>(false);
+  // Search and filter states
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedCity, setSelectedCity] = useState<string>('all');
+  const [selectedAffiliation, setSelectedAffiliation] = useState<string>('all');
+  const [selectedActiveStatus, setSelectedActiveStatus] = useState<string>('all');
+  const [selectedVerifiedStatus, setSelectedVerifiedStatus] = useState<string>('all');
 
   const fetchAndSetCenters = () => {
     if (userAccessToken) {
@@ -139,6 +135,45 @@ const AdminCentersPage: React.FC = () => {
     fetchAndSetCenters();
   }, [userAccessToken, auth.isLoading]);
 
+  // Get unique cities for filter dropdown
+  const uniqueCities = useMemo(() => {
+    const cities = centers
+      .map(center => center.city)
+      .filter(city => city && city.trim() !== '')
+      .map(city => city!.trim());
+    return [...new Set(cities)].sort();
+  }, [centers]);
+
+  // Filter centers based on search and filter criteria
+  const filteredCenters = useMemo(() => {
+    return centers.filter(center => {
+      // Search term filter
+      const matchesSearch = searchTerm === '' || 
+        center.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (center.description && center.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (center.supervisor_first_name && center.supervisor_first_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (center.supervisor_last_name && center.supervisor_last_name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+      // City filter
+      const matchesCity = selectedCity === 'all' || center.city === selectedCity;
+
+      // Affiliation filter
+      const matchesAffiliation = selectedAffiliation === 'all' || center.affiliated_to === selectedAffiliation;
+
+      // Active status filter
+      const matchesActiveStatus = selectedActiveStatus === 'all' || 
+        (selectedActiveStatus === 'active' && center.is_active === true) ||
+        (selectedActiveStatus === 'inactive' && center.is_active === false);
+
+      // Verified status filter
+      const matchesVerifiedStatus = selectedVerifiedStatus === 'all' || 
+        (selectedVerifiedStatus === 'verified' && center.is_verified === true) ||
+        (selectedVerifiedStatus === 'unverified' && center.is_verified === false);
+
+      return matchesSearch && matchesCity && matchesAffiliation && matchesActiveStatus && matchesVerifiedStatus;
+    });
+  }, [centers, searchTerm, selectedCity, selectedAffiliation, selectedActiveStatus, selectedVerifiedStatus]);
+
   const getAffiliationDisplay = (center: Center): string => {
     if (center.affiliated_to === 'other' && center.other_affiliation) {
       return center.other_affiliation;
@@ -151,8 +186,7 @@ const AdminCentersPage: React.FC = () => {
   };
 
   const handleViewDetails = (center: Center) => {
-    setSelectedCenter(center);
-    setIsDetailDialogOpen(true);
+    navigate(`/admin/centers/details/${center.id}`);
   };
 
   const handleEdit = (centerId: string | number) => {
@@ -179,60 +213,157 @@ const AdminCentersPage: React.FC = () => {
     }
   };
 
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedCity('all');
+    setSelectedAffiliation('all');
+    setSelectedActiveStatus('all');
+    setSelectedVerifiedStatus('all');
+  };
+
   if (loading && !centers.length && !error) return <div className="container mx-auto p-4"><p>{t('adminCentersPage.loadingCenters')}</p></div>;
   if (auth.isLoading) return <div className="container mx-auto p-4"><p>{t('adminCentersPage.loadingAuthAndCenters')}</p></div>;
-  // Display general error if it exists and it's not related to the detail dialog being open
-  if (error && !isDetailDialogOpen) return <div className="container mx-auto p-4"><p className="text-red-500">{error}</p></div>;
+  // Display general error if it exists
+  if (error) return <div className="container mx-auto p-4"><p className="text-red-500">{error}</p></div>;
   
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-4">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">{t('adminCentersPage.title')}</h1>
         <Button onClick={() => navigate('/admin/centers/add')}> 
           <PlusCircle className="mr-2 h-4 w-4" /> {t('adminCentersPage.addNewCenterButton')}
         </Button>
       </div>
 
-      {/* Display fetch error separately if it exists, to not hide table during other errors like delete */}
+      {/* Search and Filter Section */}
+      <div 
+        className="dark:bg-gray-800 p-4 rounded-lg shadow-sm border dark:border-gray-700 mb-6"
+        style={{ 
+          backgroundColor: '#409e0915', // #409e09 with 15% opacity for light background
+          borderColor: '#409e09'
+        }}
+      >
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Search Bar */}
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder={t('adminCentersPage.searchPlaceholder', 'Search centers...')}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </div>
+          
+          {/* Filters */}
+          <div className="flex flex-col sm:flex-row gap-3 lg:gap-2">
+            {/* City Filter */}
+            <Select value={selectedCity} onValueChange={setSelectedCity}>
+              <SelectTrigger className="w-full sm:w-[140px]">
+                <SelectValue placeholder={t('adminCentersPage.filterByCity', 'City')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('adminCentersPage.allCities', 'All Cities')}</SelectItem>
+                {uniqueCities.map(city => (
+                  <SelectItem key={city} value={city}>{city}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Affiliation Filter */}
+            <Select value={selectedAffiliation} onValueChange={setSelectedAffiliation}>
+              <SelectTrigger className="w-full sm:w-[150px]">
+                <SelectValue placeholder={t('adminCentersPage.filterByAffiliation', 'Affiliation')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('adminCentersPage.allAffiliations', 'All Affiliations')}</SelectItem>
+                <SelectItem value="entraide">{t('adminCentersPage.affiliationEntraide')}</SelectItem>
+                <SelectItem value="association">{t('adminCentersPage.affiliationAssociation')}</SelectItem>
+                <SelectItem value="other">{t('adminCentersPage.affiliationOther', 'Other')}</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Active Status Filter */}
+            <Select value={selectedActiveStatus} onValueChange={setSelectedActiveStatus}>
+              <SelectTrigger className="w-full sm:w-[120px]">
+                <SelectValue placeholder={t('adminCentersPage.filterByStatus', 'Status')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('adminCentersPage.allStatuses', 'All')}</SelectItem>
+                <SelectItem value="active">{t('adminCentersPage.statusActive', 'Active')}</SelectItem>
+                <SelectItem value="inactive">{t('adminCentersPage.statusInactive', 'Inactive')}</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Verified Status Filter */}
+            <Select value={selectedVerifiedStatus} onValueChange={setSelectedVerifiedStatus}>
+              <SelectTrigger className="w-full sm:w-[130px]">
+                <SelectValue placeholder={t('adminCentersPage.filterByVerified', 'Verified')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('adminCentersPage.allVerificationStatuses', 'All')}</SelectItem>
+                <SelectItem value="verified">{t('adminCentersPage.verifiedOnly', 'Verified')}</SelectItem>
+                <SelectItem value="unverified">{t('adminCentersPage.unverifiedOnly', 'Unverified')}</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Clear Filters Button */}
+            <Button
+              variant="outline"
+              onClick={clearFilters}
+              className="w-full sm:w-auto"
+            >
+              <Filter className="mr-2 h-4 w-4" />
+              {t('adminCentersPage.clearFilters', 'Clear')}
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Display fetch error separately if it exists, to not hide cards during other errors like delete */}
       {error && centers.length > 0 && <p className="text-red-500 mb-4">{error}</p>}
+      
+      {/* Results Count */}
+      <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+        {t('adminCentersPage.resultsCount', { count: filteredCenters.length, total: centers.length }) || `Showing ${filteredCenters.length} of ${centers.length} centers`}
+      </div>
       
       { (!loading || centers.length > 0) && !(!userAccessToken && !auth.isLoading) && (
         <>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[80px]">{t('adminCentersPage.tableHeaderLogo')}</TableHead>
-                <TableHead>{t('adminCentersPage.tableHeaderName')}</TableHead>
-                <TableHead>{t('adminCentersPage.tableHeaderAffiliatedTo')}</TableHead>
-                <TableHead>{t('adminCentersPage.tableHeaderSupervisorName')}</TableHead>
-                <TableHead>{t('adminCentersPage.tableHeaderPhone')}</TableHead>
-                <TableHead className="text-right w-[100px]">{t('adminCentersPage.tableHeaderActions')}</TableHead>
-             </TableRow>
-            </TableHeader>
-            <TableBody>
-              {centers.map((center) => (
-                <TableRow key={center.id} className="hover:bg-gray-100 dark:hover:bg-gray-800">
-                  <TableCell>
-                    {center.logo ? (
-                      <img src={center.logo} alt={t('adminCentersPage.logoAlt', { name: center.name })} className="h-10 w-10 rounded-full object-cover" />
-                    ) : (
-                      <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-xs font-semibold">
-                        {t('adminCentersPage.noLogo')}
-                      </div>
-                    )}
-                  </TableCell>
-                  <TableCell className="font-medium">{center.name}</TableCell>
-                  <TableCell>{getAffiliationDisplay(center)}</TableCell>
-                  <TableCell>
-                    {center.supervisor_first_name && center.supervisor_last_name 
-                      ? `${center.supervisor_first_name} ${center.supervisor_last_name}` 
-                      : center.supervisor_username || t('adminCentersPage.notAvailable')}
-                  </TableCell>
-                  <TableCell>{center.phone_number || t('adminCentersPage.notAvailable')}</TableCell>
-                  <TableCell className="text-right">
+          {/* Centers Cards Grid */}
+          {filteredCenters.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredCenters.map((center) => (
+                <div
+                  key={center.id}
+                  className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 cursor-pointer group"
+                >
+                  {/* Card Header with Logo and Actions */}
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center space-x-3">
+                      {center.logo_url ? (
+                        <img 
+                          src={center.logo_url} 
+                          alt={t('adminCentersPage.logoAlt', { name: center.name })} 
+                          className="h-12 w-12 rounded-full object-cover" 
+                        />
+                      ) : (
+                        <div className="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 text-xs font-semibold">
+                          {center.name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Actions Dropdown */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
+                        <Button 
+                          variant="ghost" 
+                          className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        >
                           <span className="sr-only">{t('adminCentersPage.openMenuSr')}</span>
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
@@ -252,94 +383,62 @@ const AdminCentersPage: React.FC = () => {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </TableCell>
-                </TableRow>
+                  </div>
+
+                  {/* Center Name */}
+                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                    {center.name}
+                  </h3>
+
+                  {/* City */}
+                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
+                    {center.city || t('adminCentersPage.notAvailable')}
+                  </p>
+
+                  {/* Status Badges */}
+                  <div className="flex flex-wrap gap-2">
+                    {center.is_active !== undefined && (
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        center.is_active 
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+                          : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                      }`}>
+                        {center.is_active ? t('adminCentersPage.statusActive', 'Active') : t('adminCentersPage.statusInactive', 'Inactive')}
+                      </span>
+                    )}
+                    {center.is_verified !== undefined && (
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        center.is_verified 
+                          ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' 
+                          : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                      }`}>
+                        {center.is_verified ? t('adminCentersPage.verifiedOnly', 'Verified') : t('adminCentersPage.unverifiedOnly', 'Unverified')}
+                      </span>
+                    )}
+                  </div>
+                </div>
               ))}
-            </TableBody>
-          </Table>
-          {centers.length === 0 && !loading && <p className="text-center mt-4">{t('adminCentersPage.noCentersFound')}</p>}
-        </>
-      )}
-      
-      {selectedCenter && (
-        <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-          <DialogContent className="sm:max-w-lg">
-            <DialogHeader>
-              <DialogTitle className="flex items-center">
-                {selectedCenter.logo && (
-                  <img src={selectedCenter.logo} alt={t('adminCentersPage.logoAlt', { name: selectedCenter.name })} className="h-10 w-10 rounded-full object-cover mr-3" />
-                )}
-                {selectedCenter.name}
-              </DialogTitle>
-              <DialogDescription>
-                {t('adminCentersPage.dialogDescription', { name: selectedCenter.name })}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto">
-              <InfoRow label={t('adminCentersPage.dialogId')} value={selectedCenter.id.toString()} />
-              <InfoRow label={t('adminCentersPage.dialogDescriptionLabel')} value={selectedCenter.description} />
-              <InfoRow label={t('adminCentersPage.dialogAffiliation')} value={getAffiliationDisplay(selectedCenter)} />
-              {selectedCenter.affiliated_to === 'association' && selectedCenter.association_name && (
-                 <InfoRow label={t('adminCentersPage.dialogAssociationName')} value={selectedCenter.association_name} />
-              )}
-              {selectedCenter.affiliated_to === 'other' && selectedCenter.other_affiliation && (
-                 <InfoRow label={t('adminCentersPage.dialogOtherAffiliationDetails')} value={selectedCenter.other_affiliation} />
-              )}
-              <InfoRow label={t('adminCentersPage.dialogPhone')} value={selectedCenter.phone_number} t={t} />
-              <InfoRow label={t('adminCentersPage.dialogEmail')} value={selectedCenter.email} t={t} />
-              <InfoRow label={t('adminCentersPage.dialogAddress')} value={selectedCenter.address} t={t} />
-              <InfoRow label={t('adminCentersPage.dialogCity')} value={selectedCenter.city} t={t}/>
-              <InfoRow 
-                label={t('adminCentersPage.dialogSupervisor')} 
-                value={
-                  selectedCenter.supervisor_first_name && selectedCenter.supervisor_last_name 
-                    ? `${selectedCenter.supervisor_first_name} ${selectedCenter.supervisor_last_name}` 
-                    : selectedCenter.supervisor_username || (selectedCenter.supervisor ? `ID: ${selectedCenter.supervisor}`: t('adminCentersPage.notAvailable'))
-                } 
-              />
-              <InfoRow label={t('adminCentersPage.dialogActive')} value={selectedCenter.is_active ? t('common.yes') : t('common.no')} />
-              <InfoRow label={t('adminCentersPage.dialogVerified')} value={selectedCenter.is_verified ? t('common.yes') : t('common.no')} />
-              <InfoRow label={t('adminCentersPage.dialogWebsite')} value={selectedCenter.website} link={selectedCenter.website} t={t} />
-              <InfoRow label={t('adminCentersPage.dialogFacebook')} value={selectedCenter.facebook_link} link={selectedCenter.facebook_link} t={t} />
-              <InfoRow label={t('adminCentersPage.dialogInstagram')} value={selectedCenter.instagram_link} link={selectedCenter.instagram_link} t={t} />
-              <InfoRow label={t('adminCentersPage.dialogTwitter')} value={selectedCenter.twitter_link} link={selectedCenter.twitter_link} t={t} />
-              <InfoRow label={t('adminCentersPage.dialogMapsLink')} value={selectedCenter.maps_link} link={selectedCenter.maps_link} t={t} />
-              <InfoRow label={t('adminCentersPage.dialogCreatedAt')} value={selectedCenter.created_at ? new Date(selectedCenter.created_at).toLocaleString() : t('adminCentersPage.notAvailable')} />
-              <InfoRow label={t('adminCentersPage.dialogLastUpdated')} value={selectedCenter.updated_at ? new Date(selectedCenter.updated_at).toLocaleString() : t('adminCentersPage.notAvailable')} />
-              <InfoRow label={t('adminCentersPage.dialogRoomsCount')} value={selectedCenter.rooms?.length?.toString() || '0'} />
-              <InfoRow label={t('adminCentersPage.dialogGroupsCount')} value={selectedCenter.groups?.length?.toString() || '0'} />
             </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="outline">
-                  {t('common.closeButton')}
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 dark:text-gray-400 text-lg">
+                {searchTerm || selectedCity !== 'all' || selectedAffiliation !== 'all' || selectedActiveStatus !== 'all' || selectedVerifiedStatus !== 'all'
+                  ? t('adminCentersPage.noCentersMatchFilters', 'No centers match your current filters')
+                  : t('adminCentersPage.noCentersFound')
+                }
+              </p>
+              {(searchTerm || selectedCity !== 'all' || selectedAffiliation !== 'all' || selectedActiveStatus !== 'all' || selectedVerifiedStatus !== 'all') && (
+                <Button
+                  variant="outline"
+                  onClick={clearFilters}
+                  className="mt-4"
+                >
+                  {t('adminCentersPage.clearFilters', 'Clear Filters')}
                 </Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
-    </div>
-  );
-};
-
-// Helper component for Dialog content
-const InfoRow: React.FC<{ label: string; value?: string | number | null; link?: string | null; t?: (key: string) => string }> = ({ label, value, link, t }) => {
-  const notAvailableText = t ? t('adminCentersPage.notAvailable') : 'N/A';
-  const displayValue = value === null || value === undefined || value === '' ? notAvailableText : value;
-  const displayLink = link === null || link === undefined || link === '' ? null : link
-
-  if (displayValue === notAvailableText && !displayLink) return null; // Don't render if only N/A and no link
-
-  return (
-    <div className="grid grid-cols-3 items-center gap-2 text-sm">
-      <span className="font-semibold col-span-1">{label}:</span>
-      {displayLink ? (
-        <a href={displayLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline col-span-2 truncate">
-          {displayValue === notAvailableText ? displayLink : displayValue.toString()}
-        </a>
-      ) : (
-        <span className="col-span-2 truncate" title={displayValue?.toString()}>{displayValue.toString()}</span>
+              )}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

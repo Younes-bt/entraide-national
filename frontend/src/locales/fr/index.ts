@@ -220,6 +220,86 @@ export const fr = {
     notFoundTitle: '404 - Page Non Trouvée',
     goHome: 'Retour à l\'accueil',
 
+    // AdminCenterDetailsPage translations
+    adminCenterDetailsPage: {
+      errorNoCenterId: 'ID du centre non fourni',
+      errorAuthRequired: 'Authentification requise',
+      errorFetchingDetails: 'Échec de la récupération des détails du centre',
+      loadingDetails: 'Chargement des détails du centre...',
+      backToCenters: 'Retour aux Centres',
+      centerNotFoundTitle: 'Centre Non Trouvé',
+      centerNotFoundDescription: 'Le centre demandé n\'a pas pu être trouvé.',
+      editCenter: 'Modifier le Centre',
+      deleteCenter: 'Supprimer le Centre',
+      confirmDelete: 'Êtes-vous sûr de vouloir supprimer ce centre ? Cette action ne peut pas être annulée.',
+      errorDeleting: 'Échec de la suppression du centre',
+      
+      // Tab names
+      tabGeneral: 'Infos Générales',
+      tabContact: 'Contact et Liens',
+      tabRooms: 'Salles',
+      tabGroups: 'Groupes',
+      
+      // General Info section
+      generalInfo: {
+        title: 'Informations Générales',
+        basicInfo: 'Informations de Base',
+        id: 'ID',
+        affiliation: 'Affiliation',
+        association: 'Association',
+        otherAffiliation: 'Autre Affiliation',
+        supervisor: 'Superviseur',
+        supervisorName: 'Nom',
+        supervisorUsername: 'Nom d\'utilisateur',
+        noSupervisor: 'Aucun superviseur assigné',
+        statistics: 'Statistiques',
+        roomsCount: 'Salles',
+        groupsCount: 'Groupes',
+        timestamps: 'Horodatages',
+        createdAt: 'Créé le',
+        updatedAt: 'Dernière mise à jour'
+      },
+      
+      // Contact section
+      contact: {
+        title: 'Informations de Contact et Liens',
+        contactInfo: 'Informations de Contact',
+        email: 'E-mail',
+        phone: 'Téléphone',
+        address: 'Adresse',
+        city: 'Ville',
+        location: 'Emplacement',
+        viewOnMap: 'Voir sur la Carte',
+        socialLinks: 'Site Web et Réseaux Sociaux',
+        website: 'Site Web',
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        twitter: 'Twitter',
+        viewProfile: 'Voir le Profil',
+        noSocialLinks: 'Aucun site web ou lien de réseau social disponible'
+      },
+      
+      // Rooms section
+      rooms: {
+        description: 'Toutes les salles disponibles dans ce centre',
+        capacity: 'Capacité',
+        available: 'Disponible',
+        equipment: 'Équipement',
+        items: 'articles',
+        viewDetails: 'Voir les Détails',
+        noRooms: 'Aucune salle trouvée pour ce centre'
+      },
+      
+      // Groups section
+      groups: {
+        description: 'Tous les groupes d\'étudiants de ce centre',
+        createdAt: 'Créé le',
+        updatedAt: 'Mis à jour le',
+        viewDetails: 'Voir les Détails',
+        noGroups: 'Aucun groupe trouvé pour ce centre'
+      }
+    },
+
     // Added for AdminCentersPage (French)
     common: {
       yes: "Oui",
@@ -233,6 +313,23 @@ export const fr = {
     adminCentersPage: {
       title: "Gérer les Centres",
       addNewCenterButton: "Ajouter un Nouveau Centre",
+      searchPlaceholder: "Rechercher des centres...",
+      filterByCity: "Ville",
+      allCities: "Toutes les Villes",
+      filterByAffiliation: "Affiliation",
+      allAffiliations: "Toutes les Affiliations",
+      affiliationOther: "Autre",
+      filterByStatus: "Statut",
+      allStatuses: "Tous",
+      statusActive: "Actif",
+      statusInactive: "Inactif",
+      filterByVerified: "Vérifié",
+      allVerificationStatuses: "Tous",
+      verifiedOnly: "Vérifié",
+      unverifiedOnly: "Non Vérifié",
+      clearFilters: "Effacer les Filtres",
+      resultsCount: "Affichage de {{count}} sur {{total}} centres",
+      noCentersMatchFilters: "Aucun centre ne correspond à vos filtres actuels",
       tableHeaderLogo: "Logo",
       tableHeaderName: "Nom",
       tableHeaderAffiliatedTo: "Affilié À",
@@ -944,6 +1041,28 @@ export const fr = {
         cancel: "Annuler",
         submitting: "Soumission en cours...",
         submit: "Créer le Formateur"
+      }
+    },
+    centerEditTrainer: {
+      errors: {
+        authError: "Erreur d'authentification. Veuillez vous assurer que vous êtes connecté et que vous disposez d'un jeton valide.",
+        fetchCenterError: "Échec de la récupération de votre centre supervisé. Veuillez réessayer.",
+        noCenterAssigned: "Vous n'êtes actuellement affecté comme superviseur à aucun centre, ou les données du centre n'ont pas pu être récupérées.",
+        fetchProgramsError: "Échec de la récupération des programmes de formation. Veuillez réessayer.",
+        fetchTrainerError: "Échec de la récupération des détails du formateur. Veuillez réessayer.",
+        missingInfo: "ID du formateur ou jeton d'authentification manquant. Impossible de charger les détails.",
+        missingInfoSubmit: "ID du formateur ou informations du centre manquantes. Impossible de soumettre la mise à jour.",
+        submitError: "Échec de la mise à jour du formateur. Veuillez vérifier les détails et réessayer.",
+        submitErrorUnknown: "Une erreur inconnue s'est produite lors de l'enregistrement des modifications."
+      },
+      successMessage: "Formateur mis à jour avec succès !",
+      authPrompt: "Veuillez vous connecter pour modifier le formateur.",
+      loadingTrainer: "Chargement des détails du formateur...",
+      title: "Modifier le Formateur",
+      editingFor: "Modification du formateur : {{trainerEmail}}",
+      buttons: {
+        saving: "Enregistrement...",
+        saveChanges: "Enregistrer les Modifications"
       }
     }
   }

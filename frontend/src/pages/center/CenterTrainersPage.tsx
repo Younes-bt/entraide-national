@@ -42,6 +42,7 @@ interface Trainer {
   user: TrainerUser; // Nested user details
   center: number; // Assuming center is represented by its ID in the fetched trainer data
   program: string | number; // Program ID
+  program_name?: string; // Program name from the updated serializer
   contarct_with: string;
   contract_start_date: string;
   contract_end_date: string;
@@ -63,13 +64,14 @@ interface ProgramData {
 }
 
 // Mobile Trainer Card Component
-const TrainerCard = ({ trainer, onViewDetails, onEdit, getInitials, t, getProgramNameById, formatDate }: {
+const TrainerCard = ({ trainer, onViewDetails, onEdit, onDeactivate, getInitials, t, getProgramNameById, formatDate }: {
   trainer: Trainer;
   onViewDetails: (trainerId: number) => void;
   onEdit: (trainerId: number) => void;
+  onDeactivate: (trainerId: number) => void;
   getInitials: (first: string, last: string) => string;
   t: any; // i18next translation function
-  getProgramNameById: (programId: string | number | undefined | null) => string;
+  getProgramNameById: (programId: string | number | undefined | null, programName?: string) => string;
   formatDate: (dateString: string) => string;
 }) => (
   <Card className="w-full">
@@ -87,7 +89,7 @@ const TrainerCard = ({ trainer, onViewDetails, onEdit, getInitials, t, getProgra
               {trainer.user.first_name} {trainer.user.last_name}
             </div>
             <div className="text-xs text-muted-foreground font-light truncate">
-              {getProgramNameById(trainer.program)}
+              {getProgramNameById(trainer.program, trainer.program_name)}
             </div>
             <div className="text-xs text-muted-foreground font-light truncate">
               {t('centerTrainersPage.contractEnds')}: {formatDate(trainer.contract_end_date)}
@@ -110,7 +112,7 @@ const TrainerCard = ({ trainer, onViewDetails, onEdit, getInitials, t, getProgra
               <Edit className="mr-2 h-4 w-4" />
               {t('centerTrainersPage.actions.edit')}
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600" onClick={() => console.warn("Deactivate action to be implemented", trainer.id) /* Placeholder for handleDeactivateTrainer(trainer.id) */}>
+            <DropdownMenuItem className="text-red-600" onClick={() => onDeactivate(trainer.id)}>
               <Trash2 className="mr-2 h-4 w-4" />
               {t('centerTrainersPage.actions.deactivate')}
             </DropdownMenuItem>
@@ -157,10 +159,24 @@ const CenterTrainersPage = () => {
     fetchAllPrograms();
   }, [token]);
 
-  const getProgramNameById = (programId: string | number | undefined | null): string => {
+  const getProgramNameById = (programId: string | number | undefined | null, programName?: string): string => {
     if (programId === null || programId === undefined) return 'N/A';
+    
+    // If we have the program name directly from the API, use it
+    if (programName) {
+      console.log('[CenterTrainersPage] Using program name from API:', programName);
+      return programName;
+    }
+    
+    // Add debugging
+    console.log('[CenterTrainersPage] Looking for program with ID:', programId, 'Type:', typeof programId);
+    console.log('[CenterTrainersPage] Available programs:', allProgramsData.map(p => ({ id: p.id, name: p.name, idType: typeof p.id })));
+    
     const program = allProgramsData.find(p => p.id.toString() === programId.toString());
-    return program ? program.name : t('centerTrainersPage.unknownProgram');
+    const result = program ? program.name : t('centerTrainersPage.unknownProgram');
+    
+    console.log('[CenterTrainersPage] Program match result:', result);
+    return result;
   };
   
   const filteredTrainers = trainers.filter(trainer => {
@@ -254,7 +270,17 @@ const CenterTrainersPage = () => {
 
       const trainersData = await trainersResponse.json();
       console.log('[CenterTrainersPage] Trainers data received (for center):', trainersData);
-      let allTrainersRaw: Trainer[] = []; 
+      
+      // Add detailed debugging for trainer structure
+      if (Array.isArray(trainersData) && trainersData.length > 0) {
+        console.log('[CenterTrainersPage] First trainer structure:', trainersData[0]);
+        console.log('[CenterTrainersPage] First trainer program field:', trainersData[0].program, 'Type:', typeof trainersData[0].program);
+      } else if (trainersData && trainersData.results && trainersData.results.length > 0) {
+        console.log('[CenterTrainersPage] First trainer structure (paginated):', trainersData.results[0]);
+        console.log('[CenterTrainersPage] First trainer program field (paginated):', trainersData.results[0].program, 'Type:', typeof trainersData.results[0].program);
+      }
+      
+      let allTrainersRaw: Trainer[] = [];
       if (Array.isArray(trainersData)) {
         allTrainersRaw = trainersData;
       } else if (trainersData && trainersData.results) { // Handle paginated response
@@ -506,7 +532,7 @@ const CenterTrainersPage = () => {
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell>{getProgramNameById(trainer.program)}</TableCell>
+                        <TableCell>{getProgramNameById(trainer.program, trainer.program_name)}</TableCell>
                         <TableCell>
                           <Badge variant={trainer.contarct_with === 'entraide' ? 'default' : 'secondary'}>
                             {trainer.contarct_with}
@@ -552,6 +578,7 @@ const CenterTrainersPage = () => {
                     trainer={trainer}
                     onViewDetails={handleViewTrainerDetails}
                     onEdit={handleEditTrainer}
+                    onDeactivate={handleDeactivateTrainer}
                     getInitials={getInitials}
                     t={t}
                     getProgramNameById={getProgramNameById}

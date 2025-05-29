@@ -13,12 +13,13 @@ class TeacherSerializer(serializers.ModelSerializer):
     """
     user = UserProfileSerializer(read_only=True)
     center = serializers.StringRelatedField(read_only=True)
-    program = serializers.StringRelatedField(read_only=True)
+    program_name = serializers.StringRelatedField(source='program', read_only=True)
+    program = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Teacher
         fields = [
-            'id', 'user', 'center', 'program', 'contarct_with', 
+            'id', 'user', 'center', 'program', 'program_name', 'contarct_with', 
             'contract_start_date', 'contract_end_date', 
             'created_at', 'updated_at'
         ]
@@ -39,6 +40,7 @@ class TeacherCreateUpdateSerializer(serializers.ModelSerializer):
     birth_city = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
     address = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
     city = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
+    profile_picture = serializers.ImageField(write_only=True, required=False, allow_null=True)
 
     # Field for updating the user's is_active status (nested, from UserIsActiveUpdateSerializer)
     user = UserIsActiveUpdateSerializer(required=False, partial=True)
@@ -70,6 +72,7 @@ class TeacherCreateUpdateSerializer(serializers.ModelSerializer):
             'birth_city',
             'address',
             'city',
+            'profile_picture',
         ]
         read_only_fields = ['id', 'user_info', 'created_at', 'updated_at']
 
@@ -88,6 +91,7 @@ class TeacherCreateUpdateSerializer(serializers.ModelSerializer):
         birth_city = validated_data.pop('birth_city', None)
         address = validated_data.pop('address', None)
         city = validated_data.pop('city', None)
+        profile_picture = validated_data.pop('profile_picture', None)
 
         # The 'user' field (UserIsActiveUpdateSerializer data) is not used for creation, remove if present.
         validated_data.pop('user', None) 
@@ -115,6 +119,7 @@ class TeacherCreateUpdateSerializer(serializers.ModelSerializer):
             'birth_city': birth_city,
             'address': address,
             'city': city,
+            'profile_picture': profile_picture,
         }
         
         for field_key in ['Arabic_first_name', 'arabic_last_name', 'CIN_id', 'phone_number', 'birth_date', 'birth_city', 'address', 'city']:
@@ -138,21 +143,30 @@ class TeacherCreateUpdateSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
+        print(f"TEACHER UPDATE - Original validated_data: {validated_data}")
+        
         user_payload_for_update = validated_data.pop('user', None) # Data from UserIsActiveUpdateSerializer
         user_instance = instance.user
         user_was_modified = False
 
         if user_payload_for_update and 'is_active' in user_payload_for_update:
+            print(f"TEACHER UPDATE - Found 'is_active' in user_payload_for_update: {user_payload_for_update['is_active']}")
             if isinstance(user_payload_for_update['is_active'], bool):
                 user_instance.is_active = user_payload_for_update['is_active']
                 user_was_modified = True
+                print(f"TEACHER UPDATE - Set user_instance.is_active to: {user_instance.is_active}")
+            else:
+                print("TEACHER UPDATE - 'is_active' in user_payload_for_update is not a boolean (unexpected here).")
+        else:
+            print("TEACHER UPDATE - 'user' payload (for is_active) not found or 'is_active' key missing.")
         
         user_direct_update_fields = [
             'first_name', 'last_name', 'Arabic_first_name', 'arabic_last_name',
-            'CIN_id', 'phone_number', 'birth_date', 'birth_city', 'address', 'city'
+            'CIN_id', 'phone_number', 'birth_date', 'birth_city', 'address', 'city', 'profile_picture'
         ]
         for field_name in user_direct_update_fields:
             if field_name in validated_data:
+                print(f"TEACHER UPDATE - Processing top-level user field: {field_name} = {validated_data[field_name]}")
                 field_value = validated_data.pop(field_name)
                 if field_name == 'birth_date' and not field_value: # Handle empty date string
                     setattr(user_instance, field_name, None)
@@ -161,7 +175,13 @@ class TeacherCreateUpdateSerializer(serializers.ModelSerializer):
                 user_was_modified = True
         
         if user_was_modified:
+            print(f"TEACHER UPDATE - Before saving user_instance: is_active={user_instance.is_active}, user_was_modified={user_was_modified}")
             user_instance.save()
+            print("TEACHER UPDATE - user_instance saved.")
+        else:
+            print("TEACHER UPDATE - user_instance not saved as user_was_modified is False.")
 
+        print(f"TEACHER UPDATE - Remaining validated_data for Teacher model: {validated_data}")
         teacher = super().update(instance, validated_data)
+        print("TEACHER UPDATE - Teacher instance updated.")
         return teacher 

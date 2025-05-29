@@ -20,6 +20,7 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext'; // Import AuthPr
 import { ThemeToggleButton } from '@/components/ThemeToggleButton'; // Import from new location
 import AdminSupervisorsPage from './pages/admin/AdminSupervisorsPage'; // Import the new page
 import AdminCentersPage from './pages/admin/AdminCentersPage'; // Import AdminCentersPage
+import AdminCenterDetailsPage from './pages/admin/AdminCenterDetailsPage'; // Import AdminCenterDetailsPage
 import AdminAddCenterPage from './pages/admin/AdminAddCenterPage'; // Import the new page
 import AdminAssociationsPage from './pages/admin/AdminAssociationsPage'; // Import the new Associations page
 import AdminAddAssociationPage from './pages/admin/AdminAddAssociationPage'; // Import the Add Association page
@@ -148,6 +149,7 @@ const AdminRoutes = () => {
       <Route path="supervisors/add-association" element={<AdminAddAssociationSupervisorPage />} /> {/* Added route for adding association supervisors */}
       <Route path="centers" element={<AdminCentersPage />} /> 
       <Route path="centers/add" element={<AdminAddCenterPage />} /> {/* Added route for adding centers */}
+      <Route path="centers/details/:centerId" element={<AdminCenterDetailsPage />} /> {/* Added route for center details */}
       <Route path="associations" element={<AdminAssociationsPage />} /> {/* Added route for associations */}
       <Route path="associations/add" element={<AdminAddAssociationPage />} /> {/* Added route for adding associations */}
       {/* <Route path="centers/edit/:id" element={<AdminEditCenterPage />} /> */} {/* Placeholder for edit route */}

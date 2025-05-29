@@ -16,6 +16,7 @@ import CenterGroupsPage from './CenterGroupsPage';
 import CenterAddGroupPage from './CenterAddGroupPage';
 import CenterTrainersPage from './CenterTrainersPage';
 import CenterAddNewTrainer from './CenterAddNewTrainer';
+import CenterEditTrainer from './components/CenterEditTrainer';
 
 const CenterRoutes = () => {
   return (
@@ -37,6 +38,7 @@ const CenterRoutes = () => {
       <Route path="groups" element={<CenterGroupsPage />} />
       <Route path="trainers" element={<CenterTrainersPage />} />
       <Route path="trainers/new" element={<CenterAddNewTrainer />} />
+      <Route path="trainers/edit/:trainerId" element={<CenterEditTrainer />} />
       {/* Add other center-specific routes here later */}
       <Route path="*" element={<div>Center Page Not Found</div>} />
     </Routes>

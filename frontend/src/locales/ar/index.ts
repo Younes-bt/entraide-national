@@ -13,11 +13,11 @@ export const ar = {
     // User related
     greeting: 'مرحباً، {{firstName}} {{lastName}}',
     // Main Page
-    welcome: 'مرحباً بكم في التعاون الوطني!',
+    welcome: 'مرحباً بكم في منصة مندوبية التعاون الوطني يالعرائش!',
     mainPageMessage: 'هذه هي الصفحة العامة الرئيسية.',
     // Login Page
-    loginPageTitle: 'تسجيل الدخول إلى حسابك',
-    login_form_message: 'أدخل بيانات الاعتماد الخاصة بك أدناه للوصول إلى لوحة التحكم الخاصة بك.',
+    loginPageTitle: 'تسجيل الدخول ',
+    login_form_message: 'أدخل بيانات الدخول الخاصة بك أدناه للوصول إلى لوحة التحكم الخاصة بك.',
     login_details: {
       pleaseFillFields: 'يرجى ملء جميع الحقول.',
       errorTitle: 'فشل تسجيل الدخول',
@@ -34,7 +34,7 @@ export const ar = {
       associations: "الجمعيات",
       supervisors: "المشرفين",
       trainers: "المدربين",
-      students: "الطلاب",
+      students: "المستفيدين",
       centerInfo: "معلومات المركز",
       rooms: "القاعات",
       equipment: "المعدات",
@@ -43,7 +43,7 @@ export const ar = {
       attendance: "الحاضرين",
       trainingPrograms: "التكوينات",
       trainingCourses: "البرامج التكوينية",
-      annualCourseDistribution: "التوزيع السنوي للدورات",
+      annualCourseDistribution: "التوزيع السنوي للدروس",
       courses: "الدروس و البرامج",
       exams: {
         comingSoon: "قريباً"
@@ -67,8 +67,8 @@ export const ar = {
       attendance: "الحاضرين",
       trainingPrograms: "برامج التدريب",
       trainingCourses: "دورات تدريبية",
-      annualCourseDistribution: "التوزيع السنوي للدورات",
-      courses: "الدورات",
+      annualCourseDistribution: "التوزيع السنوي للدروس",
+      courses: "الدروس",
       exams: {
         comingSoon: "قريباً"
       },
@@ -222,9 +222,107 @@ export const ar = {
       optional: "اختياري",
       backToList: "العودة للقائمة"
     },
+    
+    // AdminCenterDetailsPage translations
+    adminCenterDetailsPage: {
+      errorNoCenterId: 'معرف المركز غير مقدم',
+      errorAuthRequired: 'المصادقة مطلوبة',
+      errorFetchingDetails: 'فشل في استرداد تفاصيل المركز',
+      loadingDetails: 'جارٍ تحميل تفاصيل المركز...',
+      backToCenters: 'العودة إلى المراكز',
+      centerNotFoundTitle: 'المركز غير موجود',
+      centerNotFoundDescription: 'لم يتم العثور على المركز المطلوب.',
+      editCenter: 'تعديل المركز',
+      deleteCenter: 'حذف المركز',
+      confirmDelete: 'هل أنت متأكد من رغبتك في حذف هذا المركز؟ لا يمكن التراجع عن هذا الإجراء.',
+      errorDeleting: 'فشل في حذف المركز',
+      
+      // Tab names
+      tabGeneral: 'معلومات عامة',
+      tabContact: 'الاتصال والروابط',
+      tabRooms: 'القاعات',
+      tabGroups: 'المجموعات',
+      
+      // General Info section
+      generalInfo: {
+        title: 'المعلومات العامة',
+        basicInfo: 'المعلومات الأساسية',
+        id: 'المعرف',
+        affiliation: 'الانتماء',
+        association: 'الجمعية',
+        otherAffiliation: 'انتماء آخر',
+        supervisor: 'المشرف',
+        supervisorName: 'الاسم',
+        supervisorUsername: 'اسم المستخدم',
+        noSupervisor: 'لا يوجد مشرف معين',
+        statistics: 'الإحصائيات',
+        roomsCount: 'القاعات',
+        groupsCount: 'المجموعات',
+        timestamps: 'الطوابع الزمنية',
+        createdAt: 'تاريخ الإنشاء',
+        updatedAt: 'آخر تحديث'
+      },
+      
+      // Contact section
+      contact: {
+        title: 'معلومات الاتصال والروابط',
+        contactInfo: 'معلومات الاتصال',
+        email: 'البريد الإلكتروني',
+        phone: 'الهاتف',
+        address: 'العنوان',
+        city: 'المدينة',
+        location: 'الموقع',
+        viewOnMap: 'عرض على الخريطة',
+        socialLinks: 'الموقع الإلكتروني ووسائل التواصل الاجتماعي',
+        website: 'الموقع الإلكتروني',
+        facebook: 'فيسبوك',
+        instagram: 'انستجرام',
+        twitter: 'تويتر',
+        viewProfile: 'عرض الملف الشخصي',
+        noSocialLinks: 'لا توجد مواقع إلكترونية أو روابط وسائل التواصل الاجتماعي متاحة'
+      },
+      
+      // Rooms section
+      rooms: {
+        description: 'جميع القاعات المتاحة في هذا المركز',
+        capacity: 'السعة',
+        available: 'متاح',
+        equipment: 'المعدات',
+        items: 'عناصر',
+        viewDetails: 'عرض التفاصيل',
+        noRooms: 'لم يتم العثور على قاعات لهذا المركز'
+      },
+      
+      // Groups section
+      groups: {
+        description: 'جميع مجموعات الطلاب في هذا المركز',
+        createdAt: 'تاريخ الإنشاء',
+        updatedAt: 'تاريخ التحديث',
+        viewDetails: 'عرض التفاصيل',
+        noGroups: 'لم يتم العثور على مجموعات لهذا المركز'
+      }
+    },
+    
     adminCentersPage: {
       title: "إدارة المراكز",
       addNewCenterButton: "إضافة مركز جديد",
+      searchPlaceholder: "البحث في المراكز...",
+      filterByCity: "المدينة",
+      allCities: "جميع المدن",
+      filterByAffiliation: "الانتماء",
+      allAffiliations: "جميع الانتماءات",
+      affiliationOther: "آخر",
+      filterByStatus: "الحالة",
+      allStatuses: "الكل",
+      statusActive: "نشط",
+      statusInactive: "غير نشط",
+      filterByVerified: "التحقق",
+      allVerificationStatuses: "الكل",
+      verifiedOnly: "موثق",
+      unverifiedOnly: "غير موثق",
+      clearFilters: "مسح المرشحات",
+      resultsCount: "عرض {{count}} من {{total}} مراكز",
+      noCentersMatchFilters: "لا توجد مراكز تطابق المرشحات الحالية",
       tableHeaderLogo: "الشعار",
       tableHeaderName: "الاسم",
       tableHeaderAffiliatedTo: "تابع لـ",
@@ -553,7 +651,7 @@ export const ar = {
         selectType: "اختر نوع القاعة "
       },
       buttons: {
-        createRoom: "إنشاء القاعة"
+        createRoom: "إنشاء القاعة "
       },
       validation: {
         nameRequired: "اسم القاعة مطلوب.",
@@ -933,6 +1031,28 @@ export const ar = {
         cancel: "إلغاء",
         submitting: "جارٍ الإرسال...",
         submit: "إنشاء المدرب"
+      }
+    },
+    centerEditTrainer: {
+      errors: {
+        authError: "خطأ في المصادقة. يرجى التأكد من تسجيل الدخول وأن لديك رمزًا صالحًا.",
+        fetchCenterError: "فشل في جلب المركز الذي تشرف عليه. يرجى المحاولة مرة أخرى.",
+        noCenterAssigned: "أنت غير معين حاليًا كمشرف على أي مركز، أو تعذر استرداد بيانات المركز.",
+        fetchProgramsError: "فشل في جلب برامج التدريب. يرجى المحاولة مرة أخرى.",
+        fetchTrainerError: "فشل في جلب تفاصيل المدرب. يرجى المحاولة مرة أخرى.",
+        missingInfo: "معرّف المدرب أو رمز المصادقة مفقود. لا يمكن تحميل التفاصيل.",
+        missingInfoSubmit: "معرّف المدرب أو معلومات المركز مفقودة. لا يمكن إرسال التحديث.",
+        submitError: "فشل في تحديث المدرب. يرجى التحقق من التفاصيل والمحاولة مرة أخرى.",
+        submitErrorUnknown: "حدث خطأ غير معروف أثناء حفظ التغييرات."
+      },
+      successMessage: "تم تحديث المدرب بنجاح!",
+      authPrompt: "يرجى تسجيل الدخول لتعديل المدرب.",
+      loadingTrainer: "جارٍ تحميل تفاصيل المدرب...",
+      title: "تعديل المدرب",
+      editingFor: "تعديل المدرب: {{trainerEmail}}",
+      buttons: {
+        saving: "جارٍ الحفظ...",
+        saveChanges: "حفظ التغييرات"
       }
     }
   }
