@@ -509,6 +509,114 @@ export const fr = {
         addNewCenterSupervisorDialogDescription: "Remplissez les détails pour créer un nouveau superviseur de centre. L'email et le mot de passe seront auto-générés."
       },
     },
+    adminAssociationsPage: {
+      title: "Gérer les Associations",
+      addNewAssociationButton: "Ajouter une Nouvelle Association",
+      searchPlaceholder: "Rechercher des associations...",
+      filterByCity: "Ville",
+      allCities: "Toutes les Villes",
+      filterByStatus: "Statut",
+      allStatuses: "Tous",
+      statusActive: "Actif",
+      statusInactive: "Inactif",
+      filterByVerified: "Vérifié",
+      allVerificationStatuses: "Tous",
+      verifiedOnly: "Vérifié",
+      unverifiedOnly: "Non Vérifié",
+      clearFilters: "Effacer les Filtres",
+      resultsCount: "Affichage de {{count}} sur {{total}} associations",
+      loadingAssociations: "Chargement des associations...",
+      confirmDeleteAssociation: "Êtes-vous sûr de vouloir supprimer l'association {{associationId}}?",
+      errorDeletingAssociation: "Erreur lors de la suppression de l'association: {{message}}",
+      logoAlt: "Logo de {{name}}",
+      notAvailable: "N/D",
+      openMenuSr: "Ouvrir le menu",
+      actionViewDetails: "Voir les Détails",
+      actionEdit: "Modifier",
+      actionDelete: "Supprimer",
+      noAssociationsMatchFilters: "Aucune association ne correspond à vos filtres actuels",
+      noAssociationsFound: "Aucune association trouvée",
+      adminAssociationDetailsPage: {
+        errorNoAssociationId: 'ID association non fourni',
+        errorAuthRequired: 'Authentification requise',
+        errorFetchingDetails: 'Échec de la récupération des détails de l\'association',
+        loadingDetails: 'Chargement des détails de l\'association...',
+        backToAssociations: 'Retour aux Associations',
+        associationNotFoundTitle: 'Association Non Trouvée',
+        associationNotFoundDescription: 'L\'association demandée n\'a pas pu être trouvée.',
+        editAssociation: 'Modifier l\'Association',
+        deleteAssociation: 'Supprimer l\'Association',
+        confirmDelete: 'Êtes-vous sûr de vouloir supprimer cette association ? Cette action ne peut pas être annulée.',
+        errorDeleting: 'Échec de la suppression de l\'association',
+        statusActive: 'Actif',
+        statusInactive: 'Inactif',
+        statusVerified: 'Vérifié',
+        statusUnverified: 'Non Vérifié',
+        notAvailable: 'N/D',
+        
+        // Tab names
+        tabGeneral: 'Infos Générales',
+        tabContact: 'Contact et Liens',
+        tabCenters: 'Centres',
+        tabContract: 'Contrat',
+        
+        // General Info section
+        generalInfo: {
+          title: 'Informations Générales',
+          basicInfo: 'Informations de Base',
+          id: 'ID',
+          description: 'Description',
+          registrationNumber: 'Numéro d\'Enregistrement',
+          supervisor: 'Superviseur',
+          supervisorName: 'Nom',
+          supervisorEmail: 'Email',
+          noSupervisor: 'Aucun superviseur assigné',
+          statistics: 'Statistiques',
+          centersCount: 'Centres',
+          timestamps: 'Horodatages',
+          createdAt: 'Créé le',
+          updatedAt: 'Dernière mise à jour'
+        },
+        
+        // Contact section
+        contact: {
+          title: 'Informations de Contact et Liens',
+          contactInfo: 'Informations de Contact',
+          email: 'Email',
+          phone: 'Téléphone',
+          address: 'Adresse',
+          city: 'Ville',
+          location: 'Emplacement',
+          viewOnMap: 'Voir sur la Carte',
+          socialLinks: 'Site Web et Réseaux Sociaux',
+          website: 'Site Web',
+          facebook: 'Facebook',
+          instagram: 'Instagram',
+          twitter: 'Twitter',
+          noSocialLinks: 'Aucun site web ou lien de réseau social disponible'
+        },
+        
+        // Centers section
+        centers: {
+          title: 'Centres Associés',
+          description: 'Tous les centres affiliés à cette association',
+          active: 'Actif',
+          inactive: 'Inactif',
+          verified: 'Vérifié',
+          unverified: 'Non Vérifié',
+          viewDetails: 'Voir les Détails',
+          noCenters: 'Aucun centre trouvé pour cette association'
+        },
+        
+        // Contract section
+        contract: {
+          title: 'Informations sur le Contrat',
+          startDate: 'Date de Début du Contrat',
+          endDate: 'Date de Fin du Contrat',
+          noContractInfo: 'Aucune information de contrat disponible'
+        }
+      }
+    },
     fields: {
       firstName: "Prénom",
       lastName: "Nom",
@@ -617,19 +725,19 @@ export const fr = {
       },
       groups: {
         title: "Groupes ({{count}})",
-        description: "Détails sur les groupes d\'étudiants du centre.",
+        description: "Détails sur les groupes d'étudiants du centre.",
         noGroups: "Aucun groupe répertorié pour ce centre."
       }
     },
     centerRoomsPage: {
-      noCenterAssigned: "Aucun centre n\'est actuellement attribué à ce compte superviseur, ou les données du centre n\'ont pas pu être récupérées.",
+      noCenterAssigned: "Aucun centre n'est actuellement attribué à ce compte superviseur, ou les données du centre n'ont pas pu être récupérées.",
       errorFetching: "Erreur lors de la récupération des informations sur les salles du centre pour le superviseur :",
       errorFetchingDetail: "Échec de la récupération des informations sur les salles du centre. Veuillez vous assurer que vous êtes affecté superviseur à un centre et que le centre dispose de salles.",
       accessDenied: "Accès refusé. Cette page est réservée aux superviseurs de centre, ou votre ID utilisateur est manquant.",
       loadingMessage: "Chargement des salles du centre...",
       noRoomsTitle: "Aucune Salle Trouvée à {{centerName}}",
       noCenterDataTitle: "Données du Centre Non Disponibles",
-      noRoomsDescription: "Aucune salle n\'est actuellement répertoriée pour ce centre. Vous pouvez ajouter des salles via le portail de gestion du centre.",
+      noRoomsDescription: "Aucune salle n'est actuellement répertoriée pour ce centre. Vous pouvez ajouter des salles via le portail de gestion du centre.",
       noCenterDataDescription: "Impossible de charger les données du centre. Veuillez réessayer plus tard ou contacter le support.",
       pageTitle: "Salles à {{centerName}}",
       pageSubtitle: "Parcourez et gérez les {{count}} salles disponibles dans votre centre.",
@@ -637,13 +745,13 @@ export const fr = {
       viewDetailsButton: "Voir les détails"
     },
     centerAddRoomPage: {
-      errorNoCenterSupervised: "Aucun centre supervisé par ce compte. Impossible d\'ajouter une salle.",
-      errorFetchingCenterId: "Échec de la récupération de l\'ID du centre de supervision. Veuillez réessayer.",
-      errorCenterIdNotSet: "L\'ID du centre de supervision n\'est pas défini. Impossible de soumettre le formulaire.",
-      errorCreatingRoom: "Une erreur s\'est produite lors de la création de la salle. Veuillez vérifier votre saisie et réessayer.",
+      errorNoCenterSupervised: "Aucun centre supervisé par ce compte. Impossible d'ajouter une salle.",
+      errorFetchingCenterId: "Échec de la récupération de l'ID du centre de supervision. Veuillez réessayer.",
+      errorCenterIdNotSet: "L'ID du centre de supervision n'est pas défini. Impossible de soumettre le formulaire.",
+      errorCreatingRoom: "Une erreur s'est produite lors de la création de la salle. Veuillez vérifier votre saisie et réessayer.",
       loadingCenterInfo: "Chargement des informations du centre...",
       errorCritical: "Erreur Critique",
-      errorNoCenterAssociatedAccount: "Aucun centre n\'est associé à ce compte superviseur. Veuillez contacter l\'administration.",
+      errorNoCenterAssociatedAccount: "Aucun centre n'est associé à ce compte superviseur. Veuillez contacter l'administration.",
       backToRoomsList: "Retour à la Liste des Salles",
       title: "Ajouter Nouvelle Salle",
       description: "Remplissez les détails ci-dessous pour ajouter une nouvelle salle à votre centre.",
@@ -665,7 +773,7 @@ export const fr = {
         nameRequired: "Le nom de la salle est requis.",
         typeRequired: "Le type de salle est requis.",
         capacityPositive: "La capacité doit être un nombre positif.",
-        centerIdMissing: "L\'ID du centre est manquant. Ceci est une erreur interne."
+        centerIdMissing: "L'ID du centre est manquant. Ceci est une erreur interne."
       }
     },
     roomTypes: {
@@ -691,7 +799,7 @@ export const fr = {
       loadingRoomDetails: "Chargement des détails de la salle...",
       backToRoomsList: "Retour à la Liste des Salles",
       roomNotFoundTitle: "Salle Non Trouvée",
-      roomNotFoundDescription: "La salle que vous recherchez n\'existe pas ou n\'a pas pu être chargée.",
+      roomNotFoundDescription: "La salle que vous recherchez n'existe pas ou n'a pas pu être chargée.",
       sectionTitles: {
         generalInfo: "Informations Générales",
         timestamps: "Horodatages",
@@ -707,7 +815,7 @@ export const fr = {
         equipmentQuantity: "Quantité",
         equipmentName: "Nom" // Added for table header
       },
-      viewEquipmentPicture: "Voir l\'Image",
+      viewEquipmentPicture: "Voir l'Image",
       noEquipmentInRoom: "Aucun équipement répertorié pour cette salle."
     },
     centerEditRoomPage: {
@@ -718,7 +826,7 @@ export const fr = {
       errorUpdatingRoom: "Échec de la mise à jour de la salle. Veuillez vérifier votre saisie et réessayer.",
       errorNoRoomId: "Aucun ID de salle fourni. Impossible de charger les données pour modification.",
       errorRoomNotFound: "Salle Introuvable pour Modification",
-      errorRoomNotFoundDescription: "La salle que vous essayez de modifier n\\'existe pas ou n\\'a pas pu être chargée.",
+      errorRoomNotFoundDescription: "La salle que vous essayez de modifier n'existe pas ou n'a pas pu être chargée.",
       backToRoomDetails: "Retour aux Détails de la Salle",
       currentImageAlt: "Image actuelle de la salle",
       currentImageNotice: "Image actuelle. Téléchargez un nouveau fichier pour la remplacer.",
@@ -1064,6 +1172,63 @@ export const fr = {
         saving: "Enregistrement...",
         saveChanges: "Enregistrer les Modifications"
       }
+    },
+    adminEditAssociationPage: {
+      title: "Modifier l'Association",
+      subtitle: "Modifiez les détails de l'association ci-dessous",
+      backToDetails: "Retour aux Détails de l'Association",
+      loadingData: "Chargement des données de l'association...",
+      errorLoadingTitle: "Erreur lors du Chargement de l'Association",
+      saving: "Enregistrement...",
+      saveChanges: "Enregistrer les Modifications",
+      cancel: "Annuler",
+      basicInfoTitle: "Informations de Base",
+      basicInfoDescription: "Mettre à jour les détails principaux de l'association",
+      contactInfoTitle: "Informations de Contact", 
+      contactInfoDescription: "Mettre à jour les coordonnées et les liens de réseaux sociaux",
+      contractInfoTitle: "Informations sur le Contrat",
+      contractInfoDescription: "Mettre à jour les dates et détails du contrat",
+      socialMediaTitle: "Réseaux Sociaux et Liens",
+      
+      // Form labels
+      associationName: "Nom de l'Association",
+      registrationNumber: "Numéro d'Enregistrement", 
+      description: "Description",
+      supervisor: "Superviseur",
+      email: "Email",
+      phoneNumber: "Numéro de Téléphone",
+      address: "Adresse",
+      city: "Ville",
+      websiteUrl: "URL du Site Web",
+      mapsLink: "Lien Google Maps",
+      facebookUrl: "URL Facebook",
+      instagramUrl: "URL Instagram", 
+      twitterUrl: "URL Twitter",
+      contractStartDate: "Date de Début du Contrat",
+      contractEndDate: "Date de Fin du Contrat",
+      
+      // Placeholders
+      enterName: "Entrez le nom de l'association",
+      enterRegistration: "Entrez le numéro d'enregistrement",
+      enterDescription: "Entrez la description de l'association",
+      selectSupervisor: "Sélectionner un superviseur",
+      noSupervisor: "Aucun superviseur",
+      enterEmail: "Entrez l'adresse email",
+      enterPhone: "Entrez le numéro de téléphone", 
+      enterAddress: "Entrez l'adresse",
+      enterCity: "Entrez la ville",
+      websitePlaceholder: "https://exemple.com",
+      mapsPlaceholder: "URL Google Maps",
+      facebookPlaceholder: "URL de la page Facebook",
+      instagramPlaceholder: "URL du profil Instagram",
+      twitterPlaceholder: "URL du profil Twitter",
+      
+      // Messages
+      nameRequired: "Le nom de l'association est requis",
+      authRequired: "Jeton d'authentification non trouvé", 
+      unknownError: "Une erreur inconnue s'est produite",
+      updateSuccess: "Association mise à jour avec succès !",
+      updateError: "Échec de la mise à jour de l'association"
     }
   }
 }; 

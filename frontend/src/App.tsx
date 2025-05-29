@@ -24,6 +24,8 @@ import AdminCenterDetailsPage from './pages/admin/AdminCenterDetailsPage'; // Im
 import AdminRoomDetailsPage from './pages/admin/AdminRoomDetailsPage'; // Import AdminRoomDetailsPage
 import AdminAddCenterPage from './pages/admin/AdminAddCenterPage'; // Import the new page
 import AdminAssociationsPage from './pages/admin/AdminAssociationsPage'; // Import the new Associations page
+import AdminAssociationDetailsPage from './pages/admin/AdminAssociationDetailsPage'; // Import the Association Details page
+import AdminEditAssociationPage from './pages/admin/AdminEditAssociationPage'; // Import the Edit Association page
 import AdminAddAssociationPage from './pages/admin/AdminAddAssociationPage'; // Import the Add Association page
 import AdminAddSupervisorPage from './pages/admin/AdminAddSupervisorPage'; // Import the new Add Supervisor page
 import AdminAddAssociationSupervisorPage from './pages/admin/AdminAddAssociationSupervisorPage'; // Import the Add Association Supervisor page
@@ -154,8 +156,8 @@ const AdminRoutes = () => {
       <Route path="centers/details/:centerId/rooms/:roomId" element={<AdminRoomDetailsPage />} /> {/* Added route for room details */}
       <Route path="associations" element={<AdminAssociationsPage />} /> {/* Added route for associations */}
       <Route path="associations/add" element={<AdminAddAssociationPage />} /> {/* Added route for adding associations */}
-      {/* <Route path="centers/edit/:id" element={<AdminEditCenterPage />} /> */} {/* Placeholder for edit route */}
-      {/* <Route path="students" element={<AdminStudentsPage />} /> */}
+      <Route path="associations/details/:id" element={<AdminAssociationDetailsPage />} /> {/* Added route for association details */}
+      <Route path="associations/edit/:id" element={<AdminEditAssociationPage />} /> {/* Added route for editing associations */}
       <Route path="training-programs" element={<TrainingProgramsPage />} /> {/* Added route for training programs */}
       <Route path="training-programs/add" element={<AdminAddTrainingProgramPage />} /> {/* Added route for adding training programs */}
       <Route path="*" element={<div>Admin Page Not Found</div>} />

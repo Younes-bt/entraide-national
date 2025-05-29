@@ -42,6 +42,21 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
     
+    def get_queryset(self):
+        """
+        Override to support filtering by role.
+        
+        Returns:
+            QuerySet: Filtered queryset based on query parameters
+        """
+        queryset = User.objects.all()
+        role = self.request.query_params.get('role', None)
+        
+        if role is not None:
+            queryset = queryset.filter(role=role)
+            
+        return queryset
+    
     def get_permissions(self):
         """
         Override to set custom permissions per action.

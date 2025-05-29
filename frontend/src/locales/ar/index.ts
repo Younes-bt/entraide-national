@@ -501,6 +501,114 @@ export const ar = {
         addNewCenterSupervisorDialogDescription: "املأ التفاصيل لإنشاء مشرف مركز جديد. سيتم إنشاء البريد الإلكتروني وكلمة المرور تلقائيًا."
       },
     },
+    adminAssociationsPage: {
+      title: "إدارة الجمعيات",
+      addNewAssociationButton: "إضافة جمعية جديدة",
+      searchPlaceholder: "البحث في الجمعيات...",
+      filterByCity: "المدينة",
+      allCities: "جميع المدن",
+      filterByStatus: "الحالة",
+      allStatuses: "الكل",
+      statusActive: "نشط",
+      statusInactive: "غير نشط",
+      filterByVerified: "التحقق",
+      allVerificationStatuses: "الكل",
+      verifiedOnly: "موثق",
+      unverifiedOnly: "غير موثق",
+      clearFilters: "مسح المرشحات",
+      resultsCount: "عرض {{count}} من {{total}} جمعيات",
+      loadingAssociations: "جارٍ تحميل الجمعيات...",
+      confirmDeleteAssociation: "هل أنت متأكد أنك تريد حذف الجمعية {{associationId}}؟",
+      errorDeletingAssociation: "خطأ في حذف الجمعية: {{message}}",
+      logoAlt: "شعار {{name}}",
+      notAvailable: "غير متاح",
+      openMenuSr: "فتح القائمة",
+      actionViewDetails: "عرض التفاصيل",
+      actionEdit: "تعديل",
+      actionDelete: "حذف",
+      noAssociationsMatchFilters: "لا توجد جمعيات تطابق المرشحات الحالية",
+      noAssociationsFound: "لم يتم العثور على جمعيات"
+    },
+    adminAssociationDetailsPage: {
+      errorNoAssociationId: 'معرف الجمعية غير مقدم',
+      errorAuthRequired: 'المصادقة مطلوبة',
+      errorFetchingDetails: 'فشل في جلب تفاصيل الجمعية',
+      loadingDetails: 'جارٍ تحميل تفاصيل الجمعية...',
+      backToAssociations: 'العودة إلى الجمعيات',
+      associationNotFoundTitle: 'الجمعية غير موجودة',
+      associationNotFoundDescription: 'لا يمكن العثور على الجمعية المطلوبة.',
+      editAssociation: 'تعديل الجمعية',
+      deleteAssociation: 'حذف الجمعية',
+      confirmDelete: 'هل أنت متأكد أنك تريد حذف هذه الجمعية؟ لا يمكن التراجع عن هذا الإجراء.',
+      errorDeleting: 'فشل في حذف الجمعية',
+      statusActive: 'نشط',
+      statusInactive: 'غير نشط',
+      statusVerified: 'موثق',
+      statusUnverified: 'غير موثق',
+      notAvailable: 'غير متوفر',
+      
+      // Tab names
+      tabGeneral: 'معلومات عامة',
+      tabContact: 'جهات الاتصال والروابط',
+      tabCenters: 'المراكز',
+      tabContract: 'العقد',
+      
+      // General Info section
+      generalInfo: {
+        title: 'معلومات عامة',
+        basicInfo: 'معلومات أساسية',
+        id: 'المعرف',
+        description: 'الوصف',
+        registrationNumber: 'رقم التسجيل',
+        supervisor: 'المشرف',
+        supervisorName: 'الاسم',
+        supervisorEmail: 'البريد الإلكتروني',
+        noSupervisor: 'لا يوجد مشرف مخصص',
+        statistics: 'إحصائيات',
+        centersCount: 'المراكز',
+        timestamps: 'الطوابع الزمنية',
+        createdAt: 'تم الإنشاء في',
+        updatedAt: 'آخر تحديث'
+      },
+      
+      // Contact section
+      contact: {
+        title: 'معلومات الاتصال والروابط',
+        contactInfo: 'معلومات الاتصال',
+        email: 'البريد الإلكتروني',
+        phone: 'الهاتف',
+        address: 'العنوان',
+        city: 'المدينة',
+        location: 'الموقع',
+        viewOnMap: 'عرض على الخريطة',
+        socialLinks: 'الموقع الإلكتروني ووسائل التواصل الاجتماعي',
+        website: 'الموقع الإلكتروني',
+        facebook: 'فيسبوك',
+        instagram: 'إنستغرام',
+        twitter: 'تويتر',
+        noSocialLinks: 'لا توجد روابط موقع ويب أو وسائل تواصل اجتماعي متاحة'
+      },
+      
+      // Centers section
+      centers: {
+        title: 'المراكز المرتبطة',
+        description: 'جميع المراكز المنتسبة لهذه الجمعية',
+        active: 'نشط',
+        inactive: 'غير نشط',
+        verified: 'موثق',
+        unverified: 'غير موثق',
+        viewDetails: 'عرض التفاصيل',
+        noCenters: 'لم يتم العثور على مراكز لهذه الجمعية'
+      },
+      
+      // Contract section
+      contract: {
+        title: 'معلومات العقد',
+        startDate: 'تاريخ بداية العقد',
+        endDate: 'تاريخ انتهاء العقد',
+        noContractInfo: 'لا توجد معلومات عقد متاحة'
+      }
+    },
     fields: {
       firstName: "الاسم الأول",
       lastName: "اسم العائلة",
@@ -1054,6 +1162,63 @@ export const ar = {
         saving: "جارٍ الحفظ...",
         saveChanges: "حفظ التغييرات"
       }
+    },
+    adminEditAssociationPage: {
+      title: "تعديل الجمعية",
+      subtitle: "قم بتعديل تفاصيل الجمعية أدناه",
+      backToDetails: "العودة إلى تفاصيل الجمعية",
+      loadingData: "جارٍ تحميل بيانات الجمعية...",
+      errorLoadingTitle: "خطأ في تحميل الجمعية",
+      saving: "جارٍ الحفظ...",
+      saveChanges: "حفظ التغييرات",
+      cancel: "إلغاء",
+      basicInfoTitle: "المعلومات الأساسية",
+      basicInfoDescription: "تحديث التفاصيل الرئيسية للجمعية",
+      contactInfoTitle: "معلومات الاتصال",
+      contactInfoDescription: "تحديث معلومات الاتصال وروابط وسائل التواصل الاجتماعي",
+      contractInfoTitle: "معلومات العقد",
+      contractInfoDescription: "تحديث تواريخ وتفاصيل العقد",
+      socialMediaTitle: "وسائل التواصل الاجتماعي والروابط",
+      
+      // Form labels
+      associationName: "اسم الجمعية",
+      registrationNumber: "رقم التسجيل",
+      description: "الوصف",
+      supervisor: "المشرف",
+      email: "البريد الإلكتروني",
+      phoneNumber: "رقم الهاتف",
+      address: "العنوان",
+      city: "المدينة",
+      websiteUrl: "رابط الموقع الإلكتروني",
+      mapsLink: "رابط خرائط جوجل",
+      facebookUrl: "رابط فيسبوك",
+      instagramUrl: "رابط إنستغرام",
+      twitterUrl: "رابط تويتر",
+      contractStartDate: "تاريخ بداية العقد",
+      contractEndDate: "تاريخ نهاية العقد",
+      
+      // Placeholders
+      enterName: "أدخل اسم الجمعية",
+      enterRegistration: "أدخل رقم التسجيل",
+      enterDescription: "أدخل وصف الجمعية",
+      selectSupervisor: "اختر مشرفًا",
+      noSupervisor: "لا يوجد مشرف",
+      enterEmail: "أدخل عنوان البريد الإلكتروني",
+      enterPhone: "أدخل رقم الهاتف",
+      enterAddress: "أدخل العنوان",
+      enterCity: "أدخل المدينة",
+      websitePlaceholder: "https://example.com",
+      mapsPlaceholder: "رابط خرائط جوجل",
+      facebookPlaceholder: "رابط صفحة فيسبوك",
+      instagramPlaceholder: "رابط ملف إنستغرام الشخصي",
+      twitterPlaceholder: "رابط ملف تويتر الشخصي",
+      
+      // Messages
+      nameRequired: "اسم الجمعية مطلوب",
+      authRequired: "لم يتم العثور على رمز المصادقة",
+      unknownError: "حدث خطأ غير معروف",
+      updateSuccess: "تم تحديث الجمعية بنجاح!",
+      updateError: "فشل في تحديث الجمعية"
     }
   }
 }; 

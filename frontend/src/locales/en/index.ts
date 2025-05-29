@@ -429,6 +429,114 @@ export const en = {
         addNewCenterSupervisorDialogDescription: "Fill in the details to create a new center supervisor. Email and password will be auto-generated."
       },
     },
+    adminAssociationsPage: {
+      title: "Manage Associations",
+      addNewAssociationButton: "Add New Association",
+      searchPlaceholder: "Search associations...",
+      filterByCity: "City",
+      allCities: "All Cities",
+      filterByStatus: "Status",
+      allStatuses: "All",
+      statusActive: "Active",
+      statusInactive: "Inactive",
+      filterByVerified: "Verified",
+      allVerificationStatuses: "All",
+      verifiedOnly: "Verified",
+      unverifiedOnly: "Unverified",
+      clearFilters: "Clear Filters",
+      resultsCount: "Showing {{count}} of {{total}} associations",
+      loadingAssociations: "Loading associations...",
+      confirmDeleteAssociation: "Are you sure you want to delete association {{associationId}}?",
+      errorDeletingAssociation: "Error deleting association: {{message}}",
+      logoAlt: "{{name}} logo",
+      notAvailable: "N/A",
+      openMenuSr: "Open menu",
+      actionViewDetails: "View Details",
+      actionEdit: "Edit",
+      actionDelete: "Delete",
+      noAssociationsMatchFilters: "No associations match your current filters",
+      noAssociationsFound: "No associations found"
+    },
+    adminAssociationDetailsPage: {
+      errorNoAssociationId: 'Association ID not provided',
+      errorAuthRequired: 'Authentication required',
+      errorFetchingDetails: 'Failed to fetch association details',
+      loadingDetails: 'Loading association details...',
+      backToAssociations: 'Back to Associations',
+      associationNotFoundTitle: 'Association Not Found',
+      associationNotFoundDescription: 'The requested association could not be found.',
+      editAssociation: 'Edit Association',
+      deleteAssociation: 'Delete Association',
+      confirmDelete: 'Are you sure you want to delete this association? This action cannot be undone.',
+      errorDeleting: 'Failed to delete association',
+      statusActive: 'Active',
+      statusInactive: 'Inactive',
+      statusVerified: 'Verified',
+      statusUnverified: 'Unverified',
+      notAvailable: 'N/A',
+      
+      // Tab names
+      tabGeneral: 'General Info',
+      tabContact: 'Contact & Links',
+      tabCenters: 'Centers',
+      tabContract: 'Contract',
+      
+      // General Info section
+      generalInfo: {
+        title: 'General Information',
+        basicInfo: 'Basic Information',
+        id: 'ID',
+        description: 'Description',
+        registrationNumber: 'Registration Number',
+        supervisor: 'Supervisor',
+        supervisorName: 'Name',
+        supervisorEmail: 'Email',
+        noSupervisor: 'No supervisor assigned',
+        statistics: 'Statistics',
+        centersCount: 'Centers',
+        timestamps: 'Timestamps',
+        createdAt: 'Created At',
+        updatedAt: 'Last Updated'
+      },
+      
+      // Contact section
+      contact: {
+        title: 'Contact Information & Links',
+        contactInfo: 'Contact Information',
+        email: 'Email',
+        phone: 'Phone',
+        address: 'Address',
+        city: 'City',
+        location: 'Location',
+        viewOnMap: 'View on Map',
+        socialLinks: 'Website & Social Media',
+        website: 'Website',
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        twitter: 'Twitter',
+        noSocialLinks: 'No website or social media links available'
+      },
+      
+      // Centers section
+      centers: {
+        title: 'Associated Centers',
+        description: 'All centers affiliated with this association',
+        active: 'Active',
+        inactive: 'Inactive',
+        verified: 'Verified',
+        unverified: 'Unverified',
+        viewDetails: 'View Details',
+        noCenters: 'No centers found for this association'
+      },
+      
+      // Contract section
+      contract: {
+        title: 'Contract Information',
+        startDate: 'Contract Start Date',
+        endDate: 'Contract End Date',
+        noContractInfo: 'No contract information available'
+      }
+    },
     fields: {
       firstName: "First Name",
       lastName: "Last Name",
@@ -519,7 +627,7 @@ export const en = {
       },
       rooms: {
         title: "Rooms ({{count}})",
-        description: "Details about the center\\\'s available rooms.",
+        description: "Details about the center's available rooms.",
         capacity: "Capacity:",
         available: "Available:",
         equipment: "Equipment",
@@ -537,7 +645,7 @@ export const en = {
       },
       groups: {
         title: "Groups ({{count}})",
-        description: "Details about the center\'s student groups.",
+        description: "Details about the center's student groups.",
         noGroups: "No groups listed for this center."
       }
     },
@@ -984,6 +1092,63 @@ export const en = {
         saving: "Saving...",
         saveChanges: "Save Changes"
       }
+    },
+    adminEditAssociationPage: {
+      title: "Edit Association",
+      subtitle: "Modify the association details below",
+      backToDetails: "Back to Association Details",
+      loadingData: "Loading association data...",
+      errorLoadingTitle: "Error Loading Association",
+      saving: "Saving...",
+      saveChanges: "Save Changes",
+      cancel: "Cancel",
+      basicInfoTitle: "Basic Information",
+      basicInfoDescription: "Update the core details of the association",
+      contactInfoTitle: "Contact Information", 
+      contactInfoDescription: "Update contact details and social media links",
+      contractInfoTitle: "Contract Information",
+      contractInfoDescription: "Update contract dates and details",
+      socialMediaTitle: "Social Media & Links",
+      
+      // Form labels
+      associationName: "Association Name",
+      registrationNumber: "Registration Number", 
+      description: "Description",
+      supervisor: "Supervisor",
+      email: "Email",
+      phoneNumber: "Phone Number",
+      address: "Address",
+      city: "City",
+      websiteUrl: "Website URL",
+      mapsLink: "Google Maps Link",
+      facebookUrl: "Facebook URL",
+      instagramUrl: "Instagram URL", 
+      twitterUrl: "Twitter URL",
+      contractStartDate: "Contract Start Date",
+      contractEndDate: "Contract End Date",
+      
+      // Placeholders
+      enterName: "Enter association name",
+      enterRegistration: "Enter registration number",
+      enterDescription: "Enter association description",
+      selectSupervisor: "Select supervisor",
+      noSupervisor: "No supervisor",
+      enterEmail: "Enter email address",
+      enterPhone: "Enter phone number", 
+      enterAddress: "Enter address",
+      enterCity: "Enter city",
+      websitePlaceholder: "https://example.com",
+      mapsPlaceholder: "Google Maps URL",
+      facebookPlaceholder: "Facebook page URL",
+      instagramPlaceholder: "Instagram profile URL",
+      twitterPlaceholder: "Twitter profile URL",
+      
+      // Messages
+      nameRequired: "Association name is required",
+      authRequired: "Authentication token not found", 
+      unknownError: "An unknown error occurred",
+      updateSuccess: "Association updated successfully!",
+      updateError: "Failed to update association"
     }
   }
 }; 
