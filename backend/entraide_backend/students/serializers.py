@@ -17,6 +17,7 @@ class StudentSerializer(serializers.ModelSerializer):
     user = UserProfileSerializer(read_only=True) # Use UserProfileSerializer for the user field
     center = serializers.StringRelatedField(read_only=True)
     program = serializers.PrimaryKeyRelatedField(read_only=True)
+    program_name = serializers.StringRelatedField(source='program', read_only=True)
     training_course = serializers.PrimaryKeyRelatedField(read_only=True, allow_null=True)
     group = serializers.PrimaryKeyRelatedField(read_only=True, allow_null=True)
 
@@ -59,6 +60,7 @@ class StudentCreateUpdateSerializer(serializers.ModelSerializer):
             'center_code',  
             'center',
             'program',
+            'program_name',
             'academic_year',
             'joining_date',
             'training_course',

@@ -242,6 +242,8 @@ export const ar = {
       tabContact: 'الاتصال والروابط',
       tabRooms: 'القاعات',
       tabGroups: 'المجموعات',
+      tabStudents: 'المستفيدين',
+      tabTrainers: 'المدربين',
       
       // General Info section
       generalInfo: {
@@ -300,6 +302,60 @@ export const ar = {
         updatedAt: 'تاريخ التحديث',
         viewDetails: 'عرض التفاصيل',
         noGroups: 'لم يتم العثور على مجموعات لهذا المركز'
+      },
+
+      // Students section
+      students: {
+        description: 'جميع الطلاب المسجلين في هذا المركز',
+        searchPlaceholder: 'البحث عن الطلاب بالاسم أو البريد الإلكتروني أو رقم الامتحان...',
+        filterByStatus: 'تصفية حسب الحالة',
+        filterByProgram: 'تصفية حسب البرنامج',
+        allStatuses: 'جميع الحالات',
+        allPrograms: 'جميع البرامج',
+        statusActive: 'نشط',
+        statusInactive: 'غير نشط',
+        clearFilters: 'مسح المرشحات',
+        resultsCount: 'عرض {{count}} من {{total}} طلاب',
+        noStudents: 'لم يتم العثور على طلاب لهذا المركز',
+        noStudentsMatchFilters: 'لا يوجد طلاب يطابقون المرشحات الحالية',
+        tableHeaders: {
+          examId: 'رقم الامتحان',
+          name: 'الاسم',
+          email: 'البريد الإلكتروني',
+          phone: 'الهاتف',
+          program: 'البرنامج',
+          joiningDate: 'تاريخ الالتحاق',
+          status: 'الحالة'
+        }
+      },
+
+      // Trainers section
+      trainers: {
+        description: 'جميع المدربين المعينين لهذا المركز',
+        searchPlaceholder: 'البحث عن المدربين بالاسم أو البريد الإلكتروني...',
+        filterByStatus: 'تصفية حسب الحالة',
+        filterByContract: 'تصفية حسب العقد',
+        filterByProgram: 'تصفية حسب البرنامج',
+        allStatuses: 'جميع الحالات',
+        allContracts: 'جميع العقود',
+        allPrograms: 'جميع البرامج',
+        statusActive: 'نشط',
+        statusInactive: 'غير نشط',
+        contractEntraide: 'التعاون الوطني',
+        contractAssociation: 'الجمعية',
+        clearFilters: 'مسح المرشحات',
+        resultsCount: 'عرض {{count}} من {{total}} مدربين',
+        noTrainers: 'لم يتم العثور على مدربين لهذا المركز',
+        noTrainersMatchFilters: 'لا يوجد مدربين يطابقون المرشحات الحالية',
+        tableHeaders: {
+          name: 'الاسم',
+          email: 'البريد الإلكتروني',
+          phone: 'الهاتف',
+          program: 'البرنامج',
+          contractWith: 'العقد مع',
+          contractPeriod: 'فترة العقد',
+          status: 'الحالة'
+        }
       }
     },
     

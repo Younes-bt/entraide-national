@@ -220,6 +220,142 @@ export const en = {
     notFoundTitle: '404 - Page Not Found',
     goHome: 'Go Home',
 
+    // AdminCenterDetailsPage translations
+    adminCenterDetailsPage: {
+      errorNoCenterId: 'Center ID not provided',
+      errorAuthRequired: 'Authentication required',
+      errorFetchingDetails: 'Failed to fetch center details',
+      loadingDetails: 'Loading center details...',
+      backToCenters: 'Back to Centers',
+      centerNotFoundTitle: 'Center Not Found',
+      centerNotFoundDescription: 'The requested center could not be found.',
+      editCenter: 'Edit Center',
+      deleteCenter: 'Delete Center',
+      confirmDelete: 'Are you sure you want to delete this center? This action cannot be undone.',
+      errorDeleting: 'Failed to delete center',
+      
+      // Tab names
+      tabGeneral: 'General Info',
+      tabContact: 'Contact & Links',
+      tabRooms: 'Rooms',
+      tabGroups: 'Groups',
+      tabStudents: 'Students',
+      tabTrainers: 'Trainers',
+      
+      // General Info section
+      generalInfo: {
+        title: 'General Information',
+        basicInfo: 'Basic Information',
+        id: 'ID',
+        affiliation: 'Affiliation',
+        association: 'Association',
+        otherAffiliation: 'Other Affiliation',
+        supervisor: 'Supervisor',
+        supervisorName: 'Name',
+        supervisorUsername: 'Username',
+        noSupervisor: 'No supervisor assigned',
+        statistics: 'Statistics',
+        roomsCount: 'Rooms',
+        groupsCount: 'Groups',
+        timestamps: 'Timestamps',
+        createdAt: 'Created At',
+        updatedAt: 'Last Updated'
+      },
+      
+      // Contact section
+      contact: {
+        title: 'Contact Information & Links',
+        contactInfo: 'Contact Information',
+        email: 'Email',
+        phone: 'Phone',
+        address: 'Address',
+        city: 'City',
+        location: 'Location',
+        viewOnMap: 'View on Map',
+        socialLinks: 'Website & Social Media',
+        website: 'Website',
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        twitter: 'Twitter',
+        viewProfile: 'View Profile',
+        noSocialLinks: 'No website or social media links available'
+      },
+      
+      // Rooms section
+      rooms: {
+        description: 'All available rooms in this center',
+        capacity: 'Capacity',
+        available: 'Available',
+        equipment: 'Equipment',
+        items: 'items',
+        viewDetails: 'View Details',
+        noRooms: 'No rooms found for this center'
+      },
+      
+      // Groups section
+      groups: {
+        description: 'All student groups in this center',
+        createdAt: 'Created At',
+        updatedAt: 'Updated At',
+        viewDetails: 'View Details',
+        noGroups: 'No groups found for this center'
+      },
+
+      // Students section
+      students: {
+        description: 'All students enrolled in this center',
+        searchPlaceholder: 'Search students by name, email or exam ID...',
+        filterByStatus: 'Filter by Status',
+        filterByProgram: 'Filter by Program',
+        allStatuses: 'All Statuses',
+        allPrograms: 'All Programs',
+        statusActive: 'Active',
+        statusInactive: 'Inactive',
+        clearFilters: 'Clear Filters',
+        resultsCount: 'Showing {{count}} of {{total}} students',
+        noStudents: 'No students found for this center',
+        noStudentsMatchFilters: 'No students match the current filters',
+        tableHeaders: {
+          examId: 'Exam ID',
+          name: 'Name',
+          email: 'Email',
+          phone: 'Phone',
+          program: 'Program',
+          joiningDate: 'Joining Date',
+          status: 'Status'
+        }
+      },
+
+      // Trainers section
+      trainers: {
+        description: 'All trainers assigned to this center',
+        searchPlaceholder: 'Search trainers by name or email...',
+        filterByStatus: 'Filter by Status',
+        filterByContract: 'Filter by Contract',
+        filterByProgram: 'Filter by Program',
+        allStatuses: 'All Statuses',
+        allContracts: 'All Contracts',
+        allPrograms: 'All Programs',
+        statusActive: 'Active',
+        statusInactive: 'Inactive',
+        contractEntraide: 'Entraide National',
+        contractAssociation: 'Association',
+        clearFilters: 'Clear Filters',
+        resultsCount: 'Showing {{count}} of {{total}} trainers',
+        noTrainers: 'No trainers found for this center',
+        noTrainersMatchFilters: 'No trainers match the current filters',
+        tableHeaders: {
+          name: 'Name',
+          email: 'Email',
+          phone: 'Phone',
+          program: 'Program',
+          contractWith: 'Contract With',
+          contractPeriod: 'Contract Period',
+          status: 'Status'
+        }
+      }
+    },
+
     // Added for AdminCentersPage
     common: {
       yes: "Yes",

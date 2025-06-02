@@ -239,6 +239,8 @@ export const fr = {
       tabContact: 'Contact et Liens',
       tabRooms: 'Salles',
       tabGroups: 'Groupes',
+      tabStudents: 'Étudiants',
+      tabTrainers: 'Formateurs',
       
       // General Info section
       generalInfo: {
@@ -297,6 +299,60 @@ export const fr = {
         updatedAt: 'Mis à jour le',
         viewDetails: 'Voir les Détails',
         noGroups: 'Aucun groupe trouvé pour ce centre'
+      },
+
+      // Students section
+      students: {
+        description: 'Tous les étudiants inscrits dans ce centre',
+        searchPlaceholder: 'Rechercher des étudiants par nom, email ou ID d\'examen...',
+        filterByStatus: 'Filtrer par Statut',
+        filterByProgram: 'Filtrer par Programme',
+        allStatuses: 'Tous les Statuts',
+        allPrograms: 'Tous les Programmes',
+        statusActive: 'Actif',
+        statusInactive: 'Inactif',
+        clearFilters: 'Effacer les Filtres',
+        resultsCount: 'Affichage de {{count}} sur {{total}} étudiants',
+        noStudents: 'Aucun étudiant trouvé pour ce centre',
+        noStudentsMatchFilters: 'Aucun étudiant ne correspond aux filtres actuels',
+        tableHeaders: {
+          examId: 'ID d\'Examen',
+          name: 'Nom',
+          email: 'Email',
+          phone: 'Téléphone',
+          program: 'Programme',
+          joiningDate: 'Date d\'Inscription',
+          status: 'Statut'
+        }
+      },
+
+      // Trainers section
+      trainers: {
+        description: 'Tous les formateurs affectés à ce centre',
+        searchPlaceholder: 'Rechercher des formateurs par nom ou email...',
+        filterByStatus: 'Filtrer par Statut',
+        filterByContract: 'Filtrer par Contrat',
+        filterByProgram: 'Filtrer par Programme',
+        allStatuses: 'Tous les Statuts',
+        allContracts: 'Tous les Contrats',
+        allPrograms: 'Tous les Programmes',
+        statusActive: 'Actif',
+        statusInactive: 'Inactif',
+        contractEntraide: 'Entraide Nationale',
+        contractAssociation: 'Association',
+        clearFilters: 'Effacer les Filtres',
+        resultsCount: 'Affichage de {{count}} sur {{total}} formateurs',
+        noTrainers: 'Aucun formateur trouvé pour ce centre',
+        noTrainersMatchFilters: 'Aucun formateur ne correspond aux filtres actuels',
+        tableHeaders: {
+          name: 'Nom',
+          email: 'Email',
+          phone: 'Téléphone',
+          program: 'Programme',
+          contractWith: 'Contrat Avec',
+          contractPeriod: 'Période de Contrat',
+          status: 'Statut'
+        }
       }
     },
 

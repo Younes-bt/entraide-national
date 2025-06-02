@@ -6,7 +6,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, ArrowLeft, Edit, Trash2, Eye, ExternalLink } from 'lucide-react';
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, ArrowLeft, Edit, Trash2, Eye, ExternalLink, Search } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslation } from 'react-i18next';
 
@@ -42,6 +44,50 @@ interface Group {
   description?: string;
   created_at?: string;
   updated_at?: string;
+}
+
+// Student interface
+interface Student {
+  id: number;
+  exam_id: string;
+  center_code?: string;
+  academic_year: string;
+  joining_date: string;
+  user: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number?: string;
+    is_active: boolean;
+  };
+  program: number;
+  program_name: string;
+  training_course?: number;
+  group?: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Teacher interface
+interface Teacher {
+  id: number;
+  user: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number?: string;
+    is_active: boolean;
+  };
+  center: number;
+  program: number;
+  program_name: string;
+  contarct_with: 'entraide' | 'association';
+  contract_start_date: string;
+  contract_end_date: string;
+  created_at: string;
+  updated_at: string;
 }
 
 // Center interface
@@ -84,8 +130,23 @@ const AdminCenterDetailsPage: React.FC = () => {
   const userAccessToken = auth.accessToken;
 
   const [center, setCenter] = useState<Center | null>(null);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [studentsLoading, setStudentsLoading] = useState<boolean>(false);
+  const [teachersLoading, setTeachersLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Students search and filter states
+  const [studentSearchTerm, setStudentSearchTerm] = useState<string>('');
+  const [studentStatusFilter, setStudentStatusFilter] = useState<string>('all');
+  const [studentProgramFilter, setStudentProgramFilter] = useState<string>('all');
+  
+  // Trainers search and filter states
+  const [trainerSearchTerm, setTrainerSearchTerm] = useState<string>('');
+  const [trainerStatusFilter, setTrainerStatusFilter] = useState<string>('all');
+  const [trainerContractFilter, setTrainerContractFilter] = useState<string>('all');
+  const [trainerProgramFilter, setTrainerProgramFilter] = useState<string>('all');
 
   useEffect(() => {
     const fetchCenterDetails = async () => {
@@ -118,6 +179,10 @@ const AdminCenterDetailsPage: React.FC = () => {
         const data = await response.json();
         setCenter(data);
         setError(null);
+        
+        // Add user info logging
+        console.log('Current user from auth context:', auth.user);
+        
       } catch (err: any) {
         console.error('Error fetching center details:', err);
         setError(err.message || t('adminCenterDetailsPage.errorFetchingDetails', 'Failed to fetch center details'));
@@ -127,7 +192,77 @@ const AdminCenterDetailsPage: React.FC = () => {
     };
 
     fetchCenterDetails();
-  }, [centerId, userAccessToken, t]);
+  }, [centerId, userAccessToken, t, auth.user]);
+
+  const fetchStudents = async () => {
+    if (!centerId || !userAccessToken) return;
+    
+    try {
+      setStudentsLoading(true);
+      const url = `http://localhost:8000/api/students/students/?center=${centerId}`;
+      console.log('Fetching students from URL:', url);
+      
+      const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userAccessToken}`,
+        },
+      });
+
+      console.log('Students response status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Students API error:', errorText);
+        throw new Error('Failed to fetch students');
+      }
+
+      const data = await response.json();
+      console.log('Students API response:', data);
+      console.log('Students array length:', Array.isArray(data) ? data.length : (data.results?.length || 0));
+      
+      setStudents(Array.isArray(data) ? data : data.results || []);
+    } catch (err: any) {
+      console.error('Error fetching students:', err);
+    } finally {
+      setStudentsLoading(false);
+    }
+  };
+
+  const fetchTeachers = async () => {
+    if (!centerId || !userAccessToken) return;
+    
+    try {
+      setTeachersLoading(true);
+      const url = `http://localhost:8000/api/teachers/teachers/?center=${centerId}`;
+      console.log('Fetching teachers from URL:', url);
+      
+      const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userAccessToken}`,
+        },
+      });
+
+      console.log('Teachers response status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Teachers API error:', errorText);
+        throw new Error('Failed to fetch teachers');
+      }
+
+      const data = await response.json();
+      console.log('Teachers API response:', data);
+      console.log('Teachers array length:', Array.isArray(data) ? data.length : (data.results?.length || 0));
+      
+      setTeachers(Array.isArray(data) ? data : data.results || []);
+    } catch (err: any) {
+      console.error('Error fetching teachers:', err);
+    } finally {
+      setTeachersLoading(false);
+    }
+  };
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'N/A';
@@ -171,6 +306,58 @@ const AdminCenterDetailsPage: React.FC = () => {
       }
     }
   };
+
+  // Filter students based on search term and filters
+  const filteredStudents = students.filter(student => {
+    const matchesSearchTerm = studentSearchTerm === '' || 
+      student.user.first_name.toLowerCase().includes(studentSearchTerm.toLowerCase()) ||
+      student.user.last_name.toLowerCase().includes(studentSearchTerm.toLowerCase()) ||
+      student.user.email.toLowerCase().includes(studentSearchTerm.toLowerCase()) ||
+      student.exam_id.toLowerCase().includes(studentSearchTerm.toLowerCase());
+    
+    const matchesStatus = studentStatusFilter === 'all' ||
+      (studentStatusFilter === 'active' && student.user.is_active) ||
+      (studentStatusFilter === 'inactive' && !student.user.is_active);
+    
+    const matchesProgram = studentProgramFilter === 'all' ||
+      student.program.toString() === studentProgramFilter;
+    
+    return matchesSearchTerm && matchesStatus && matchesProgram;
+  });
+
+  // Get unique programs for filter dropdown
+  const uniquePrograms = Array.from(new Set(students.map(student => student.program)))
+    .map(programId => {
+      const student = students.find(s => s.program === programId);
+      return { id: programId, name: student?.program_name || `Program ${programId}` };
+    });
+
+  // Filter trainers based on search term and filters
+  const filteredTrainers = teachers.filter(teacher => {
+    const matchesSearchTerm = trainerSearchTerm === '' || 
+      teacher.user.first_name.toLowerCase().includes(trainerSearchTerm.toLowerCase()) ||
+      teacher.user.last_name.toLowerCase().includes(trainerSearchTerm.toLowerCase()) ||
+      teacher.user.email.toLowerCase().includes(trainerSearchTerm.toLowerCase());
+    
+    const matchesStatus = trainerStatusFilter === 'all' ||
+      (trainerStatusFilter === 'active' && teacher.user.is_active) ||
+      (trainerStatusFilter === 'inactive' && !teacher.user.is_active);
+    
+    const matchesContract = trainerContractFilter === 'all' ||
+      teacher.contarct_with === trainerContractFilter;
+    
+    const matchesProgram = trainerProgramFilter === 'all' ||
+      teacher.program.toString() === trainerProgramFilter;
+    
+    return matchesSearchTerm && matchesStatus && matchesContract && matchesProgram;
+  });
+
+  // Get unique programs for trainers filter dropdown
+  const uniqueTrainerPrograms = Array.from(new Set(teachers.map(teacher => teacher.program)))
+    .map(programId => {
+      const teacher = teachers.find(t => t.program === programId);
+      return { id: programId, name: teacher?.program_name || `Program ${programId}` };
+    });
 
   if (loading) {
     return (
@@ -270,7 +457,7 @@ const AdminCenterDetailsPage: React.FC = () => {
 
       {/* Tabbed Content */}
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-4 bg-green-100 dark:bg-green-900/20 border-green-200 dark:border-green-800">
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-4 bg-green-100 dark:bg-green-900/20 border-green-200 dark:border-green-800">
           <TabsTrigger 
             value="general"
             className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-50 dark:hover:bg-green-900/30 text-green-700 dark:text-green-300"
@@ -294,6 +481,20 @@ const AdminCenterDetailsPage: React.FC = () => {
             className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-50 dark:hover:bg-green-900/30 text-green-700 dark:text-green-300"
           >
             {t('adminCenterDetailsPage.tabGroups', 'Groups')}
+          </TabsTrigger>
+          <TabsTrigger 
+            value="students"
+            className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-50 dark:hover:bg-green-900/30 text-green-700 dark:text-green-300"
+            onClick={fetchStudents}
+          >
+            {t('adminCenterDetailsPage.tabStudents', 'Students')}
+          </TabsTrigger>
+          <TabsTrigger 
+            value="trainers"
+            className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-50 dark:hover:bg-green-900/30 text-green-700 dark:text-green-300"
+            onClick={fetchTeachers}
+          >
+            {t('adminCenterDetailsPage.tabTrainers', 'Trainers')}
           </TabsTrigger>
         </TabsList>
 
@@ -573,6 +774,236 @@ const AdminCenterDetailsPage: React.FC = () => {
               ) : (
                 <div className="text-center py-8">
                   <p className="text-muted-foreground">{t('adminCenterDetailsPage.groups.noGroups', 'No groups found for this center')}</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Students Tab */}
+        <TabsContent value="students">
+          <Card>
+            <CardHeader>
+              <CardTitle>Students ({filteredStudents.length})</CardTitle>
+              <CardDescription>{t('adminCenterDetailsPage.students.description', 'All students enrolled in this center')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {studentsLoading ? (
+                <div className="flex justify-center items-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                  <span>{t('adminCenterDetailsPage.students.loading', 'Loading students...')}</span>
+                </div>
+              ) : students.length > 0 ? (
+                <div className="space-y-4">
+                  {/* Search and Filter Section */}
+                  <div className="flex flex-col sm:flex-row gap-4 p-4 bg-muted/50 rounded-lg">
+                    <div className="flex-1">
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                        <Input
+                          placeholder={t('adminCenterDetailsPage.students.searchPlaceholder', 'Search by name, email, or exam ID...')}
+                          value={studentSearchTerm}
+                          onChange={(e) => setStudentSearchTerm(e.target.value)}
+                          className="pl-10"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Select value={studentStatusFilter} onValueChange={setStudentStatusFilter}>
+                        <SelectTrigger className="w-32">
+                          <SelectValue placeholder="Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">{t('adminCenterDetailsPage.students.filterAll', 'All Status')}</SelectItem>
+                          <SelectItem value="active">{t('adminCenterDetailsPage.students.filterActive', 'Active')}</SelectItem>
+                          <SelectItem value="inactive">{t('adminCenterDetailsPage.students.filterInactive', 'Inactive')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select value={studentProgramFilter} onValueChange={setStudentProgramFilter}>
+                        <SelectTrigger className="w-40">
+                          <SelectValue placeholder="Program" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">{t('adminCenterDetailsPage.students.filterAllPrograms', 'All Programs')}</SelectItem>
+                          {uniquePrograms.map(program => (
+                            <SelectItem key={program.id} value={program.id.toString()}>
+                              {program.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Results summary */}
+                  {(studentSearchTerm || studentStatusFilter !== 'all' || studentProgramFilter !== 'all') && (
+                    <div className="text-sm text-muted-foreground">
+                      {t('adminCenterDetailsPage.students.showingResults', 'Showing {{count}} of {{total}} students', {
+                        count: filteredStudents.length,
+                        total: students.length
+                      })}
+                    </div>
+                  )}
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.students.examId', 'Exam ID')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.students.name', 'Name')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.students.email', 'Email')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.students.phone', 'Phone')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.students.program', 'Program')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.students.joiningDate', 'Joining Date')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.students.status', 'Status')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredStudents.map(student => (
+                          <tr key={student.id} className="border-b hover:bg-muted/50">
+                            <td className="p-2 font-mono text-sm">{student.exam_id}</td>
+                            <td className="p-2">{student.user.first_name} {student.user.last_name}</td>
+                            <td className="p-2 text-sm text-muted-foreground">{student.user.email}</td>
+                            <td className="p-2 text-sm">{student.user.phone_number || 'N/A'}</td>
+                            <td className="p-2">{student.program_name}</td>
+                            <td className="p-2">{new Date(student.joining_date).toLocaleDateString()}</td>
+                            <td className="p-2">
+                              <Badge variant={student.user.is_active ? "default" : "secondary"}>
+                                {student.user.is_active ? t('common.active', 'Active') : t('common.inactive', 'Inactive')}
+                              </Badge>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">{t('adminCenterDetailsPage.students.noStudents', 'No students found for this center')}</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Trainers Tab */}
+        <TabsContent value="trainers">
+          <Card>
+            <CardHeader>
+              <CardTitle>Trainers ({filteredTrainers.length})</CardTitle>
+              <CardDescription>{t('adminCenterDetailsPage.trainers.description', 'All trainers working in this center')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {teachersLoading ? (
+                <div className="flex justify-center items-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                  <span>{t('adminCenterDetailsPage.trainers.loading', 'Loading trainers...')}</span>
+                </div>
+              ) : teachers.length > 0 ? (
+                <div className="space-y-4">
+                  {/* Search and Filter Section */}
+                  <div className="flex flex-col sm:flex-row gap-4 p-4 bg-muted/50 rounded-lg">
+                    <div className="flex-1">
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                        <Input
+                          placeholder={t('adminCenterDetailsPage.trainers.searchPlaceholder', 'Search by name or email...')}
+                          value={trainerSearchTerm}
+                          onChange={(e) => setTrainerSearchTerm(e.target.value)}
+                          className="pl-10"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Select value={trainerStatusFilter} onValueChange={setTrainerStatusFilter}>
+                        <SelectTrigger className="w-32">
+                          <SelectValue placeholder="Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">{t('adminCenterDetailsPage.trainers.filterAll', 'All Status')}</SelectItem>
+                          <SelectItem value="active">{t('adminCenterDetailsPage.trainers.filterActive', 'Active')}</SelectItem>
+                          <SelectItem value="inactive">{t('adminCenterDetailsPage.trainers.filterInactive', 'Inactive')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select value={trainerContractFilter} onValueChange={setTrainerContractFilter}>
+                        <SelectTrigger className="w-36">
+                          <SelectValue placeholder="Contract" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">{t('adminCenterDetailsPage.trainers.filterAllContracts', 'All Contracts')}</SelectItem>
+                          <SelectItem value="entraide">{t('adminCenterDetailsPage.trainers.contractEntraide', 'Entraide')}</SelectItem>
+                          <SelectItem value="association">{t('adminCenterDetailsPage.trainers.contractAssociation', 'Association')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select value={trainerProgramFilter} onValueChange={setTrainerProgramFilter}>
+                        <SelectTrigger className="w-40">
+                          <SelectValue placeholder="Program" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">{t('adminCenterDetailsPage.trainers.filterAllPrograms', 'All Programs')}</SelectItem>
+                          {uniqueTrainerPrograms.map(program => (
+                            <SelectItem key={program.id} value={program.id.toString()}>
+                              {program.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Results summary */}
+                  {(trainerSearchTerm || trainerStatusFilter !== 'all' || trainerContractFilter !== 'all' || trainerProgramFilter !== 'all') && (
+                    <div className="text-sm text-muted-foreground">
+                      {t('adminCenterDetailsPage.trainers.showingResults', 'Showing {{count}} of {{total}} trainers', {
+                        count: filteredTrainers.length,
+                        total: teachers.length
+                      })}
+                    </div>
+                  )}
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.trainers.name', 'Name')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.trainers.email', 'Email')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.trainers.phone', 'Phone')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.trainers.program', 'Program')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.trainers.contractWith', 'Contract With')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.trainers.contractPeriod', 'Contract Period')}</th>
+                          <th className="text-left p-2 font-medium">{t('adminCenterDetailsPage.trainers.status', 'Status')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredTrainers.map(teacher => (
+                          <tr key={teacher.id} className="border-b hover:bg-muted/50">
+                            <td className="p-2">{teacher.user.first_name} {teacher.user.last_name}</td>
+                            <td className="p-2 text-sm text-muted-foreground">{teacher.user.email}</td>
+                            <td className="p-2 text-sm">{teacher.user.phone_number || 'N/A'}</td>
+                            <td className="p-2">{teacher.program_name}</td>
+                            <td className="p-2">
+                              <Badge variant="outline">
+                                {teacher.contarct_with === 'entraide' ? 'Entraide' : 'Association'}
+                              </Badge>
+                            </td>
+                            <td className="p-2 text-sm">
+                              {new Date(teacher.contract_start_date).toLocaleDateString()} - {new Date(teacher.contract_end_date).toLocaleDateString()}
+                            </td>
+                            <td className="p-2">
+                              <Badge variant={teacher.user.is_active ? "default" : "secondary"}>
+                                {teacher.user.is_active ? t('common.active', 'Active') : t('common.inactive', 'Inactive')}
+                              </Badge>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">{t('adminCenterDetailsPage.trainers.noTrainers', 'No trainers found for this center')}</p>
                 </div>
               )}
             </CardContent>
