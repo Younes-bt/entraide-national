@@ -32,10 +32,17 @@ class WeeklyCoursePlanSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TrainingCourseSerializer(serializers.ModelSerializer):
+    # Read-only nested serializers for detailed output
     program = TrainingProgrameSerializer(read_only=True)
     center = CenterSerializer(read_only=True)
     trainer = UserSerializer(read_only=True)
 
     class Meta:
         model = TrainingCourse
-        fields = '__all__' 
+        fields = '__all__'
+
+class TrainingCourseCreateUpdateSerializer(serializers.ModelSerializer):
+    # Write-only fields for create/update operations
+    class Meta:
+        model = TrainingCourse
+        fields = ['program', 'center', 'trainer', 'academic_year'] 

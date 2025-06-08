@@ -41,6 +41,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       { section: 'programme', href: '/center/schedules', label: 'sidebar.schedules', icon: CalendarDays },
       { section: 'programme', href: '/center/attendance', label: 'sidebar.attendance', icon: ClipboardCheck },
     ];
+  } else if (user?.role === 'trainer') {
+    navLinks = [
+      { href: '/trainer/dashboard', label: 'sidebar.dashboard', icon: LayoutDashboard, section: 'overview' },
+      { section: 'classes', href: '/trainer/my-classes', label: 'sidebar.myClasses', icon: BookOpen },
+      { section: 'classes', href: '/trainer/schedule', label: 'sidebar.schedule', icon: CalendarDays },
+      { section: 'students', href: '/trainer/students', label: 'sidebar.students', icon: GraduationCap },
+      { section: 'students', href: '/trainer/attendance', label: 'sidebar.attendance', icon: ClipboardCheck },
+      { section: 'courses', href: '/trainer/courses', label: 'sidebar.courses', icon: CheckSquare },
+      { section: 'courses', href: '/trainer/materials', label: 'sidebar.materials', icon: Briefcase },
+    ];
   }
 
   return (

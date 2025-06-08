@@ -3,6 +3,7 @@ from django.db import transaction
 from .models import Teacher
 from accounts.models import User, UserRole # Assuming UserRole.TEACHER exists
 from accounts.serializers import UserProfileSerializer, UserIsActiveUpdateSerializer 
+from centers.serializers import GroupSerializer # Import GroupSerializer for detailed group info
 # from programs.models import TrainingPrograme # Import if explicit queryset needed for PrimaryKeyRelatedField
 # from centers.models import Center # Import if explicit queryset needed for PrimaryKeyRelatedField
 
@@ -15,11 +16,12 @@ class TeacherSerializer(serializers.ModelSerializer):
     center = serializers.StringRelatedField(read_only=True)
     program_name = serializers.StringRelatedField(source='program', read_only=True)
     program = serializers.PrimaryKeyRelatedField(read_only=True)
+    groups = GroupSerializer(many=True, read_only=True)
 
     class Meta:
         model = Teacher
         fields = [
-            'id', 'user', 'center', 'program', 'program_name', 'contarct_with', 
+            'id', 'user', 'center', 'program', 'program_name', 'groups', 'contarct_with', 
             'contract_start_date', 'contract_end_date', 
             'created_at', 'updated_at'
         ]
@@ -54,6 +56,7 @@ class TeacherCreateUpdateSerializer(serializers.ModelSerializer):
             'id',
             'center',       # Expects Center ID for write
             'program',      # Expects TrainingPrograme ID for write
+            'groups',       # Expects list of Group IDs for write
             'contarct_with',
             'contract_start_date',
             'contract_end_date',

@@ -46,6 +46,10 @@ export const fr = {
       trainingCourses: "Cours de Formation",
       annualCourseDistribution: "Répartition Annuelle des Cours",
       courses: "Cours",
+      // Added for Trainer
+      myClasses: "Mes classes",
+      schedule: "Horaire",
+      materials: "Matériaux",
       exams: {
         comingSoon: "Bientôt Disponible"
       },
@@ -55,7 +59,10 @@ export const fr = {
         center: "Gestion du Centre",
         programme: "Gestion des Programmes",
         trainings: "Formations",
-        exams: "Examens"
+        exams: "Examens",
+        classes: "Classes",
+        students: "Étudiants",
+        courses: "Cours"
       }
     },
     table: {
@@ -1370,6 +1377,42 @@ export const fr = {
       },
       unknownProgram: "Programme Inconnu",
       contractEnds: "Le Contrat Se Termine"
+    },
+    // Trainer Students Page
+    trainerStudentsPage: {
+      title: "Mes Étudiants",
+      subtitle: "Gérer et voir vos étudiants par groupe",
+      authError: "Erreur d'authentification",
+      errorTitle: "Erreur",
+      noGroupsTitle: "Aucun Groupe Assigné",
+      noGroupsDescription: "Vous n'êtes actuellement assigné à aucun groupe. Veuillez contacter votre superviseur de centre.",
+      loadingTrainerData: "Chargement des données du formateur...",
+      groupsTitle: "Groupes d'Étudiants",
+      studentsCount: "étudiants",
+      createdOn: "Créé le",
+      loadingStudents: "Chargement des étudiants...",
+      noStudentsFound: "Aucun étudiant trouvé",
+      noStudentsInGroup: "Aucun étudiant dans ce groupe",
+      tryDifferentSearch: "Essayez un terme de recherche différent",
+      groupEmpty: "Ce groupe n'a actuellement aucun étudiant assigné",
+      searchPlaceholder: "Rechercher des étudiants par nom, email, ou ID d'examen...",
+      searchResults: "Trouvé {{found}} sur {{total}} étudiants correspondant à \"{{term}}\"",
+      totalStudents: "{{count}} étudiants dans ce groupe",
+      table: {
+        student: "Étudiant",
+        examId: "ID Examen",
+        academicYear: "Année Académique",
+        joiningDate: "Date d'Inscription",
+        status: "Statut",
+        actions: "Actions"
+      },
+      status: {
+        active: "Actif",
+        inactive: "Inactif"
+      },
+      actions: {
+        viewDetails: "Voir Détails"
+      }
     }
   }
 }; 

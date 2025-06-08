@@ -18,6 +18,14 @@ class CenterRepresentationSerializer(serializers.ModelSerializer):
 class AssociationSerializer(serializers.ModelSerializer):
     supervisor = SupervisorRepresentationSerializer(read_only=True)
     centers = CenterRepresentationSerializer(many=True, read_only=True) # Add centers relationship
+    logo_url = serializers.SerializerMethodField()
+    
+    def get_logo_url(self, obj):
+        """Convert Cloudinary field to proper URL"""
+        if obj.logo:
+            return obj.logo.url
+        return None
+    
     # supervisor_id = serializers.PrimaryKeyRelatedField(
     #     queryset=User.objects.all(), source='supervisor', write_only=True, allow_null=True, required=False
     # ) # This line would be for explicit write control if needed, but default behavior might be sufficient.
@@ -25,7 +33,7 @@ class AssociationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Association
         fields = [
-            'id', 'name', 'description', 'logo', 'phone_number', 'email', 
+            'id', 'name', 'description', 'logo', 'logo_url', 'phone_number', 'email', 
             'address', 'city', 'maps_link', 'website', 'facebook_link', 
             'instagram_link', 'twitter_link', 'is_active', 'is_verified', 
             'supervisor', # This will use the nested serializer for reads

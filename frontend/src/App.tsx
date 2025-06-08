@@ -6,6 +6,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import CenterDashboard from './pages/center/CenterDashboard';
 import AssociationDashboard from './pages/association/AssociationDashboard';
 import TrainerDashboard from './pages/trainer/TrainerDashboard';
+import TrainerStudentsPage from './pages/trainer/TrainerStudentsPage';
 import StudentDashboard from './pages/student/StudentDashboard';
 import AboutUsPage from './pages/AboutUsPage'; // New page
 import ContactUsPage from './pages/ContactUsPage'; // New page
@@ -33,6 +34,8 @@ import AdminTrainersPage from './pages/admin/AdminTrainersPage'; // Import the n
 import CenterRoutes from './pages/center/CenterRoutes'; // Import CenterRoutes
 import TrainingProgramsPage from './pages/admin/TrainingProgramsPage'; // Import the new Training Programs page
 import AdminAddTrainingProgramPage from './pages/admin/AdminAddTrainingProgramPage'; // Import the Add Training Program page
+import AdminTrainingCoursesPage from './pages/admin/AdminTrainingCoursesPage'; // Import the new Training Courses page
+import AdminAddTrainingCoursePage from './pages/admin/AdminAddTrainingCoursePage'; // Import the Add Training Course page
 import logoImage from '@/assets/entraide-nationale-maroc-seeklogo.png'; // Import the logo
 import logoImageDark from '@/assets/entraide-nationale-maroc-seeklogo-dark.png'; // Import the dark mode logo
 
@@ -80,6 +83,7 @@ function AppContent() {
       <Route path="/admin/*" element={isAuthenticated() && user?.role === 'admin' ? <DashboardLayout><AdminRoutes /></DashboardLayout> : <Navigate to="/login" replace state={{ from: location }} />} />
       {/* Add similar routes for other roles using DashboardLayout */}
       <Route path="/center/*" element={isAuthenticated() && user?.role === 'center_supervisor' ? <DashboardLayout><CenterRoutes /></DashboardLayout> : <Navigate to="/login" replace state={{ from: location }} />} />
+      <Route path="/trainer/*" element={isAuthenticated() && user?.role === 'trainer' ? <DashboardLayout><TrainerRoutes /></DashboardLayout> : <Navigate to="/login" replace state={{ from: location }} />} />
       {/* <Route path="/student/*" element={isAuthenticated() && user?.role === 'student' ? <DashboardLayout><StudentRoutes /></DashboardLayout> : <Navigate to="/login" replace state={{ from: location }} />} /> */}
       
       {/* Not Found Route */}
@@ -161,8 +165,22 @@ const AdminRoutes = () => {
       <Route path="associations/edit/:id" element={<AdminEditAssociationPage />} /> {/* Added route for editing associations */}
       <Route path="training-programs" element={<TrainingProgramsPage />} /> {/* Added route for training programs */}
       <Route path="training-programs/add" element={<AdminAddTrainingProgramPage />} /> {/* Added route for adding training programs */}
+      <Route path="training-courses" element={<AdminTrainingCoursesPage />} /> {/* Added route for training courses */}
+      <Route path="training-courses/add" element={<AdminAddTrainingCoursePage />} /> {/* Added route for adding training courses */}
       <Route path="trainers" element={<AdminTrainersPage />} /> {/* Added route for trainers */}
       <Route path="*" element={<div>Admin Page Not Found</div>} />
+    </Routes>
+  );
+};
+
+// Separate Routes for Trainer Dashboard
+const TrainerRoutes = () => {
+  return (
+    <Routes>
+      <Route index element={<TrainerDashboard />} />
+      <Route path="dashboard" element={<TrainerDashboard />} />
+      <Route path="students" element={<TrainerStudentsPage />} />
+      <Route path="*" element={<div>Trainer Page Not Found</div>} />
     </Routes>
   );
 };

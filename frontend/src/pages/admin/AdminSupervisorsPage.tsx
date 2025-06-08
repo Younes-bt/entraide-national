@@ -12,18 +12,22 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Edit, Trash2, Loader2, PlusCircle } from 'lucide-react';
+import { MoreHorizontal, Edit, Trash2, Loader2, PlusCircle, Search, Filter, X } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Define a specific type for Supervisors if needed, inheriting from User
 interface Supervisor extends User {}
+
+type FilterType = 'all' | 'recent' | 'hasPhone' | 'active';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
 
@@ -31,9 +35,17 @@ const AdminSupervisorsPage = () => {
   const { t } = useTranslation();
   const { accessToken } = useAuth();
   const [supervisors, setSupervisors] = useState<Supervisor[]>([]);
-  const [associationSupervisors, setAssociationSupervisors] = useState<Supervisor[]>([]); // New state for association supervisors
+  const [associationSupervisors, setAssociationSupervisors] = useState<Supervisor[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Search and filter states for center supervisors
+  const [centerSearchTerm, setCenterSearchTerm] = useState<string>('');
+  const [centerActiveFilter, setCenterActiveFilter] = useState<FilterType>('all');
+  
+  // Search and filter states for association supervisors
+  const [associationSearchTerm, setAssociationSearchTerm] = useState<string>('');
+  const [associationActiveFilter, setAssociationActiveFilter] = useState<FilterType>('all');
 
   useEffect(() => {
     const fetchSupervisors = async () => {
@@ -67,7 +79,6 @@ const AdminSupervisorsPage = () => {
         console.log('Raw data from API (all pages):', allUsers);
 
         // Filter for center_supervisor role
-        // Assuming the user has reverted the filter to use 'user.role'
         const filteredCenterSupervisors = allUsers.filter((user: User) => user.role === 'center_supervisor');
         setSupervisors(filteredCenterSupervisors);
 
@@ -86,19 +97,145 @@ const AdminSupervisorsPage = () => {
     fetchSupervisors();
   }, [accessToken, t]);
 
+  // Filter function for supervisors
+  const filterSupervisors = (supervisorsList: Supervisor[], searchTerm: string, activeFilter: FilterType) => {
+    let filtered = supervisorsList;
+
+    // Apply search filter
+    if (searchTerm) {
+      filtered = filtered.filter((supervisor) => {
+        const fullName = `${supervisor.first_name} ${supervisor.last_name}`.toLowerCase();
+        const email = supervisor.email?.toLowerCase() || '';
+        const phone = supervisor.phone_number?.toLowerCase() || '';
+        const search = searchTerm.toLowerCase();
+        
+        return fullName.includes(search) || email.includes(search) || phone.includes(search);
+      });
+    }
+
+    // Apply quick filters
+    switch (activeFilter) {
+      case 'recent':
+        // Filter users created in the last 30 days
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        filtered = filtered.filter((supervisor) => {
+          if (!supervisor.date_joined) return false;
+          return new Date(supervisor.date_joined) >= thirtyDaysAgo;
+        });
+        break;
+      case 'hasPhone':
+        filtered = filtered.filter((supervisor) => supervisor.phone_number && supervisor.phone_number.trim() !== '');
+        break;
+      case 'active':
+        filtered = filtered.filter((supervisor) => supervisor.is_active !== false);
+        break;
+      case 'all':
+      default:
+        // No additional filtering
+        break;
+    }
+
+    return filtered;
+  };
+
   const handleEdit = (id: number) => {
     console.log("Edit supervisor:", id);
-    // TODO: Implement edit functionality (e.g., navigate to edit page or open modal)
+    // TODO: Implement edit functionality
   };
 
   const handleDelete = (id: number) => {
     console.log("Delete supervisor:", id);
-    // TODO: Implement delete functionality (e.g., show confirmation, call API)
+    // TODO: Implement delete functionality
   };
 
+  // Quick filter buttons component
+  const QuickFilterButtons = ({ 
+    activeFilter, 
+    onFilterChange 
+  }: { 
+    activeFilter: FilterType; 
+    onFilterChange: (filter: FilterType) => void;
+  }) => (
+    <div className="flex flex-wrap gap-2">
+      <Button
+        variant={activeFilter === 'all' ? 'default' : 'outline'}
+        size="sm"
+        onClick={() => onFilterChange('all')}
+      >
+        Show All
+      </Button>
+      <Button
+        variant={activeFilter === 'recent' ? 'default' : 'outline'}
+        size="sm"
+        onClick={() => onFilterChange('recent')}
+      >
+        Recently Added
+      </Button>
+      <Button
+        variant={activeFilter === 'hasPhone' ? 'default' : 'outline'}
+        size="sm"
+        onClick={() => onFilterChange('hasPhone')}
+      >
+        Has Phone
+      </Button>
+      <Button
+        variant={activeFilter === 'active' ? 'default' : 'outline'}
+        size="sm"
+        onClick={() => onFilterChange('active')}
+      >
+        Active
+      </Button>
+    </div>
+  );
+
+  // Search input component
+  const SearchInput = ({ 
+    value, 
+    onChange, 
+    placeholder 
+  }: { 
+    value: string; 
+    onChange: (value: string) => void;
+    placeholder: string;
+  }) => (
+    <div className="relative">
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+      <Input
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="pl-10 pr-10"
+      />
+      {value && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+          onClick={() => onChange('')}
+        >
+          <X className="h-3 w-3" />
+        </Button>
+      )}
+    </div>
+  );
+
+  const filteredCenterSupervisors = filterSupervisors(supervisors, centerSearchTerm, centerActiveFilter);
+  const filteredAssociationSupervisors = filterSupervisors(associationSupervisors, associationSearchTerm, associationActiveFilter);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <Loader2 className="mr-2 h-8 w-8 animate-spin" /> 
+        <span>{t('supervisors.loading')}</span>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">{t('sidebar.supervisors')}</h1>
         <div className="flex space-x-2">
           <Link to="/admin/supervisors/add">
@@ -117,21 +254,37 @@ const AdminSupervisorsPage = () => {
       </div>
       
       {error && (
-        <Alert variant="destructive" className="mb-4">
+        <Alert variant="destructive">
           <AlertTitle>{t('supervisors.errorTitle')}</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
-      {isLoading ? (
-        <div className="flex justify-center items-center py-10">
-            <Loader2 className="mr-2 h-8 w-8 animate-spin" /> 
-            <span>{t('supervisors.loading')}</span>
-        </div>
-      ) : (
-        <>
+      {/* Section 1: Center Supervisors */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Filter className="h-5 w-5" />
+            {t('supervisors.centerSupervisorsTitle')} ({filteredCenterSupervisors.length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Search and Filter Controls */}
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <div className="w-full sm:w-96">
+              <SearchInput
+                value={centerSearchTerm}
+                onChange={setCenterSearchTerm}
+                placeholder="Search center supervisors..."
+              />
+            </div>
+            <QuickFilterButtons
+              activeFilter={centerActiveFilter}
+              onFilterChange={setCenterActiveFilter}
+            />
+          </div>
+          
           {/* Center Supervisors Table */}
-          <h2 className="text-2xl font-semibold mb-4 mt-8">{t('supervisors.centerSupervisorsTitle')}</h2>
           <div className="rounded-md border">
             <Table>
               <TableHeader>
@@ -144,8 +297,8 @@ const AdminSupervisorsPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {supervisors.length > 0 ? (
-                  supervisors.map((supervisor) => (
+                {filteredCenterSupervisors.length > 0 ? (
+                  filteredCenterSupervisors.map((supervisor) => (
                     <TableRow key={supervisor.id}>
                       <TableCell>
                         <Avatar className="h-10 w-10">
@@ -189,16 +342,44 @@ const AdminSupervisorsPage = () => {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={5} className="h-24 text-center">
-                      {t('supervisors.noCenterResults')}
+                      {centerSearchTerm || centerActiveFilter !== 'all' 
+                        ? "No center supervisors match your search criteria"
+                        : t('supervisors.noCenterResults')
+                      }
                     </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
           </div>
+        </CardContent>
+      </Card>
 
+      {/* Section 2: Association Supervisors */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Filter className="h-5 w-5" />
+            {t('supervisors.associationSupervisorsTitle')} ({filteredAssociationSupervisors.length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Search and Filter Controls */}
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <div className="w-full sm:w-96">
+              <SearchInput
+                value={associationSearchTerm}
+                onChange={setAssociationSearchTerm}
+                placeholder="Search association supervisors..."
+              />
+            </div>
+            <QuickFilterButtons
+              activeFilter={associationActiveFilter}
+              onFilterChange={setAssociationActiveFilter}
+            />
+          </div>
+          
           {/* Association Supervisors Table */}
-          <h2 className="text-2xl font-semibold mb-4 mt-8">{t('supervisors.associationSupervisorsTitle')}</h2>
           <div className="rounded-md border">
             <Table>
               <TableHeader>
@@ -211,8 +392,8 @@ const AdminSupervisorsPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {associationSupervisors.length > 0 ? (
-                  associationSupervisors.map((supervisor) => (
+                {filteredAssociationSupervisors.length > 0 ? (
+                  filteredAssociationSupervisors.map((supervisor) => (
                     <TableRow key={supervisor.id}>
                       <TableCell>
                         <Avatar className="h-10 w-10">
@@ -256,15 +437,18 @@ const AdminSupervisorsPage = () => {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={5} className="h-24 text-center">
-                      {t('supervisors.noAssociationResults')}
+                      {associationSearchTerm || associationActiveFilter !== 'all' 
+                        ? "No association supervisors match your search criteria"
+                        : t('supervisors.noAssociationResults')
+                      }
                     </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
           </div>
-        </>
-      )}
+        </CardContent>
+      </Card>
     </div>
   );
 };

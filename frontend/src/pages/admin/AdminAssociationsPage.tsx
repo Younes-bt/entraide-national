@@ -23,6 +23,7 @@ import { MoreHorizontal, EyeIcon, Edit2Icon, Trash2Icon, PlusCircle, Search, Fil
 interface Association {
   id: number;
   logo?: string;
+  logo_url?: string;
   name: string;
   city?: string;
   supervisor?: {
@@ -279,9 +280,9 @@ const AdminAssociationsPage: React.FC = () => {
               {/* Card Header with Logo and Actions */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-3">
-                  {association.logo ? (
+                  {association.logo_url ? (
                     <img 
-                      src={association.logo} 
+                      src={association.logo_url} 
                       alt={t('adminAssociationsPage.logoAlt', { name: association.name }) || `${association.name} logo`} 
                       className="h-12 w-12 rounded-full object-cover" 
                     />

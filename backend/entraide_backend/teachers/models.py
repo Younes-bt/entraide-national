@@ -13,6 +13,7 @@ class Teacher(models.Model):
 
     center = models.ForeignKey(Center, on_delete=models.CASCADE, related_name='teachers')
     program = models.ForeignKey(TrainingPrograme, on_delete=models.CASCADE, related_name='teachers')
+    groups = models.ManyToManyField('centers.Group', related_name='teachers', blank=True)
     contarct_with = models.CharField(choices=CONTRACT_WITH_CHOICES, max_length=20)
     contract_start_date = models.DateField()
     contract_end_date = models.DateField()

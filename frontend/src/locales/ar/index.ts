@@ -137,6 +137,43 @@ export const ar = {
     welcomeAssociationSupervisor: 'مرحباً، مشرف الجمعية!',
     trainerDashboardTitle: 'لوحة تحكم المدرب',
     welcomeTrainer: 'مرحباً، أيها المدرب!',
+    
+    // Trainer Students Page
+    trainerStudentsPage: {
+      title: "طلابي",
+      subtitle: "إدارة ومشاهدة طلابك حسب المجموعة",
+      authError: "خطأ في المصادقة",
+      errorTitle: "خطأ",
+      noGroupsTitle: "لا توجد مجموعات معينة",
+      noGroupsDescription: "أنت غير معين حاليًا لأي مجموعات. يرجى الاتصال بمشرف المركز الخاص بك.",
+      loadingTrainerData: "جارٍ تحميل بيانات المدرب...",
+      groupsTitle: "مجموعات الطلاب",
+      studentsCount: "طلاب",
+      createdOn: "تم الإنشاء",
+      loadingStudents: "جارٍ تحميل الطلاب...",
+      noStudentsFound: "لم يتم العثور على طلاب",
+      noStudentsInGroup: "لا يوجد طلاب في هذه المجموعة",
+      tryDifferentSearch: "جرب مصطلح بحث مختلف",
+      groupEmpty: "هذه المجموعة لا تحتوي حاليًا على طلاب معينين",
+      searchPlaceholder: "البحث عن الطلاب بالاسم أو البريد الإلكتروني أو رقم الامتحان...",
+      searchResults: "تم العثور على {{found}} من {{total}} طلاب مطابقين لـ \"{{term}}\"",
+      totalStudents: "{{count}} طلاب في هذه المجموعة",
+      table: {
+        student: "الطالب",
+        examId: "رقم الامتحان",
+        academicYear: "السنة الأكاديمية",
+        joiningDate: "تاريخ الالتحاق",
+        status: "الحالة",
+        actions: "الإجراءات"
+      },
+      status: {
+        active: "نشط",
+        inactive: "غير نشط"
+      },
+      actions: {
+        viewDetails: "عرض التفاصيل"
+      }
+    },
     studentDashboardTitle: 'لوحة تحكم الطالب',
     welcomeStudent: 'مرحباً، أيها الطالب!',
     centerStudentsPageTitle: 'إدارة طلاب المركز',
@@ -1281,6 +1318,93 @@ export const ar = {
       unknownError: "حدث خطأ غير معروف",
       updateSuccess: "تم تحديث الجمعية بنجاح!",
       updateError: "فشل في تحديث الجمعية"
+    },
+    adminTrainingCoursesPage: {
+      title: "البرامج التكوينية",
+      subtitle: "إدارة جميع البرامج التكوينية في النظام",
+      addNew: "إضافة برنامج تكوينية جديد",
+      searchPlaceholder: "البحث حسب البرنامج أو المركز أو المدرب...",
+      filterByCenter: "تصفية حسب المركز",
+      filterByProgram: "تصفية حسب البرنامج",
+      filterByTrainer: "تصفية حسب المدرب",
+      allCenters: "جميع المراكز",
+      allPrograms: "جميع البرامج",
+      allTrainers: "جميع المدربين",
+      clearFilters: "مسح المرشحات",
+      resultsCount: "عرض {{count}} من {{total}} برامج تكوينية",
+      loading: "جارٍ تحميل البرامج التكوينية...",
+      errorTitle: "خطأ",
+      noCourses: "لم يتم العثور على برامج تكوينية",
+      noCoursesDescription: "ابدأ بإنشاء أول برنامج تكويني.",
+      noMatchingCourses: "لا توجد برامج مطابقة",
+      noMatchingCoursesDescription: "جرب تعديل معايير البحث أو التصفية.",
+      courseDetails: "تفاصيل البرنامج التكويني",
+      programInfo: "معلومات البرنامج",
+      programName: "اسم البرنامج",
+      duration: "المدة",
+      description: "الوصف",
+      centerInfo: "معلومات المركز",
+      centerName: "اسم المركز",
+      city: "المدينة",
+      trainerInfo: "معلومات المدرب",
+      trainerName: "اسم المدرب",
+      email: "البريد الإلكتروني",
+      timestamps: "الطوابع الزمنية",
+      createdAt: "تاريخ الإنشاء",
+      updatedAt: "آخر تحديث",
+      accessDenied: "الوصول مرفوض",
+      adminOnly: "هذه الصفحة متاحة فقط للمسؤولين.",
+      error: {
+        notAuthenticated: "رمز المصادقة مفقود. يرجى تسجيل الدخول.",
+        unknown: "حدث خطأ غير معروف أثناء جلب البرامج التكوينية."
+      }
+    },
+    adminAddTrainingCourse: {
+      title: "إضافة برنامج تكويني جديد",
+      subtitle: "إنشاء برنامج تكويني جديد عن طريق اختيار البرنامج والمركز والمدرب.",
+      backButton: "العودة إلى البرامج التكوينية",
+      loadingData: "جارٍ تحميل البيانات المطلوبة...",
+      errorTitle: "خطأ",
+      successTitle: "نجح",
+      labels: {
+        program: "البرنامج التدريبي",
+        center: "مركز التدريب",
+        trainer: "المدرب",
+        academicYear: "السنة الأكاديمية"
+      },
+      placeholders: {
+        program: "اختر برنامجاً تدريبياً",
+        center: "اختر مركز تدريب",
+        trainer: "اختر مدرباً",
+        academicYear: "مثال: 2024-2025"
+      },
+      help: {
+        academicYear: "أدخل السنة الأكاديمية بصيغة: سسسس-سسسس (مثال: 2024-2025)"
+      },
+      summary: {
+        title: "ملخص البرنامج",
+        program: "البرنامج",
+        center: "المركز",
+        trainer: "المدرب",
+        academicYear: "السنة الأكاديمية"
+      },
+      validation: {
+        programRequired: "يرجى اختيار برنامج تدريبي.",
+        centerRequired: "يرجى اختيار مركز.",
+        trainerRequired: "يرجى اختيار مدرب.",
+        academicYearRequired: "يرجى إدخال السنة الأكاديمية."
+      },
+      error: {
+        notAuthenticated: "رمز المصادقة مفقود. يرجى تسجيل الدخول.",
+        loadData: "فشل في تحميل البيانات المطلوبة.",
+        unknown: "حدث خطأ غير معروف أثناء إنشاء البرنامج التكويني."
+      },
+      success: {
+        created: "تم إنشاء البرنامج التكويني بنجاح!"
+      },
+      buttons: {
+        create: "إنشاء برنامج تكويني"
+      }
     },
     adminTrainersPage: {
       title: "إدارة المدربين",

@@ -5,7 +5,8 @@ from .serializers import (
     TrainingProgrameSerializer, 
     AnnualCourseDistributionSerializer, 
     WeeklyCoursePlanSerializer, 
-    TrainingCourseSerializer
+    TrainingCourseSerializer,
+    TrainingCourseCreateUpdateSerializer
 )
 
 # Create your views here.
@@ -25,3 +26,8 @@ class WeeklyCoursePlanViewSet(viewsets.ModelViewSet):
 class TrainingCourseViewSet(viewsets.ModelViewSet):
     queryset = TrainingCourse.objects.all()
     serializer_class = TrainingCourseSerializer
+
+    def get_serializer_class(self):
+        if self.action in ['create', 'update', 'partial_update']:
+            return TrainingCourseCreateUpdateSerializer
+        return TrainingCourseSerializer

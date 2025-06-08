@@ -46,6 +46,10 @@ export const en = {
       trainingCourses: "Training Courses",
       annualCourseDistribution: "Annual Course Distribution",
       courses: "Courses",
+      // Added for Trainer
+      myClasses: "My Classes",
+      schedule: "Schedule",
+      materials: "Materials",
       exams: {
         comingSoon: "Coming Soon"
       },
@@ -55,7 +59,10 @@ export const en = {
         center: "Center Management",
         programme: "Programme Management",
         trainings: "Trainings",
-        exams: "Exams"
+        exams: "Exams",
+        classes: "Classes",
+        students: "Students",
+        courses: "Courses"
       }
     },
     table: {
@@ -140,6 +147,43 @@ export const en = {
     welcomeAssociationSupervisor: 'Welcome, Association Supervisor!',
     trainerDashboardTitle: 'Trainer Dashboard',
     welcomeTrainer: 'Welcome, Trainer!',
+    
+    // Trainer Students Page
+    trainerStudentsPage: {
+      title: "My Students",
+      subtitle: "Manage and view your students by group",
+      authError: "Authentication error",
+      errorTitle: "Error",
+      noGroupsTitle: "No Groups Assigned",
+      noGroupsDescription: "You are not currently assigned to any groups. Please contact your center supervisor.",
+      loadingTrainerData: "Loading trainer data...",
+      groupsTitle: "Student Groups",
+      studentsCount: "students",
+      createdOn: "Created",
+      loadingStudents: "Loading students...",
+      noStudentsFound: "No students found",
+      noStudentsInGroup: "No students in this group",
+      tryDifferentSearch: "Try a different search term",
+      groupEmpty: "This group currently has no students assigned",
+      searchPlaceholder: "Search students by name, email, or exam ID...",
+      searchResults: "Found {{found}} of {{total}} students matching \"{{term}}\"",
+      totalStudents: "{{count}} students in this group",
+      table: {
+        student: "Student",
+        examId: "Exam ID",
+        academicYear: "Academic Year",
+        joiningDate: "Joining Date",
+        status: "Status",
+        actions: "Actions"
+      },
+      status: {
+        active: "Active",
+        inactive: "Inactive"
+      },
+      actions: {
+        viewDetails: "View Details"
+      }
+    },
     studentDashboardTitle: 'Student Dashboard',
     welcomeStudent: 'Welcome, Student!',
     // Center Students Page

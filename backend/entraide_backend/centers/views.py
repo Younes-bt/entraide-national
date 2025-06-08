@@ -71,6 +71,9 @@ class CenterViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self): # <-- ADDED THIS METHOD
         user = self.request.user
+        if not user.is_authenticated:
+            return Center.objects.none()
+            
         base_queryset = Center.objects.prefetch_related(
             'rooms__equipments',
             'groups',
@@ -78,19 +81,30 @@ class CenterViewSet(viewsets.ModelViewSet):
             'supervisor',
             'equipments'
         )
-        if user.is_staff:
-            return base_queryset.all()
-        # Ensure the user object might have supervised_centers (e.g., they are not an AnonymousUser)
-        # and the related manager exists.
-        if hasattr(user, 'supervised_centers') and user.supervised_centers is not None:
-            return user.supervised_centers.prefetch_related(
-                'rooms__equipments',
-                'groups',
-                'association',
-                # 'supervisor' is already part of the user.supervised_centers context
-                'equipments'
-            ).all()
-        return Center.objects.none()
+        
+        if hasattr(user, 'role'):
+            if user.role == 'admin':
+                return base_queryset.all()
+            elif user.role == 'center_supervisor':
+                # Ensure the user object might have supervised_centers (e.g., they are not an AnonymousUser)
+                # and the related manager exists.
+                if hasattr(user, 'supervised_centers') and user.supervised_centers is not None:
+                    return user.supervised_centers.prefetch_related(
+                        'rooms__equipments',
+                        'groups',
+                        'association',
+                        # 'supervisor' is already part of the user.supervised_centers context
+                        'equipments'
+                    ).all()
+                return Center.objects.none()
+            else:
+                # Other authenticated roles might not see any centers by default
+                return Center.objects.none()
+        else:
+            # Fallback: if user has no role attribute, check is_staff (Django admin)
+            if user.is_staff:
+                return base_queryset.all()
+            return Center.objects.none()
 
     # To implement filtering for centers based on room types or equipment conditions,
     # we'll likely need a custom FilterSet class. I'll add a placeholder for now.

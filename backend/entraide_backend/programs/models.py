@@ -45,6 +45,7 @@ class TrainingCourse(models.Model):
     program = models.ForeignKey(TrainingPrograme, on_delete=models.CASCADE, related_name='courses')
     center = models.ForeignKey(Center, on_delete=models.CASCADE, related_name='courses')
     trainer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='courses')
+    academic_year = models.CharField(max_length=10)  # e.g., "2024-2025"
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

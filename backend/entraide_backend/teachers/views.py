@@ -10,9 +10,9 @@ class TeacherViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows teachers to be viewed or edited.
     """
-    queryset = Teacher.objects.select_related('user', 'center', 'program').all()
+    queryset = Teacher.objects.select_related('user', 'center', 'program').prefetch_related('groups').all()
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['center', 'program', 'contarct_with']
+    filterset_fields = ['center', 'program', 'contarct_with', 'user']
     search_fields = ['user__first_name', 'user__last_name', 'user__email', 'center__name', 'program__name']
     ordering_fields = ['user__first_name', 'user__last_name', 'contract_start_date', 'created_at']
     ordering = ['-created_at']
@@ -48,7 +48,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
             return Teacher.objects.none()
 
         # Optimized queryset base
-        qs = Teacher.objects.select_related('user', 'center', 'program')
+        qs = Teacher.objects.select_related('user', 'center', 'program').prefetch_related('groups')
 
         if hasattr(user, 'role'):
             if user.role == 'admin':
