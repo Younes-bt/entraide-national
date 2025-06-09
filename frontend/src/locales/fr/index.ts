@@ -1157,7 +1157,7 @@ export const fr = {
           arabicLastName: "Nom en Arabe",
           birthDate: "Date de Naissance",
           birthCity: "Ville de Naissance",
-          cin: "CIN (Carte d'Identité Nationale)",
+          cin: "CIN",
           role: "Rôle",
           phoneNumber: "Numéro de Téléphone",
           address: "Adresse",
@@ -1241,6 +1241,81 @@ export const fr = {
         saving: "Enregistrement...",
         saveChanges: "Enregistrer les Modifications"
       }
+    },
+    centerSchedulesPage: {
+      pageTitle: "Horaires à {{centerName}}",
+      pageSubtitle: "Gérez {{trainersCount}} formateurs et {{groupsCount}} groupes.",
+      loadingMessage: "Chargement des horaires du centre...",
+      errorTitle: "Erreur",
+      errorFetching: "Erreur lors de la récupération des données d'horaires pour le superviseur du centre :",
+      errorAuthNotAvailable: "Utilisateur non authentifié ou token non disponible.",
+      accessDenied: "Accès refusé. Cette page est réservée aux superviseurs de centre, ou votre ID utilisateur est manquant.",
+      noCenterAssigned: "Aucun centre n'est actuellement attribué à ce compte superviseur, ou les données du centre n'ont pas pu être récupérées.",
+      noCenterDataTitle: "Données du Centre Non Disponibles",
+      noCenterDataDescription: "Impossible de charger les données du centre. Veuillez réessayer plus tard ou contacter le support.",
+      
+      // New tabs
+      trainersSchedulesTab: "Horaires des Formateurs",
+      groupsSchedulesTab: "Horaires des Groupes",
+      
+      // Trainers section
+      trainersListTitle: "Liste des Formateurs",
+      trainersListDescription: "Sélectionnez un formateur pour voir son emploi du temps.",
+      searchTrainers: "Rechercher des formateurs...",
+      noTrainersFound: "Aucun formateur trouvé.",
+      selectTrainerTitle: "Sélectionner un Formateur",
+      selectTrainerMessage: "Sélectionnez un formateur",
+      selectTrainerDescription: "Choisissez un formateur dans la liste pour voir son emploi du temps hebdomadaire.",
+      trainerScheduleTitle: "Emploi du temps de {{trainerName}}",
+      
+      // Groups section
+      groupsListTitle: "Liste des Groupes",
+      groupsListDescription: "Sélectionnez un groupe pour voir son emploi du temps.",
+      searchGroups: "Rechercher des groupes...",
+      noGroupsFound: "Aucun groupe trouvé.",
+      selectGroupTitle: "Sélectionner un Groupe",
+      selectGroupMessage: "Sélectionnez un groupe",
+      selectGroupDescription: "Choisissez un groupe dans la liste pour voir son emploi du temps hebdomadaire.",
+      groupScheduleTitle: "Emploi du temps de {{groupName}}",
+      
+      // Common schedule view
+      weeklyScheduleDescription: "Emploi du temps hebdomadaire basé sur les modèles d'horaires.",
+      loadingSchedule: "Chargement de l'emploi du temps...",
+      noSchedulesFound: "Aucun horaire trouvé",
+      noSchedulesDescription: "Aucun horaire n'est configuré pour cette sélection.",
+      
+      // Table headers
+      day: "Jour",
+      time: "Heure",
+      program: "Programme",
+      trainer: "Formateur",
+      group: "Groupe",
+      room: "Salle",
+      status: "Statut",
+      
+      // Status badges
+      active: "Actif",
+      inactive: "Inactif",
+      
+      // Legacy fields (kept for compatibility)
+      statusScheduled: "Programmé",
+      statusCompleted: "Terminé",
+      statusCancelled: "Annulé",
+      statusRescheduled: "Reprogrammé",
+      customTrainer: "Formateur Personnalisé",
+      customRoom: "Salle Personnalisée",
+      customTiming: "Horaire Personnalisé",
+      notes: "Notes"
+    },
+    // Days of the week translations
+    days: {
+      monday: "Lundi",
+      tuesday: "Mardi", 
+      wednesday: "Mercredi",
+      thursday: "Jeudi",
+      friday: "Vendredi",
+      saturday: "Samedi",
+      sunday: "Dimanche"
     },
     adminEditAssociationPage: {
       title: "Modifier l'Association",

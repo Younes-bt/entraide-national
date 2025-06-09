@@ -1416,6 +1416,81 @@ export const en = {
       },
       unknownProgram: "Unknown Program",
       contractEnds: "Contract Ends"
+    },
+    centerSchedulesPage: {
+      pageTitle: "Schedules at {{centerName}}",
+      pageSubtitle: "Manage {{trainersCount}} trainers and {{groupsCount}} groups.",
+      loadingMessage: "Loading center schedules...",
+      errorTitle: "Error",
+      errorFetching: "Error fetching schedule data for center supervisor:",
+      errorAuthNotAvailable: "User not authenticated or token not available.",
+      accessDenied: "Access denied. This page is for center supervisors only, or your user ID is missing.",
+      noCenterAssigned: "No center is currently assigned to this supervisor account, or the center data could not be retrieved.",
+      noCenterDataTitle: "Center Data Not Available",
+      noCenterDataDescription: "Unable to load center data. Please try again later or contact support.",
+      
+      // New tabs
+      trainersSchedulesTab: "Trainers Schedules",
+      groupsSchedulesTab: "Groups Schedules",
+      
+      // Trainers section
+      trainersListTitle: "Trainers List",
+      trainersListDescription: "Select a trainer to view their timetable.",
+      searchTrainers: "Search trainers...",
+      noTrainersFound: "No trainers found.",
+      selectTrainerTitle: "Select a Trainer",
+      selectTrainerMessage: "Select a trainer",
+      selectTrainerDescription: "Choose a trainer from the list to view their weekly timetable.",
+      trainerScheduleTitle: "{{trainerName}}'s Timetable",
+      
+      // Groups section
+      groupsListTitle: "Groups List",
+      groupsListDescription: "Select a group to view their timetable.",
+      searchGroups: "Search groups...",
+      noGroupsFound: "No groups found.",
+      selectGroupTitle: "Select a Group",
+      selectGroupMessage: "Select a group",
+      selectGroupDescription: "Choose a group from the list to view their weekly timetable.",
+      groupScheduleTitle: "{{groupName}}'s Timetable",
+      
+      // Common schedule view
+      weeklyScheduleDescription: "Weekly timetable based on schedule templates.",
+      loadingSchedule: "Loading timetable...",
+      noSchedulesFound: "No schedules found",
+      noSchedulesDescription: "No schedules are configured for this selection.",
+      
+      // Table headers
+      day: "Day",
+      time: "Time",
+      program: "Program",
+      trainer: "Trainer",
+      group: "Group",
+      room: "Room",
+      status: "Status",
+      
+      // Status badges
+      active: "Active",
+      inactive: "Inactive",
+      
+      // Legacy fields (kept for compatibility)
+      statusScheduled: "Scheduled",
+      statusCompleted: "Completed",
+      statusCancelled: "Cancelled",
+      statusRescheduled: "Rescheduled",
+      customTrainer: "Custom Trainer",
+      customRoom: "Custom Room",
+      customTiming: "Custom Timing",
+      notes: "Notes"
+    },
+    // Days of the week translations
+    days: {
+      monday: "Monday",
+      tuesday: "Tuesday", 
+      wednesday: "Wednesday",
+      thursday: "Thursday",
+      friday: "Friday",
+      saturday: "Saturday",
+      sunday: "Sunday"
     }
   }
 }; 

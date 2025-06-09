@@ -66,6 +66,8 @@ urlpatterns = [
     path('api/students/', include('students.urls')),
     path('api/teachers/', include('teachers.urls')),
     path('api/programs/', include('programs.urls')),
+    path('api/schedule/', include('schedule.urls')),
+    path('api/attendance/', include('attendance.urls')),
     
     # Use decorated token views with enhanced documentation
     path('api/token/', DecoratedTokenObtainPairView.as_view(), name='token_obtain_pair'),

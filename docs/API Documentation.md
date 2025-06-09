@@ -720,20 +720,317 @@ Returns the full association object upon successful creation.
 
 ### Attendance Management
 
-The following endpoints will be implemented as part of the next development phase:
+The Attendance Management module provides API endpoints for tracking and managing student attendance for training sessions. The base path for these endpoints is `/api/attendance/`.
+
+**Permissions**:
+- **Admin**: Full CRUD access to all attendance data.
+- **Center Supervisor**: Full CRUD access to attendance data within their supervised centers.
+- **Trainer**: Full CRUD access to attendance for their own sessions.
+- **Student**: Read-only access to their own attendance records.
+
+**Key Features**:
+- Individual and bulk attendance recording
+- Comprehensive attendance statistics and reporting
+- Integration with schedule sessions and session instances
+- Flexible querying by student, group, trainer, or session
+
+#### Attendance Records Management
 
 | Endpoint | Method | Description | Authentication Required | Allowed Roles |
 |----------|--------|-------------|------------------------|--------------|
-| `/api/attendance/sessions/` | GET | List attendance sessions (paginated) | Yes | Admin, Center Supervisor, Trainer |
-| `/api/attendance/sessions/` | POST | Create a new attendance session | Yes | Admin, Center Supervisor, Trainer |
-| `/api/attendance/sessions/{id}/` | GET | Retrieve a specific attendance session | Yes | Admin, Center Supervisor, Trainer |
-| `/api/attendance/sessions/{id}/` | PUT | Update an attendance session | Yes | Admin, Center Supervisor, Trainer |
-| `/api/attendance/sessions/{id}/` | DELETE | Delete an attendance session | Yes | Admin, Center Supervisor, Trainer |
-| `/api/attendance/records/` | GET | List attendance records (paginated) | Yes | Admin, Center Supervisor, Trainer |
-| `/api/attendance/records/` | POST | Create a new attendance record | Yes | Admin, Center Supervisor, Trainer |
-| `/api/attendance/records/bulk_create/` | POST | Create multiple attendance records | Yes | Admin, Center Supervisor, Trainer |
-| `/api/attendance/records/my-attendance/` | GET | Get attendance records for current student | Yes | Student |
-| `/api/attendance/records/by-enrollment/{enrollment_id}/` | GET | Get attendance records for an enrollment | Yes | Admin, Center Supervisor, Trainer, Student |
+| `/api/attendance/api/records/` | GET | List attendance records (paginated) | Yes | Admin, Center Supervisor, Trainer |
+| `/api/attendance/api/records/` | POST | Create a new attendance record | Yes | Admin, Center Supervisor, Trainer |
+| `/api/attendance/api/records/{id}/` | GET | Retrieve a specific attendance record | Yes | Admin, Center Supervisor, Trainer, Student |
+| `/api/attendance/api/records/{id}/` | PUT | Update an attendance record (full update) | Yes | Admin, Center Supervisor, Trainer |
+| `/api/attendance/api/records/{id}/` | PATCH | Update an attendance record (partial update) | Yes | Admin, Center Supervisor, Trainer |
+| `/api/attendance/api/records/{id}/` | DELETE | Delete an attendance record | Yes | Admin, Center Supervisor, Trainer |
+
+#### Bulk Operations and Queries
+
+| Endpoint | Method | Description | Authentication Required | Allowed Roles |
+|----------|--------|-------------|------------------------|--------------|
+| `/api/attendance/api/records/bulk_create/` | POST | Create multiple attendance records for a session | Yes | Admin, Center Supervisor, Trainer |
+| `/api/attendance/api/records/by_session/` | GET | Get attendance records for a specific session | Yes | Admin, Center Supervisor, Trainer |
+| `/api/attendance/api/records/by_student/` | GET | Get attendance records for a specific student | Yes | Admin, Center Supervisor, Trainer, Student |
+| `/api/attendance/api/records/by_group/` | GET | Get attendance records for all students in a group | Yes | Admin, Center Supervisor, Trainer |
+
+#### Statistics and Reporting
+
+| Endpoint | Method | Description | Authentication Required | Allowed Roles |
+|----------|--------|-------------|------------------------|--------------|
+| `/api/attendance/api/records/stats/` | GET | Get general attendance statistics | Yes | Admin, Center Supervisor, Trainer |
+| `/api/attendance/api/records/student_stats/` | GET | Get detailed attendance stats for students in a group | Yes | Admin, Center Supervisor, Trainer |
+| `/api/attendance/api/records/report/` | GET | Generate comprehensive attendance reports | Yes | Admin, Center Supervisor, Trainer |
+
+#### Create an Attendance Record
+
+**Endpoint**: `POST /api/attendance/api/records/`
+
+**Description**: Creates a single attendance record for a student in a specific session.
+
+**Authentication**: Required (Bearer Token)
+
+**Allowed Roles**: `Admin`, `Center Supervisor`, `Trainer`
+
+**Request Body Fields**:
+- `date` (date string, **required**, format: `YYYY-MM-DD`): Date of the session
+- `student` (integer, **required**): ID of the student
+- `session_template` (integer, optional): ID of the schedule template (for recurring sessions)
+- `session_instance` (integer, optional): ID of the specific session instance
+- `status` (string, **required**): Attendance status (`present`, `absent`, `late`)
+- `notes` (string, optional): Additional notes about the attendance
+
+**Note**: Either `session_template` OR `session_instance` must be provided, not both.
+
+**Example Request Body**:
+```json
+{
+    "date": "2024-06-10",
+    "student": 25,
+    "session_instance": 45,
+    "status": "present",
+    "notes": "Arrived on time, actively participated"
+}
+```
+
+**Success Response (201 Created)**:
+```json
+{
+    "id": 156,
+    "date": "2024-06-10",
+    "student": 25,
+    "student_details": {
+        "id": 25,
+        "exam_id": "STU2024025",
+        "user": {
+            "first_name": "Fatima",
+            "last_name": "El Alami",
+            "email": "fatima.elalami@student.entraide.ma"
+        }
+    },
+    "session_template": null,
+    "session_instance": 45,
+    "session_instance_details": {
+        "id": 45,
+        "specific_date": "2024-06-10",
+        "effective_start_time": "08:30:00",
+        "effective_end_time": "10:30:00",
+        "status": "scheduled"
+    },
+    "status": "present",
+    "notes": "Arrived on time, actively participated",
+    "created_at": "2024-06-10T10:45:00Z",
+    "edited_at": "2024-06-10T10:45:00Z"
+}
+```
+
+#### Bulk Create Attendance Records
+
+**Endpoint**: `POST /api/attendance/api/records/bulk_create/`
+
+**Description**: Creates multiple attendance records for a session at once. Ideal for taking attendance for an entire class.
+
+**Authentication**: Required (Bearer Token)
+
+**Allowed Roles**: `Admin`, `Center Supervisor`, `Trainer`
+
+**Request Body Fields**:
+- `session_instance_id` (integer, optional): ID of the session instance
+- `session_template_id` (integer, optional): ID of the schedule template
+- `date` (date string, **required**, format: `YYYY-MM-DD`): Date of the session
+- `attendance_records` (array, **required**): Array of attendance records
+
+Each attendance record in the array should contain:
+- `student_id` (string, **required**): ID of the student
+- `status` (string, **required**): Attendance status (`present`, `absent`, `late`)
+- `notes` (string, optional): Additional notes
+
+**Example Request Body**:
+```json
+{
+    "session_instance_id": 45,
+    "date": "2024-06-10",
+    "attendance_records": [
+        {
+            "student_id": "25",
+            "status": "present",
+            "notes": "On time"
+        },
+        {
+            "student_id": "26",
+            "status": "late",
+            "notes": "Arrived 10 minutes late"
+        },
+        {
+            "student_id": "27",
+            "status": "absent"
+        }
+    ]
+}
+```
+
+**Success Response (200 OK)**:
+```json
+{
+    "message": "Processed 3 attendance records",
+    "created": 3,
+    "errors": [],
+    "records": [
+        {
+            "id": 156,
+            "date": "2024-06-10",
+            "student": 25,
+            "status": "present",
+            "notes": "On time"
+        },
+        {
+            "id": 157,
+            "date": "2024-06-10",
+            "student": 26,
+            "status": "late",
+            "notes": "Arrived 10 minutes late"
+        },
+        {
+            "id": 158,
+            "date": "2024-06-10",
+            "student": 27,
+            "status": "absent",
+            "notes": ""
+        }
+    ]
+}
+```
+
+#### Get Attendance Statistics
+
+**Endpoint**: `GET /api/attendance/api/records/stats/`
+
+**Description**: Retrieves attendance statistics for a specified period and scope (student, group, or trainer).
+
+**Authentication**: Required (Bearer Token)
+
+**Query Parameters**:
+- `start_date` (date string, **required**, format: `YYYY-MM-DD`): Start date of the period
+- `end_date` (date string, **required**, format: `YYYY-MM-DD`): End date of the period
+- `student_id` (integer, optional): Filter by specific student
+- `group_id` (integer, optional): Filter by specific group
+- `trainer_id` (integer, optional): Filter by specific trainer
+
+**Example Request**:
+`GET /api/attendance/api/records/stats/?start_date=2024-06-01&end_date=2024-06-15&group_id=3`
+
+**Success Response (200 OK)**:
+```json
+{
+    "total_sessions": 28,
+    "present_count": 22,
+    "absent_count": 4,
+    "late_count": 2,
+    "attendance_rate": 85.71
+}
+```
+
+#### Get Student Attendance Statistics
+
+**Endpoint**: `GET /api/attendance/api/records/student_stats/`
+
+**Description**: Retrieves detailed attendance statistics for all students in a group over a specified period.
+
+**Authentication**: Required (Bearer Token)
+
+**Query Parameters**:
+- `group_id` (integer, **required**): ID of the group
+- `start_date` (date string, **required**, format: `YYYY-MM-DD`): Start date of the period
+- `end_date` (date string, **required**, format: `YYYY-MM-DD`): End date of the period
+
+**Example Request**:
+`GET /api/attendance/api/records/student_stats/?group_id=3&start_date=2024-06-01&end_date=2024-06-15`
+
+**Success Response (200 OK)**:
+```json
+[
+    {
+        "student": {
+            "id": 25,
+            "exam_id": "STU2024025",
+            "user": {
+                "first_name": "Fatima",
+                "last_name": "El Alami",
+                "email": "fatima.elalami@student.entraide.ma"
+            }
+        },
+        "stats": {
+            "total_sessions": 14,
+            "present_count": 12,
+            "absent_count": 1,
+            "late_count": 1,
+            "attendance_rate": 92.86
+        },
+        "recent_attendance": [
+            {
+                "id": 156,
+                "date": "2024-06-10",
+                "status": "present",
+                "notes": "On time"
+            }
+            // ... up to 10 most recent records
+        ]
+    }
+    // ... more students
+]
+```
+
+#### Generate Attendance Report
+
+**Endpoint**: `GET /api/attendance/api/records/report/`
+
+**Description**: Generates a comprehensive attendance report with daily breakdowns and statistics.
+
+**Authentication**: Required (Bearer Token)
+
+**Query Parameters**:
+- `start_date` (date string, **required**, format: `YYYY-MM-DD`): Start date of the report period
+- `end_date` (date string, **required**, format: `YYYY-MM-DD`): End date of the report period
+- `student_id` (integer, optional): Filter by specific student
+- `group_id` (integer, optional): Filter by specific group
+- `trainer_id` (integer, optional): Filter by specific trainer
+
+**Example Request**:
+`GET /api/attendance/api/records/report/?start_date=2024-06-01&end_date=2024-06-07&group_id=3`
+
+**Success Response (200 OK)**:
+```json
+{
+    "period": {
+        "start_date": "2024-06-01",
+        "end_date": "2024-06-07"
+    },
+    "report": [
+        {
+            "date": "2024-06-03",
+            "statistics": {
+                "total": 15,
+                "present": 13,
+                "absent": 1,
+                "late": 1
+            },
+            "records": [
+                {
+                    "id": 140,
+                    "student": 25,
+                    "status": "present",
+                    "session_instance_details": {
+                        "effective_start_time": "08:30:00",
+                        "effective_end_time": "10:30:00"
+                    }
+                }
+                // ... all records for this date
+            ]
+        }
+        // ... more daily reports
+    ]
+}
+```
 
 ### Exam Management
 
@@ -753,16 +1050,237 @@ The following endpoints will be implemented as part of the next development phas
 
 ### Schedule Management
 
-The following endpoints will be implemented as part of the next development phase:
+The Schedule Management module provides API endpoints for managing weekly schedule templates and specific session instances. The base path for these endpoints is `/api/schedule/`.
+
+**Permissions**:
+- **Admin**: Full CRUD access to all schedule data.
+- **Center Supervisor**: Full CRUD access to schedules within their supervised centers.
+- **Trainer**: Read access to their own schedules, limited update access to their session instances.
+- **Any Authenticated User**: Read-only access to relevant schedule information.
+
+**Key Concepts**:
+- **Schedule Sessions**: Weekly recurring schedule templates (e.g., "Every Monday 8:30-10:30")
+- **Session Instances**: Specific session occurrences for particular dates (for cancellations, rescheduling)
+
+#### Weekly Schedule Templates (`Schedule_session`)
 
 | Endpoint | Method | Description | Authentication Required | Allowed Roles |
 |----------|--------|-------------|------------------------|--------------|
-| `/api/schedule/` | GET | List schedules (paginated) | Yes | Any authenticated user |
-| `/api/schedule/` | POST | Create a new schedule | Yes | Admin, Center Supervisor |
-| `/api/schedule/{id}/` | GET | Retrieve a specific schedule | Yes | Any authenticated user |
-| `/api/schedule/{id}/` | PUT | Update a schedule | Yes | Admin, Center Supervisor |
-| `/api/schedule/{id}/` | DELETE | Delete a schedule | Yes | Admin, Center Supervisor |
-| `/api/schedule/my-schedule/` | GET | Get schedule for current user | Yes | Any authenticated user |
+| `/api/schedule/api/sessions/` | GET | List all weekly schedule templates (paginated) | Yes | Any authenticated user |
+| `/api/schedule/api/sessions/` | POST | Create a new weekly schedule template | Yes | Admin, Center Supervisor |
+| `/api/schedule/api/sessions/{id}/` | GET | Retrieve a specific schedule template | Yes | Any authenticated user |
+| `/api/schedule/api/sessions/{id}/` | PUT | Update a schedule template (full update) | Yes | Admin, Center Supervisor |
+| `/api/schedule/api/sessions/{id}/` | PATCH | Update a schedule template (partial update) | Yes | Admin, Center Supervisor |
+| `/api/schedule/api/sessions/{id}/` | DELETE | Delete a schedule template | Yes | Admin, Center Supervisor |
+| `/api/schedule/api/sessions/by_trainer/` | GET | Get all schedules for a specific trainer | Yes | Any authenticated user |
+| `/api/schedule/api/sessions/by_center/` | GET | Get all schedules for a specific center | Yes | Any authenticated user |
+| `/api/schedule/api/sessions/by_group/` | GET | Get all schedules for a specific group | Yes | Any authenticated user |
+| `/api/schedule/api/sessions/check_conflicts/` | POST | Check for scheduling conflicts | Yes | Admin, Center Supervisor |
+
+#### Session Instances (`SessionInstance`)
+
+| Endpoint | Method | Description | Authentication Required | Allowed Roles |
+|----------|--------|-------------|------------------------|--------------|
+| `/api/schedule/api/instances/` | GET | List session instances (paginated) | Yes | Any authenticated user |
+| `/api/schedule/api/instances/` | POST | Create a new session instance | Yes | Admin, Center Supervisor |
+| `/api/schedule/api/instances/{id}/` | GET | Retrieve a specific session instance | Yes | Any authenticated user |
+| `/api/schedule/api/instances/{id}/` | PUT | Update a session instance (full update) | Yes | Admin, Center Supervisor, Trainer |
+| `/api/schedule/api/instances/{id}/` | PATCH | Update a session instance (partial update) | Yes | Admin, Center Supervisor, Trainer |
+| `/api/schedule/api/instances/{id}/` | DELETE | Delete a session instance | Yes | Admin, Center Supervisor |
+| `/api/schedule/api/instances/generate_for_week/` | POST | Generate session instances for a specific week | Yes | Admin, Center Supervisor |
+| `/api/schedule/api/instances/trainer_timetable/` | GET | Get trainer's timetable for a date range | Yes | Any authenticated user |
+| `/api/schedule/api/instances/group_timetable/` | GET | Get group's timetable for a date range | Yes | Any authenticated user |
+| `/api/schedule/api/instances/{id}/cancel/` | POST | Cancel a specific session instance | Yes | Admin, Center Supervisor, Trainer |
+| `/api/schedule/api/instances/{id}/reschedule/` | POST | Reschedule a session instance | Yes | Admin, Center Supervisor, Trainer |
+| `/api/schedule/api/instances/weekly_summary/` | GET | Get weekly schedule summary | Yes | Any authenticated user |
+
+#### Create a Weekly Schedule Template
+
+**Endpoint**: `POST /api/schedule/api/sessions/`
+
+**Description**: Creates a new weekly recurring schedule template. Includes automatic conflict detection for trainer and room double-booking.
+
+**Authentication**: Required (Bearer Token)
+
+**Allowed Roles**: `Admin`, `Center Supervisor`
+
+**Request Body Fields**:
+- `day` (string, **required**): Day of the week (`Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`, `Saturday`, `Sunday`)
+- `start_time` (time string, **required**, format: `HH:MM:SS`): Session start time
+- `end_time` (time string, **required**, format: `HH:MM:SS`): Session end time
+- `academic_year` (string, **required**): Academic year (e.g., "2024-2025")
+- `trainer` (integer, **required**): ID of the trainer (User with trainer role)
+- `room` (integer, optional): ID of the room where the session takes place
+- `group` (integer, optional): ID of the student group
+- `training_course` (integer, **required**): ID of the training course
+- `is_active` (boolean, optional): Whether the schedule is active (default: `true`)
+
+**Example Request Body**:
+```json
+{
+    "day": "Monday",
+    "start_time": "08:30:00",
+    "end_time": "10:30:00",
+    "academic_year": "2024-2025",
+    "trainer": 5,
+    "room": 12,
+    "group": 3,
+    "training_course": 7,
+    "is_active": true
+}
+```
+
+**Success Response (201 Created)**:
+```json
+{
+    "id": 15,
+    "day": "Monday",
+    "start_time": "08:30:00",
+    "end_time": "10:30:00",
+    "academic_year": "2024-2025",
+    "is_active": true,
+    "trainer": 5,
+    "trainer_details": {
+        "id": 5,
+        "first_name": "Ahmed",
+        "last_name": "Benali",
+        "email": "ahmed.benali@entraide.ma",
+        "full_name": "Ahmed Benali"
+    },
+    "room": 12,
+    "room_details": {
+        "id": 12,
+        "name": "Classroom A1",
+        "type": "classroom",
+        "capacity": 30
+    },
+    "group": 3,
+    "group_details": {
+        "id": 3,
+        "name": "Group Alpha",
+        "description": "Advanced programming group"
+    },
+    "training_course": 7,
+    "training_course_details": {
+        "id": 7,
+        "program": {
+            "name": "Web Development",
+            "duration_years": 2
+        },
+        "center": {
+            "name": "Rabat Training Center"
+        },
+        "academic_year": "2024-2025"
+    },
+    "created_at": "2024-06-09T14:30:00Z",
+    "updated_at": "2024-06-09T14:30:00Z"
+}
+```
+
+**Error Responses**:
+- `400 Bad Request`: Validation errors, including conflict detection
+```json
+{
+    "non_field_errors": [
+        "Trainer Ahmed Benali already has a session on Monday at 08:30:00"
+    ]
+}
+```
+
+#### Generate Session Instances for a Week
+
+**Endpoint**: `POST /api/schedule/api/instances/generate_for_week/`
+
+**Description**: Automatically generates session instances for a specific week based on active schedule templates.
+
+**Authentication**: Required (Bearer Token)
+
+**Allowed Roles**: `Admin`, `Center Supervisor`
+
+**Request Body Fields**:
+- `start_date` (date string, **required**, format: `YYYY-MM-DD`): Monday of the week to generate
+- `academic_year` (string, **required**): Academic year to filter templates
+
+**Example Request Body**:
+```json
+{
+    "start_date": "2024-06-10",
+    "academic_year": "2024-2025"
+}
+```
+
+**Success Response (200 OK)**:
+```json
+{
+    "message": "Created 25 session instances",
+    "instances": [
+        {
+            "id": 45,
+            "schedule_template": 15,
+            "specific_date": "2024-06-10",
+            "status": "scheduled",
+            "effective_start_time": "08:30:00",
+            "effective_end_time": "10:30:00",
+            "effective_trainer": {
+                "id": 5,
+                "first_name": "Ahmed",
+                "last_name": "Benali",
+                "email": "ahmed.benali@entraide.ma",
+                "full_name": "Ahmed Benali"
+            }
+        }
+        // ... more instances
+    ]
+}
+```
+
+#### Get Trainer Timetable
+
+**Endpoint**: `GET /api/schedule/api/instances/trainer_timetable/`
+
+**Description**: Retrieves a trainer's complete timetable for a specified date range.
+
+**Authentication**: Required (Bearer Token)
+
+**Query Parameters**:
+- `trainer_id` (integer, **required**): ID of the trainer
+- `start_date` (date string, **required**, format: `YYYY-MM-DD`): Start date of the period
+- `end_date` (date string, **required**, format: `YYYY-MM-DD`): End date of the period
+
+**Example Request**:
+`GET /api/schedule/api/instances/trainer_timetable/?trainer_id=5&start_date=2024-06-10&end_date=2024-06-16`
+
+**Success Response (200 OK)**:
+```json
+{
+    "trainer": {
+        "id": 5,
+        "name": "Ahmed Benali",
+        "email": "ahmed.benali@entraide.ma"
+    },
+    "period": {
+        "start_date": "2024-06-10",
+        "end_date": "2024-06-16"
+    },
+    "sessions": [
+        {
+            "id": 45,
+            "specific_date": "2024-06-10",
+            "effective_start_time": "08:30:00",
+            "effective_end_time": "10:30:00",
+            "status": "scheduled",
+            "schedule_template_details": {
+                "training_course_details": {
+                    "program": {
+                        "name": "Web Development"
+                    }
+                }
+            }
+        }
+        // ... more sessions
+    ]
+}
+```
 
 ---
 

@@ -1486,6 +1486,81 @@ export const ar = {
       },
       unknownProgram: "برنامج غير معروف",
       contractEnds: "ينتهي العقد"
+    },
+    centerSchedulesPage: {
+      pageTitle: "الجداول الزمنية في {{centerName}}",
+      pageSubtitle: "إدارة {{trainersCount}} مدربين و {{groupsCount}} مجموعات.",
+      loadingMessage: "جارٍ تحميل جداول المركز...",
+      errorTitle: "خطأ",
+      errorFetching: "خطأ في جلب بيانات الجدولة لمشرف المركز:",
+      errorAuthNotAvailable: "المستخدم غير مصادق عليه أو الرمز المميز غير متوفر.",
+      accessDenied: "الوصول مرفوض. هذه الصفحة مخصصة لمشرفي المراكز فقط، أو معرف المستخدم مفقود.",
+      noCenterAssigned: "لا يوجد مركز معين حاليًا لحساب المشرف هذا، أو تعذر استرداد بيانات المركز.",
+      noCenterDataTitle: "بيانات المركز غير متوفرة",
+      noCenterDataDescription: "تعذر تحميل بيانات المركز. يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالدعم.",
+      
+      // New tabs
+      trainersSchedulesTab: "جداول المدربين",
+      groupsSchedulesTab: "جداول المجموعات",
+      
+      // Trainers section
+      trainersListTitle: "قائمة المدربين",
+      trainersListDescription: "اختر مدربًا لعرض جدوله الزمني.",
+      searchTrainers: "البحث عن المدربين...",
+      noTrainersFound: "لم يتم العثور على مدربين.",
+      selectTrainerTitle: "اختر مدربًا",
+      selectTrainerMessage: "اختر مدربًا",
+      selectTrainerDescription: "اختر مدربًا من القائمة لعرض جدوله الأسبوعي.",
+      trainerScheduleTitle: "الجدول الزمني لـ {{trainerName}}",
+      
+      // Groups section
+      groupsListTitle: "قائمة المجموعات",
+      groupsListDescription: "اختر مجموعة لعرض جدولها الزمني.",
+      searchGroups: "البحث عن المجموعات...",
+      noGroupsFound: "لم يتم العثور على مجموعات.",
+      selectGroupTitle: "اختر مجموعة",
+      selectGroupMessage: "اختر مجموعة",
+      selectGroupDescription: "اختر مجموعة من القائمة لعرض جدولها الأسبوعي.",
+      groupScheduleTitle: "الجدول الزمني لـ {{groupName}}",
+      
+      // Common schedule view
+      weeklyScheduleDescription: "الجدول الزمني الأسبوعي بناءً على قوالب الجدولة.",
+      loadingSchedule: "جارٍ تحميل الجدول الزمني...",
+      noSchedulesFound: "لم يتم العثور على جداول",
+      noSchedulesDescription: "لا توجد جداول مكوّنة لهذا الاختيار.",
+      
+      // Table headers
+      day: "اليوم",
+      time: "الوقت",
+      program: "البرنامج",
+      trainer: "المدرب",
+      group: "المجموعة",
+      room: "الغرفة",
+      status: "الحالة",
+      
+      // Status badges
+      active: "نشط",
+      inactive: "غير نشط",
+      
+      // Legacy fields (kept for compatibility)
+      statusScheduled: "مجدول",
+      statusCompleted: "مكتمل",
+      statusCancelled: "ملغى",
+      statusRescheduled: "معاد جدولته",
+      customTrainer: "مدرب مخصص",
+      customRoom: "غرفة مخصصة",
+      customTiming: "توقيت مخصص",
+      notes: "ملاحظات"
+    },
+    // Days of the week translations
+    days: {
+      monday: "الاثنين",
+      tuesday: "الثلاثاء", 
+      wednesday: "الأربعاء",
+      thursday: "الخميس",
+      friday: "الجمعة",
+      saturday: "السبت",
+      sunday: "الأحد"
     }
   }
 }; 
