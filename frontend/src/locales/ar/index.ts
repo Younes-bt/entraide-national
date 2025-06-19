@@ -183,6 +183,7 @@ export const ar = {
       pageTitle: "الطلاب في {{centerName}}",
       pageSubtitle: "إدارة كل الـ {{count}} طلاب في مركزك.",
       addNewStudentButton: "إضافة طالب جديد",
+      bulkImportButton: "استيراد مجمع",
       loadingMessage: "جارٍ تحميل طلاب المركز...",
       errorFetching: "خطأ في جلب بيانات الطلاب لمشرف المركز:",
       errorFetchingDetail: "فشل في جلب معلومات الطلاب. يرجى التأكد من وجود مركزك وأن لديه طلاب مسجلين.",
@@ -257,7 +258,8 @@ export const ar = {
       loading: "جار التحميل...",
       cancelButton: "إلغاء",
       optional: "اختياري",
-      backToList: "العودة للقائمة"
+      backToList: "العودة للقائمة",
+      back: "رجوع"
     },
     
     // AdminCenterDetailsPage translations
@@ -1552,7 +1554,7 @@ export const ar = {
       customTiming: "توقيت مخصص",
       notes: "ملاحظات"
     },
-    // Days of the week translations
+          // Days of the week translations
     days: {
       monday: "الاثنين",
       tuesday: "الثلاثاء", 
@@ -1561,6 +1563,52 @@ export const ar = {
       friday: "الجمعة",
       saturday: "السبت",
       sunday: "الأحد"
+    },
+    
+    // Bulk Import translations
+    bulkImport: {
+      title: "استيراد مجمع للطلاب",
+      description: "استيراد عدة طلاب من ملف Excel. أولاً اختر إعدادات البرنامج والمجموعة، ثم قم بتحميل القالب ورفع بياناتك.",
+      authRequired: "المصادقة مطلوبة لاستيراد الطلاب.",
+      template: {
+        title: "تحميل قالب Excel",
+        description: "قم بتحميل قالب Excel مع الأعمدة المناسبة والبيانات التجريبية. الحقول المميزة بـ (*) مطلوبة. يتم التعامل مع تعيين البرنامج والمجموعة أعلاه.",
+        download: "تحميل قالب Excel"
+      },
+      assignment: {
+        title: "إعدادات التعيين",
+        description: "اختر البرنامج واختياريًا مجموعة/دورة تدريبية سيتم تعيينها لجميع الطلاب المستوردين.",
+        program: "البرنامج التدريبي",
+        group: "المجموعة",
+        trainingCourse: "الدورة التدريبية",
+        selectProgram: "اختر برنامجًا",
+        selectGroup: "اختر مجموعة",
+        selectCourse: "اختر دورة",
+        selectProgramFirst: "اختر برنامجًا أولاً"
+      },
+      selectFile: "اختر ملف Excel",
+      fileRequirements: "الصيغ المقبولة: .xlsx, .xls (حد أقصى 10 ميجابايت)",
+      selectedFile: "الملف المختار",
+      upload: "استيراد الطلاب", 
+      uploading: "جاري الاستيراد...",
+      progress: "تقدم الرفع",
+      success: "تم الاستيراد بنجاح!",
+      partialSuccess: "تم الاستيراد مع بعض الأخطاء",
+      error: "فشل الاستيراد",
+      errorDetails: "تفاصيل الخطأ",
+      viewStudents: "عرض الطلاب",
+      results: {
+        total: "إجمالي الصفوف",
+        successful: "تم إنشاؤها بنجاح",
+        failed: "فشلت"
+      },
+      errors: {
+        invalidFileType: "يرجى اختيار ملف Excel (.xlsx أو .xls)",
+        fileTooLarge: "يجب أن يكون حجم الملف أقل من 10 ميجابايت",
+        noFileSelected: "يرجى اختيار ملف للرفع",
+        noProgramSelected: "يرجى اختيار برنامج تدريبي",
+        uploadFailed: "فشل الرفع. يرجى المحاولة مرة أخرى."
+      }
     }
   }
 }; 

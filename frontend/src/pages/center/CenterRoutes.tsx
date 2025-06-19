@@ -12,6 +12,7 @@ import CenterGroupsPage from './CenterGroupsPage';
 import CenterAddGroupPage from './CenterAddGroupPage';
 import CenterStudentsPage from './CenterStudentsPage';
 import CenterAddNewStudent from './components/CenterAddNewStudent';
+import CenterBulkImportStudents from './components/CenterBulkImportStudents';
 import CenterUpdateStudent from './components/CenterUpdateStudent';
 import CenterStudentDetailsPage from './CenterStudentDetailsPage';
 import CenterTrainersPage from './CenterTrainersPage';
@@ -35,6 +36,7 @@ const CenterRoutes = () => {
       <Route path="groups/add" element={<CenterAddGroupPage />} />
       <Route path="students" element={<CenterStudentsPage />} />
       <Route path="students/add" element={<CenterAddNewStudent />} />
+      <Route path="students/bulk-import" element={<CenterBulkImportStudents />} />
       <Route path="students/:studentId/edit" element={<CenterUpdateStudent />} />
       <Route path="students/:studentId" element={<CenterStudentDetailsPage />} />
       <Route path="trainers" element={<CenterTrainersPage />} />

@@ -10,7 +10,9 @@ import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Search, Plus, MoreHorizontal, Eye, Edit, Trash2, Filter, Users } from 'lucide-react';
+import { Search, Plus, MoreHorizontal, Eye, Edit, Trash2, Filter, Users, FileSpreadsheet } from 'lucide-react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 // Define these constants at the top level of your module
 const ALL_PROGRAMS_VALUE = '__ALL_PROGRAMS_FILTER__';
@@ -224,8 +226,8 @@ const CenterStudentsPage = () => {
       student.user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.exam_id.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesProgram = !selectedProgram || student.program === selectedProgram;
-    const matchesGroup = !selectedGroup || student.group === selectedGroup;
+    const matchesProgram = !selectedProgram || String(student.program) === String(selectedProgram);
+    const matchesGroup = !selectedGroup || String(student.group) === String(selectedGroup);
     
     return matchesSearch && matchesProgram && matchesGroup;
   });
@@ -291,7 +293,8 @@ const CenterStudentsPage = () => {
       }
 
       console.log(`[CenterStudentsPage] Fetching students for center ID: ${currentCenter.id}`);
-      const studentsResponse = await fetch(`http://localhost:8000/api/students/students/?center=${currentCenter.id}`, {
+      // Fetch all students in one request by requesting a large page_size
+      const studentsResponse = await fetch(`http://localhost:8000/api/students/students/?center=${currentCenter.id}&page_size=1000`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -394,6 +397,54 @@ const CenterStudentsPage = () => {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
+  // Generate PDF of current filtered students list
+  const handleDownloadPDF = () => {
+    // Use built-in SiyamRuqa font for Arabic support
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+
+    // Header
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const title = `${t('centerStudentsPage.pdfTitle', 'Students List')} - ${centerData?.name || ''}`;
+    doc.setFontSize(14);
+    doc.text(title, pageWidth / 2, 40, { align: 'center' });
+
+    // Table data
+    const head = [[
+      t('centerStudentsPage.tableHeaders.student'),
+      t('centerStudentsPage.tableHeaders.examId'),
+      t('centerStudentsPage.tableHeaders.program'),
+      t('centerStudentsPage.tableHeaders.group'),
+      t('centerStudentsPage.tableHeaders.academicYear'),
+      t('centerStudentsPage.tableHeaders.joiningDate'),
+    ]];
+
+    const body = filteredStudents.map((s) => [
+      `${s.user.first_name} ${s.user.last_name}`,
+      s.exam_id,
+      getProgramNameById(s.program),
+      s.group ? getGroupNameById(s.group) : t('centerStudentsPage.noGroup'),
+      s.academic_year,
+      formatDate(s.joining_date),
+    ]);
+
+    autoTable(doc, {
+      head,
+      body,
+      startY: 60,
+      styles: { fontSize: 8, cellPadding: 4, font: 'SiyamRuqa' },
+      headStyles: { fillColor: [60, 141, 188] },
+      didDrawPage: () => {
+        // Footer with page number
+        doc.setFontSize(8);
+        const str = `${t('centerStudentsPage.page', 'Page')} ${doc.internal.getNumberOfPages()}`;
+        doc.text(str, pageWidth / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
+      },
+      margin: { top: 60 },
+    });
+
+    doc.save('students_list.pdf');
+  };
+
   if (loading) {
     return (
       <div className="container mx-auto p-3 md:p-4">
@@ -449,12 +500,24 @@ const CenterStudentsPage = () => {
               {t('centerStudentsPage.pageSubtitle', { count: filteredStudents.length })}
             </p>
           </div>
-          <Link to="new" className="w-full sm:w-auto">
-            <Button className="flex items-center justify-center gap-2 w-full sm:w-auto">
-              <Plus className="h-4 w-4" />
-              <span className="sm:inline">{t('centerStudentsPage.addNewStudentButton')}</span>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <Link to="add" className="w-full sm:w-auto">
+              <Button className="flex items-center justify-center gap-2 w-full sm:w-auto">
+                <Plus className="h-4 w-4" />
+                <span className="sm:inline">{t('centerStudentsPage.addNewStudentButton')}</span>
+              </Button>
+            </Link>
+            <Link to="bulk-import" className="w-full sm:w-auto">
+              <Button variant="outline" className="flex items-center justify-center gap-2 w-full sm:w-auto">
+                <FileSpreadsheet className="h-4 w-4" />
+                <span className="sm:inline">{t('centerStudentsPage.bulkImportButton')}</span>
+              </Button>
+            </Link>
+            <Button variant="secondary" onClick={handleDownloadPDF} className="flex items-center gap-2 w-full sm:w-auto">
+              <Filter className="h-4 w-4" />
+              {t('centerStudentsPage.downloadPdf')}
             </Button>
-          </Link>
+          </div>
         </div>
       </div>
 
@@ -480,11 +543,6 @@ const CenterStudentsPage = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={ALL_PROGRAMS_VALUE}>{t('centerStudentsPage.allPrograms')}</SelectItem>
-                  {/* {uniquePrograms.map((program) => (
-                    <SelectItem key={`program-${program}`} value={program}> 
-                      {program}
-                    </SelectItem>
-                  ))} */}
                   {allProgramsData.map((program) => (
                     <SelectItem key={`program-${program.id}`} value={program.id.toString()}>
                       {program.name}
@@ -501,13 +559,6 @@ const CenterStudentsPage = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={ALL_GROUPS_VALUE}>{t('centerStudentsPage.allGroups')}</SelectItem>
-                  {/* {uniqueGroups
-                    .filter((group): group is string => typeof group === 'string')
-                    .map((group) => (
-                      <SelectItem key={`group-${group}`} value={group}> 
-                        {group}
-                      </SelectItem>
-                    ))} */}
                   {allGroupsData.map((group) => (
                     <SelectItem key={`group-${group.id}`} value={group.id.toString()}>
                       {group.name}
@@ -520,6 +571,7 @@ const CenterStudentsPage = () => {
         </CardContent>
       </Card>
 
+      {/* Students List */}
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -527,113 +579,43 @@ const CenterStudentsPage = () => {
             {t('centerStudentsPage.studentsListTitle')} ({filteredStudents.length})
           </CardTitle>
         </CardHeader>
-                <CardContent>
+        <CardContent>
           {filteredStudents.length === 0 ? (
             <div className="text-center py-8">
               <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground">
                 {searchTerm || selectedProgram || selectedGroup 
                   ? t('centerStudentsPage.noStudentsMatchFilter')
-                  : t('centerStudentsPage.noStudentsFound')
-                }
+                  : t('centerStudentsPage.noStudentsFound')}
               </p>
             </div>
           ) : (
-            <>
-              {/* Desktop Table View */}
-              <div className="hidden md:block overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>{t('centerStudentsPage.tableHeaders.student')}</TableHead>
-                      <TableHead>{t('centerStudentsPage.tableHeaders.examId')}</TableHead>
-                      <TableHead>{t('centerStudentsPage.tableHeaders.program')}</TableHead>
-                      <TableHead>{t('centerStudentsPage.tableHeaders.group')}</TableHead>
-                      <TableHead>{t('centerStudentsPage.tableHeaders.academicYear')}</TableHead>
-                      <TableHead>{t('centerStudentsPage.tableHeaders.joiningDate')}</TableHead>
-                      <TableHead className="text-right">{t('centerStudentsPage.tableHeaders.actions')}</TableHead>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t('centerStudentsPage.tableHeaders.student')}</TableHead>
+                    <TableHead>{t('centerStudentsPage.tableHeaders.examId')}</TableHead>
+                    <TableHead>{t('centerStudentsPage.tableHeaders.program')}</TableHead>
+                    <TableHead>{t('centerStudentsPage.tableHeaders.group')}</TableHead>
+                    <TableHead>{t('centerStudentsPage.tableHeaders.academicYear')}</TableHead>
+                    <TableHead>{t('centerStudentsPage.tableHeaders.joiningDate')}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredStudents.map((student) => (
+                    <TableRow key={student.id}>
+                      <TableCell>{student.user.first_name} {student.user.last_name}</TableCell>
+                      <TableCell>{student.exam_id}</TableCell>
+                      <TableCell>{getProgramNameById(student.program)}</TableCell>
+                      <TableCell>{student.group ? getGroupNameById(student.group) : t('centerStudentsPage.noGroup')}</TableCell>
+                      <TableCell>{student.academic_year}</TableCell>
+                      <TableCell>{formatDate(student.joining_date)}</TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredStudents.map((student) => (
-                      <TableRow key={student.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <Avatar className="h-8 w-8">
-                              <AvatarImage src={student.user.profile_picture || undefined} alt={`${student.user.first_name} ${student.user.last_name}`} />
-                              <AvatarFallback className="text-xs">
-                                {getInitials(student.user.first_name, student.user.last_name)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <div className="font-medium">
-                                {student.user.first_name} {student.user.last_name}
-                              </div>
-                              <div className="text-sm text-muted-foreground">
-                                {student.user.email}
-                              </div>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">{student.exam_id}</Badge>
-                        </TableCell>
-                        <TableCell>{getProgramNameById(student.program)}</TableCell>
-                        <TableCell>
-                          {student.group ? (
-                            <Badge variant="secondary">{getGroupNameById(student.group)}</Badge>
-                          ) : (
-                            <span className="text-muted-foreground">{t('centerStudentsPage.noGroup')}</span>
-                          )}
-                        </TableCell>
-                        <TableCell>{student.academic_year}</TableCell>
-                        <TableCell>{formatDate(student.joining_date)}</TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">{t('centerStudentsPage.openMenu')}</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => handleViewStudentDetails(student.id)}>
-                                <Eye className="mr-2 h-4 w-4" />
-                                {t('centerStudentsPage.actions.viewDetails')}
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleEditStudent(student.id)}>
-                                <Edit className="mr-2 h-4 w-4" />
-                                {t('centerStudentsPage.actions.edit')}
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600" onClick={() => handleDeactivateStudent(student.id)}>
-                                <Trash2 className="mr-2 h-4 w-4" />
-                                {t('centerStudentsPage.actions.delete')}
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-
-              {/* Mobile Card View */}
-              <div className="md:hidden space-y-3">
-                {filteredStudents.map((student) => (
-                  <StudentCard 
-                    key={student.id} 
-                    student={student} 
-                    onViewDetails={handleViewStudentDetails}
-                    onEdit={handleEditStudent}
-                    formatDate={formatDate} 
-                    getInitials={getInitials} 
-                    t={t} 
-                    getProgramNameById={getProgramNameById}
-                  />
-                ))}
-              </div>
-            </>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -641,4 +623,4 @@ const CenterStudentsPage = () => {
   );
 };
 
-export default CenterStudentsPage; 
+export default CenterStudentsPage;

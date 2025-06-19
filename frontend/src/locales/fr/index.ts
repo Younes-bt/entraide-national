@@ -157,6 +157,7 @@ export const fr = {
       pageTitle: "Étudiants à {{centerName}}",
       pageSubtitle: "Gérez tous les {{count}} étudiants de votre centre.",
       addNewStudentButton: "Ajouter Nouvel Étudiant",
+      bulkImportButton: "Importation en Bloc",
       loadingMessage: "Chargement des étudiants du centre...",
       errorFetching: "Erreur lors de la récupération des données d'étudiants pour le superviseur du centre :",
       errorFetchingDetail: "Échec de la récupération des informations sur les étudiants. Veuillez vous assurer que votre centre existe et que des étudiants y sont inscrits.",
@@ -371,7 +372,8 @@ export const fr = {
       loading: "Chargement...",
       cancelButton: "Annuler",
       optional: "Optionnel",
-      backToList: "Retour à la liste"
+      backToList: "Retour à la liste",
+      back: "Retour"
     },
     adminCentersPage: {
       title: "Gérer les Centres",
@@ -1487,6 +1489,52 @@ export const fr = {
       },
       actions: {
         viewDetails: "Voir Détails"
+      }
+    },
+    
+    // Bulk Import translations
+    bulkImport: {
+      title: "Importation en Bloc d'Étudiants",
+      description: "Importez plusieurs étudiants à partir d'un fichier Excel. Sélectionnez d'abord les affectations de programme/groupe, puis téléchargez le modèle et transférez vos données.",
+      authRequired: "Authentification requise pour importer des étudiants.",
+      template: {
+        title: "Télécharger le Modèle Excel",
+        description: "Téléchargez le modèle Excel avec les colonnes appropriées et les données d'exemple. Les champs marqués d'un (*) sont obligatoires. L'affectation du programme et du groupe est gérée ci-dessus.",
+        download: "Télécharger le Modèle Excel"
+      },
+      assignment: {
+        title: "Paramètres d'Affectation",
+        description: "Sélectionnez le programme et optionnellement un groupe/cours de formation qui sera assigné à tous les étudiants importés.",
+        program: "Programme de Formation",
+        group: "Groupe",
+        trainingCourse: "Cours de Formation",
+        selectProgram: "Sélectionner un programme",
+        selectGroup: "Sélectionner un groupe",
+        selectCourse: "Sélectionner un cours",
+        selectProgramFirst: "Sélectionner d'abord un programme"
+      },
+      selectFile: "Sélectionner un Fichier Excel",
+      fileRequirements: "Formats acceptés : .xlsx, .xls (max 10 MB)",
+      selectedFile: "Fichier sélectionné",
+      upload: "Importer les Étudiants", 
+      uploading: "Importation en cours...",
+      progress: "Progression du Téléchargement",
+      success: "Importation Terminée avec Succès !",
+      partialSuccess: "Importation Terminée avec Quelques Erreurs",
+      error: "Échec de l'Importation",
+      errorDetails: "Détails de l'Erreur",
+      viewStudents: "Voir les Étudiants",
+      results: {
+        total: "Total des Lignes",
+        successful: "Créés avec Succès",
+        failed: "Échoués"
+      },
+      errors: {
+        invalidFileType: "Veuillez sélectionner un fichier Excel (.xlsx ou .xls)",
+        fileTooLarge: "La taille du fichier doit être inférieure à 10 MB",
+        noFileSelected: "Veuillez sélectionner un fichier à télécharger",
+        noProgramSelected: "Veuillez sélectionner un programme de formation",
+        uploadFailed: "Échec du téléchargement. Veuillez réessayer."
       }
     }
   }

@@ -194,6 +194,7 @@ export const en = {
       pageTitle: "Students at {{centerName}}",
       pageSubtitle: "Manage all {{count}} students in your center.",
       addNewStudentButton: "Add New Student",
+      bulkImportButton: "Bulk Import",
       loadingMessage: "Loading center students...",
       errorFetching: "Error fetching student data for center supervisor:",
       errorFetchingDetail: "Failed to fetch student information. Please ensure your center exists and has students enrolled.",
@@ -408,7 +409,8 @@ export const en = {
       loading: "Loading...",
       cancelButton: "Cancel",
       optional: "Optional",
-      backToList: "Back to List"
+      backToList: "Back to List",
+      back: "Back"
     },
     adminCentersPage: {
       title: "Manage Centers",
@@ -1491,6 +1493,52 @@ export const en = {
       friday: "Friday",
       saturday: "Saturday",
       sunday: "Sunday"
+    },
+    
+    // Bulk Import translations
+    bulkImport: {
+      title: "Bulk Import Students",
+      description: "Import multiple students from an Excel file. First select program/group assignments, then download the template and upload your data.",
+      authRequired: "Authentication required to import students.",
+      template: {
+        title: "Download Excel Template",
+        description: "Download the Excel template with proper columns and sample data. Fields marked with (*) are required. Program and group assignment are handled above.",
+        download: "Download Excel Template"
+      },
+      assignment: {
+        title: "Assignment Settings",
+        description: "Select the program and optionally a group/training course that will be assigned to all imported students.",
+        program: "Training Program",
+        group: "Group",
+        trainingCourse: "Training Course",
+        selectProgram: "Select a program",
+        selectGroup: "Select a group",
+        selectCourse: "Select a course",
+        selectProgramFirst: "Select a program first"
+      },
+      selectFile: "Select Excel File",
+      fileRequirements: "Accepted formats: .xlsx, .xls (max 10MB)",
+      selectedFile: "Selected file",
+      upload: "Import Students", 
+      uploading: "Importing...",
+      progress: "Upload Progress",
+      success: "Import Completed Successfully!",
+      partialSuccess: "Import Completed with Some Errors",
+      error: "Import Failed",
+      errorDetails: "Error Details",
+      viewStudents: "View Students",
+      results: {
+        total: "Total Rows",
+        successful: "Successfully Created",
+        failed: "Failed"
+      },
+      errors: {
+        invalidFileType: "Please select an Excel file (.xlsx or .xls)",
+        fileTooLarge: "File size must be less than 10MB",
+        noFileSelected: "Please select a file to upload",
+        noProgramSelected: "Please select a training program",
+        uploadFailed: "Upload failed. Please try again."
+      }
     }
   }
 }; 

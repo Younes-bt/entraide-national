@@ -60,7 +60,6 @@ class StudentCreateUpdateSerializer(serializers.ModelSerializer):
             'center_code',  
             'center',
             'program',
-            'program_name',
             'academic_year',
             'joining_date',
             'training_course',

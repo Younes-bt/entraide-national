@@ -30,6 +30,8 @@ interface Center {
   name: string;
 }
 
+
+
 const CenterAddNewStudent: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();

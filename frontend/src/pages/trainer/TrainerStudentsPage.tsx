@@ -153,7 +153,7 @@ const TrainerStudentsPage: React.FC = () => {
 
       setStudentsLoading(true);
       try {
-        const response = await fetch(`/api/students/students/?group=${selectedGroupId}`, {
+        const response = await fetch(`/api/students/students/?group=${selectedGroupId}&page_size=1000`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
 
