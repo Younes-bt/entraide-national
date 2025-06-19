@@ -38,6 +38,7 @@ import AdminTrainingCoursesPage from './pages/admin/AdminTrainingCoursesPage'; /
 import AdminAddTrainingCoursePage from './pages/admin/AdminAddTrainingCoursePage'; // Import the Add Training Course page
 import logoImage from '@/assets/entraide-nationale-maroc-seeklogo.png'; // Import the logo
 import logoImageDark from '@/assets/entraide-nationale-maroc-seeklogo-dark.png'; // Import the dark mode logo
+import TrainerSchedulePage from './pages/trainer/TrainerSchedulePage';
 
 // Helper to get dashboard path based on role
 const getDashboardPath = (role: string | undefined): string => {
@@ -180,6 +181,7 @@ const TrainerRoutes = () => {
       <Route index element={<TrainerDashboard />} />
       <Route path="dashboard" element={<TrainerDashboard />} />
       <Route path="students" element={<TrainerStudentsPage />} />
+      <Route path="schedule" element={<TrainerSchedulePage />} />
       <Route path="*" element={<div>Trainer Page Not Found</div>} />
     </Routes>
   );
