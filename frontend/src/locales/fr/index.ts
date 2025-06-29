@@ -373,7 +373,9 @@ export const fr = {
       cancelButton: "Annuler",
       optional: "Optionnel",
       backToList: "Retour à la liste",
-      back: "Retour"
+      back: "Retour",
+      saving: "Enregistrement en cours...",
+      save: "Enregistrer"
     },
     adminCentersPage: {
       title: "Gérer les Centres",
@@ -1536,6 +1538,38 @@ export const fr = {
         noProgramSelected: "Veuillez sélectionner un programme de formation",
         uploadFailed: "Échec du téléchargement. Veuillez réessayer."
       }
-    }
+    },
+    trainerSchedulePage: {
+      title: "Mon emploi du temps hebdomadaire",
+      subtitle: "Aperçu de vos séances",
+      selectYear: "Choisir l'année",
+      takeAttendance: "Prendre présence",
+      exitAttendance: "Quitter la présence",
+      weeklyScheduleDescription: "Emploi du temps hebdomadaire",
+      day: "Jour",
+      fetchError: "Erreur lors du chargement des plannings",
+      fetchStudentsError: "Impossible de charger les étudiants",
+      saveAttendanceError: "Échec de sauvegarde de la présence",
+      noSchedules: "Aucun planning trouvé",
+      takeAttendanceFor: "Présence pour"
+    },
+    trainerAttendancePage: {
+      title: "Présence",
+      subtitle: "Sélectionnez une date pour voir la présence",
+      searchPlaceholder: "Rechercher notes / séance",
+      errorTitle: "Erreur",
+      noSession: "Aucune séance",
+      noSessions: "Aucune séance",
+      noRecords: "Aucun enregistrement trouvé"
+    },
+    attendance: {
+      status: {
+        present: "Présent",
+        absent: "Absent",
+        late: "En retard"
+      }
+    },
+    save: "Enregistrer",
+    saving: "Enregistrement en cours..."
   }
 }; 

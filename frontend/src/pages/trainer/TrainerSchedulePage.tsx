@@ -5,6 +5,15 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RefreshCw, Calendar, AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
 
 interface Trainer {
   id: number;
@@ -46,6 +55,9 @@ interface ScheduleSession {
 interface TimeSlot { start: string; end: string; label: string }
 interface TimetableCell { session: ScheduleSession | null; isEmpty: boolean }
 
+interface StudentUser { id: number; first_name: string; last_name: string; }
+interface Student { id: number; user: StudentUser; }
+
 const timeSlots: TimeSlot[] = [
   { start: '08:00', end: '10:30', label: '08:00 - 10:30' },
   { start: '10:30', end: '12:30', label: '10:30 - 12:30' },
@@ -67,6 +79,15 @@ const TrainerSchedulePage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingSchedules, setLoadingSchedules] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [attendanceMode, setAttendanceMode] = useState(false);
+  const [attendanceDialogOpen, setAttendanceDialogOpen] = useState(false);
+  const [selectedSession, setSelectedSession] = useState<ScheduleSession | null>(null);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [attendanceMap, setAttendanceMap] = useState<Record<number, 'present' | 'absent' | 'late'>>({});
+  const [loadingStudents, setLoadingStudents] = useState(false);
+  const [savingAttendance, setSavingAttendance] = useState(false);
+  const today = new Date().toISOString().substring(0,10);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   // Generate last three academic years
   useEffect(() => {
@@ -107,6 +128,14 @@ const TrainerSchedulePage: React.FC = () => {
     fetchSchedules();
   }, [user, accessToken, academicYear, t]);
 
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)');
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   const sessionFitsInSlot = (session: ScheduleSession, slot: TimeSlot): boolean => {
     return session.start_time < slot.end && session.end_time > slot.start;
   };
@@ -137,20 +166,87 @@ const TrainerSchedulePage: React.FC = () => {
     });
   };
 
+  const handleSessionSelect = async (s: ScheduleSession) => {
+    if (!attendanceMode) return;
+    if (!accessToken) return;
+    setSelectedSession(s);
+    setAttendanceDialogOpen(true);
+    setLoadingStudents(true);
+    try {
+      // 1. fetch students of group
+      if (!s.group_details) {
+        setStudents([]);
+      } else {
+        const res = await axios.get('/api/students/students/', {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          params: { group: s.group_details.id, page_size: 1000 },
+        });
+        const list: Student[] = Array.isArray(res.data) ? res.data : (res.data.results || []);
+        setStudents(list);
+        const initial: Record<number, 'present' | 'absent' | 'late'> = {};
+        list.forEach(st => { initial[st.id] = 'absent'; });
+        // 2. fetch existing attendance records for this session & today
+        try {
+          const attRes = await axios.get('/api/attendance/api/records/by_session/', {
+            headers: { Authorization: `Bearer ${accessToken}` },
+            params: { session_template_id: s.id, date: today, page_size: 1000 },
+          });
+          const existing: any[] = attRes.data; // Serializer returns list
+          existing.forEach(rec => {
+            initial[rec.student] = rec.status; // rec.student is ID
+          });
+        } catch (e) {
+          console.warn('[SchedulePage] No existing attendance or fetch error', e);
+        }
+        setAttendanceMap(initial);
+      }
+    } catch (err) {
+      console.error('[SchedulePage] fetch students', err);
+      setError(t('trainerSchedulePage.fetchStudentsError', 'Failed to load students'));
+    } finally {
+      setLoadingStudents(false);
+    }
+  };
+
+  const updateStatus = (sid: number, status: 'present' | 'absent' | 'late') => {
+    setAttendanceMap(prev => ({ ...prev, [sid]: status }));
+  };
+
+  const handleSaveAttendance = async () => {
+    if (!accessToken || !selectedSession) return;
+    setSavingAttendance(true);
+    try {
+      const body = {
+        session_template_id: selectedSession.id,
+        date: today,
+        attendance_records: Object.entries(attendanceMap).map(([sid, status]) => ({ student_id: Number(sid), status })),
+      };
+      await axios.post('/api/attendance/api/records/bulk_create/', body, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setAttendanceDialogOpen(false);
+      setAttendanceMode(false);
+    } catch (err) {
+      console.error('[SchedulePage] save attendance', err);
+      setError(t('trainerSchedulePage.saveAttendanceError', 'Failed to save attendance'));
+    } finally {
+      setSavingAttendance(false);
+    }
+  };
+
   const renderTimetableCell = (cell: TimetableCell) => {
     if (cell.isEmpty || !cell.session) return <div className="p-2 h-24 bg-background"></div>;
     const s = cell.session;
+    const clickable = attendanceMode;
+    const classes = `p-2 h-24 flex flex-col justify-between bg-blue-50 dark:bg-blue-950 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors ${clickable ? 'cursor-pointer ring-1 ring-primary/40' : ''}`;
     return (
-      <div className="p-2 h-24 flex flex-col justify-between bg-blue-50 dark:bg-blue-950 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors">
-        {/* Group Name */}
+      <div className={classes} onClick={() => handleSessionSelect(s)}>
         {s.group_details && (
           <div className="text-sm font-semibold text-blue-900 dark:text-blue-100 break-words" title={s.group_details.name}>{s.group_details.name}</div>
         )}
-        {/* Room */}
         {s.room_details && (
           <div className="text-xs text-blue-600 dark:text-blue-300 break-words" title={s.room_details.name}>{s.room_details.name}</div>
         )}
-        {/* Time */}
         <div className="text-xs text-muted-foreground">
           {formatTime(s.start_time)} - {formatTime(s.end_time)}
         </div>
@@ -194,7 +290,7 @@ const TrainerSchedulePage: React.FC = () => {
             {t('trainerSchedulePage.subtitle', 'Overview of your sessions')}
           </p>
         </div>
-        <div>
+        <div className="flex gap-2 items-center flex-wrap">
           <Select value={academicYear} onValueChange={setAcademicYear}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder={t('trainerSchedulePage.selectYear', 'Select Year')} />
@@ -205,6 +301,9 @@ const TrainerSchedulePage: React.FC = () => {
               ))}
             </SelectContent>
           </Select>
+          <Button variant={attendanceMode ? 'secondary' : 'default'} onClick={() => setAttendanceMode(!attendanceMode)}>
+            {attendanceMode ? t('trainerSchedulePage.exitAttendance', 'Exit Attendance') : t('trainerSchedulePage.takeAttendance', 'Take Attendance')}
+          </Button>
         </div>
       </div>
 
@@ -248,6 +347,98 @@ const TrainerSchedulePage: React.FC = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Attendance Dialog / Drawer */}
+      {isMobile ? (
+        attendanceDialogOpen && (
+          <div className="fixed inset-0 z-50">
+            {/* Dim background */}
+            <div className="absolute inset-0 bg-black/50" onClick={() => setAttendanceDialogOpen(false)} />
+
+            {/* Full-screen sheet */}
+            <div className="relative inset-0 bg-background h-full overflow-y-auto p-4 space-y-4">
+              <h2 className="text-lg font-semibold">{t('trainerSchedulePage.takeAttendanceFor', 'Attendance for')} {selectedSession ? `${selectedSession.training_course_details.program.name} / ${selectedSession.training_course_details.name}` : ''}</h2>
+              <p className="text-sm text-muted-foreground">{today}</p>
+
+              {loadingStudents ? (
+                <div className="flex items-center justify-center h-32"><RefreshCw className="h-6 w-6 animate-spin" /></div>
+              ) : (
+                <>
+                  <div className="max-h-[65vh] overflow-y-auto space-y-1">
+                    {/* Header */}
+                    <div className="flex items-center justify-between font-medium text-sm pb-2 border-b border-border">
+                      <span>{t('student', 'Student')}</span>
+                      <span>{t('status', 'Status')}</span>
+                    </div>
+                    {/* Students */}
+                    {students.map(st => (
+                      <div key={st.id} className="flex items-center gap-2 py-2">
+                        <span className="flex-1 min-w-0 truncate">{`${st.user.first_name} ${st.user.last_name}`}</span>
+                        <div className="flex gap-1 flex-shrink-0">
+                          {(['present','absent','late'] as const).map(status => (
+                            <Badge
+                              key={status}
+                              onClick={() => updateStatus(st.id, status)}
+                              className={`cursor-pointer select-none h-7 w-7 p-0 flex items-center justify-center text-[0.65rem] rounded-full ${status === 'present' ? 'bg-green-600 hover:bg-green-700 text-white' : ''} ${status === 'absent' ? 'bg-red-600 hover:bg-red-700 text-white' : ''} ${status === 'late' ? 'bg-yellow-400 hover:bg-yellow-500 text-black dark:text-white' : ''} ${attendanceMap[st.id] === status ? 'ring-2 ring-ring ring-offset-2' : 'opacity-60'}`}
+                            >
+                              {status.charAt(0).toUpperCase()}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {students.length > 0 && (
+                    <Button className="w-full" onClick={handleSaveAttendance} disabled={savingAttendance}>{savingAttendance ? t('saving', 'Saving...') : t('save', 'Save')}</Button>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        )
+      ) : (
+        <Dialog open={attendanceDialogOpen} onOpenChange={setAttendanceDialogOpen}>
+          <DialogContent className="max-w-lg sm:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{t('trainerSchedulePage.takeAttendanceFor', 'Attendance for')} {selectedSession ? `${selectedSession.training_course_details.program.name} / ${selectedSession.training_course_details.name}` : ''}</DialogTitle>
+              <DialogDescription>{today}</DialogDescription>
+            </DialogHeader>
+            {loadingStudents ? (
+              <div className="flex items-center justify-center h-32"><RefreshCw className="h-6 w-6 animate-spin" /></div>
+            ) : (
+              <div className="space-y-4">
+                <div className="max-h-[60vh] overflow-y-auto space-y-1">
+                  {/* Header */}
+                  <div className="flex items-center justify-between font-medium text-sm pb-2 border-b border-border">
+                    <span>{t('student', 'Student')}</span>
+                    <span>{t('status', 'Status')}</span>
+                  </div>
+                  {/* Students */}
+                  {students.map(st => (
+                    <div key={st.id} className="flex items-center gap-2 py-2">
+                      <span className="flex-1 min-w-0 truncate">{`${st.user.first_name} ${st.user.last_name}`}</span>
+                      <div className="flex gap-1 flex-shrink-0">
+                        {(['present','absent','late'] as const).map(status => (
+                          <Badge
+                            key={status}
+                            onClick={() => updateStatus(st.id, status)}
+                            className={`cursor-pointer select-none h-7 w-7 p-0 flex items-center justify-center text-[0.65rem] rounded-full ${status === 'present' ? 'bg-green-600 hover:bg-green-700 text-white' : ''} ${status === 'absent' ? 'bg-red-600 hover:bg-red-700 text-white' : ''} ${status === 'late' ? 'bg-yellow-400 hover:bg-yellow-500 text-black dark:text-white' : ''} ${attendanceMap[st.id] === status ? 'ring-2 ring-ring ring-offset-2' : 'opacity-60'}`}
+                          >
+                            {status.charAt(0).toUpperCase()}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {students.length > 0 && (
+                  <Button onClick={handleSaveAttendance} disabled={savingAttendance}>{savingAttendance ? t('saving', 'Saving...') : t('save', 'Save')}</Button>
+                )}
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };

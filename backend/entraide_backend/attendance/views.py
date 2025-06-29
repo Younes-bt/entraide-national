@@ -35,6 +35,49 @@ class AttendanceRecordViewSet(viewsets.ModelViewSet):
             return CreateAttendanceRecordSerializer
         return AttendanceRecordSerializer
     
+    def get_queryset(self):
+        """Return queryset filtered by trainer if requested.
+
+        Behaviour:
+        1. Accepts optional query param `trainer_id`. Value can be a numeric id or the literal "me".
+        2. For trainers:
+           - If no param supplied, default to their own id.
+           - If they supply a different id, it will be ignored (forced to their own id).
+        3. For other roles (admin, center supervisor, etc.) the param is optional and honoured as given.
+        4. Filtering is applied on both template and instance references.
+        """
+        base_qs = super().get_queryset()
+        request = self.request
+
+        # Resolve requested trainer id (if any)
+        trainer_param = request.query_params.get('trainer_id')
+        resolved_trainer_id = None
+
+        if trainer_param:
+            if trainer_param.lower() == 'me':
+                resolved_trainer_id = request.user.id if request.user.is_authenticated else None
+            else:
+                try:
+                    resolved_trainer_id = int(trainer_param)
+                except ValueError:
+                    resolved_trainer_id = None  # Invalid param, ignore it
+        else:
+            # Default for trainers when param missing
+            if request.user.is_authenticated and getattr(request.user, 'role', None) == 'trainer':
+                resolved_trainer_id = request.user.id
+
+        # Lock-down: trainers cannot query other trainers' data
+        if request.user.is_authenticated and getattr(request.user, 'role', None) == 'trainer':
+            resolved_trainer_id = request.user.id
+
+        if resolved_trainer_id:
+            base_qs = base_qs.filter(
+                Q(session_template__trainer_id=resolved_trainer_id) |
+                Q(session_instance__schedule_template__trainer_id=resolved_trainer_id)
+            )
+
+        return base_qs
+    
     @action(detail=False, methods=['post'])
     def bulk_create(self, request):
         """Bulk create attendance records for a session"""

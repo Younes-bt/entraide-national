@@ -54,8 +54,14 @@ export const ar = {
         center: "إدارة المركز",
         programme: "إدارة التكوينات",
         trainings: "التكوينات",
-        exams: "الامتحانات"
-      }
+        exams: "الامتحانات",
+        classes: "الحصص",
+        students: "المستفيدين",
+        courses: "الدروس والبرامج"
+      },
+      myClasses: "صفوفي",
+      schedule: "الجدول",
+      materials: "المواد التعليمية"
     },
     table: {
       avatar: "الصورة الرمزية",
@@ -259,7 +265,9 @@ export const ar = {
       cancelButton: "إلغاء",
       optional: "اختياري",
       backToList: "العودة للقائمة",
-      back: "رجوع"
+      back: "رجوع",
+      saving: "جارٍ الحفظ...",
+      save: "حفظ"
     },
     
     // AdminCenterDetailsPage translations
@@ -1609,6 +1617,38 @@ export const ar = {
         noProgramSelected: "يرجى اختيار برنامج تدريبي",
         uploadFailed: "فشل الرفع. يرجى المحاولة مرة أخرى."
       }
-    }
+    },
+    trainerSchedulePage: {
+      title: "جدولي الأسبوعي",
+      subtitle: "نظرة عامة على حصصك",
+      selectYear: "اختر السنة",
+      takeAttendance: "أخذ الحضور",
+      exitAttendance: "إنهاء الحضور",
+      weeklyScheduleDescription: "الجدول الأسبوعي",
+      day: "اليوم",
+      fetchError: "خطأ في جلب الجداول",
+      fetchStudentsError: "فشل في تحميل الطلاب",
+      saveAttendanceError: "فشل في حفظ الحضور",
+      noSchedules: "لا توجد جداول",
+      takeAttendanceFor: "الحضور لـ"
+    },
+    trainerAttendancePage: {
+      title: "الحضور",
+      subtitle: "اختر تاريخاً لعرض الحضور",
+      searchPlaceholder: "ابحث في الملاحظات / الحصة",
+      errorTitle: "خطأ",
+      noSession: "لا توجد حصة",
+      noSessions: "لا توجد حصص",
+      noRecords: "لا توجد سجلات"
+    },
+    attendance: {
+      status: {
+        present: "حاضر",
+        absent: "غائب",
+        late: "متأخر"
+      }
+    },
+    save: "حفظ",
+    saving: "جارٍ الحفظ..."
   }
 }; 
