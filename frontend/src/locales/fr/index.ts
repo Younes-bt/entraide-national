@@ -1570,6 +1570,137 @@ export const fr = {
       }
     },
     save: "Enregistrer",
-    saving: "Enregistrement en cours..."
+    saving: "Enregistrement en cours...",
+    
+    // Course Management Pages
+    courses: {
+      title: "Gestion des Cours",
+      details: "Détails du Cours",
+      addCourse: "Ajouter un Cours",
+      editCourse: "Modifier le Cours",
+      deleteCourse: "Supprimer le Cours",
+      noCourses: "Aucun cours trouvé",
+      loading: "Chargement des cours...",
+      courseHierarchy: "Hiérarchie des Cours",
+      
+      // Course structure
+      units: "Unités",
+      sections: "Sections",
+      lessons: "Leçons",
+      practices: "Pratiques",
+      
+      // Actions
+      addUnit: "Ajouter une Unité",
+      addSection: "Ajouter une Section",
+      addLesson: "Ajouter une Leçon",
+      addPractice: "Ajouter une Pratique",
+      editUnit: "Modifier l'Unité",
+      editSection: "Modifier la Section",
+      editLesson: "Modifier la Leçon",
+      viewLesson: "Voir la Leçon",
+      
+      // Form labels
+      courseName: "Nom du Cours",
+      courseDescription: "Description du Cours",
+      unitName: "Nom de l'Unité",
+      unitDescription: "Description de l'Unité",
+      sectionName: "Nom de la Section",
+      sectionDescription: "Description de la Section",
+      lessonTitle: "Titre de la Leçon",
+      lessonDescription: "Description de la Leçon",
+      lessonContent: "Contenu de la Leçon",
+      lessonFile: "Fichier de Leçon (PDF)",
+      lessonVideo: "Vidéo de la Leçon",
+      
+      // Course details page
+      courseInfo: "Informations du Cours",
+      duration: "Durée",
+      instructor: "Instructeur",
+      students: "Étudiants",
+      progress: "Progrès",
+      
+      // Unit management
+      unitOrder: "Ordre de l'Unité",
+      totalSections: "Total des Sections",
+      totalLessons: "Total des Leçons",
+      
+      // Section management
+      sectionOrder: "Ordre de la Section",
+      lessonsInSection: "Leçons dans la Section",
+      
+      // Lesson viewer
+      lessonViewer: "Visualiseur de Leçon",
+      openPdfLesson: "Ouvrir la Leçon PDF",
+      downloadLesson: "Télécharger la Leçon",
+      lessonNotAvailable: "Contenu de la leçon non disponible",
+      openInNewTab: "Ouvrir dans un Nouvel Onglet",
+      securityNote: "En raison des restrictions de sécurité, les leçons PDF s'ouvrent dans un nouvel onglet pour une meilleure expérience de visualisation.",
+      
+      // Messages
+      success: {
+        courseCreated: "Cours créé avec succès !",
+        courseUpdated: "Cours mis à jour avec succès !",
+        courseDeleted: "Cours supprimé avec succès !",
+        unitCreated: "Unité créée avec succès !",
+        unitUpdated: "Unité mise à jour avec succès !",
+        unitDeleted: "Unité supprimée avec succès !",
+        sectionCreated: "Section créée avec succès !",
+        sectionUpdated: "Section mise à jour avec succès !",
+        sectionDeleted: "Section supprimée avec succès !",
+        lessonCreated: "Leçon créée avec succès !",
+        lessonUpdated: "Leçon mise à jour avec succès !",
+        lessonDeleted: "Leçon supprimée avec succès !"
+      },
+      
+      errors: {
+        fetchCourses: "Échec de la récupération des cours",
+        fetchCourseDetails: "Échec de la récupération des détails du cours",
+        createCourse: "Échec de la création du cours",
+        updateCourse: "Échec de la mise à jour du cours",
+        deleteCourse: "Échec de la suppression du cours",
+        createUnit: "Échec de la création de l'unité",
+        updateUnit: "Échec de la mise à jour de l'unité",
+        deleteUnit: "Échec de la suppression de l'unité",
+        createSection: "Échec de la création de la section",
+        updateSection: "Échec de la mise à jour de la section",
+        deleteSection: "Échec de la suppression de la section",
+        createLesson: "Échec de la création de la leçon",
+        updateLesson: "Échec de la mise à jour de la leçon",
+        deleteLesson: "Échec de la suppression de la leçon",
+        invalidFile: "Format de fichier invalide. Veuillez télécharger un fichier PDF.",
+        fileTooLarge: "Taille de fichier trop volumineuse. Taille maximale : 10 Mo.",
+        required: "Ce champ est obligatoire"
+      },
+      
+      // Confirmations
+      confirmations: {
+        deleteCourse: "Êtes-vous sûr de vouloir supprimer ce cours ? Cette action ne peut pas être annulée.",
+        deleteUnit: "Êtes-vous sûr de vouloir supprimer cette unité ? Toutes les sections et leçons qu'elle contient seront supprimées.",
+        deleteSection: "Êtes-vous sûr de vouloir supprimer cette section ? Toutes les leçons qu'elle contient seront supprimées.",
+        deleteLesson: "Êtes-vous sûr de vouloir supprimer cette leçon ? Cette action ne peut pas être annulée."
+      },
+      
+      // Empty states
+      emptyStates: {
+        noUnits: "Aucune unité trouvée. Ajoutez votre première unité pour commencer.",
+        noSections: "Aucune section dans cette unité. Ajoutez une section pour organiser les leçons.",
+        noLessons: "Aucune leçon dans cette section. Ajoutez des leçons pour fournir du contenu.",
+        emptySection: "Cette section est vide"
+      },
+      
+      // Placeholders
+      placeholders: {
+        courseName: "Entrez le nom du cours",
+        courseDescription: "Entrez la description du cours",
+        unitName: "Entrez le nom de l'unité",
+        unitDescription: "Entrez la description de l'unité",
+        sectionName: "Entrez le nom de la section",
+        sectionDescription: "Entrez la description de la section",
+        lessonTitle: "Entrez le titre de la leçon",
+        lessonDescription: "Entrez la description de la leçon",
+        searchCourses: "Rechercher des cours...",
+        searchLessons: "Rechercher des leçons..."
+      }
+    }
   }
 }; 

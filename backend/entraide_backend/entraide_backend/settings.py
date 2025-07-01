@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'associations',  # associations app
     'attendance',  # attendance app
     'centers',  # centers app
+    'courses',  # course content management app
     'exams',  # exams app
     'programs', # programs app
     'schedule',  # schedule app
@@ -236,4 +237,29 @@ LANGUAGES = [
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
+]
+
+# Allow iframe embedding for PDF viewing
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = True  # For development only
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
 ]

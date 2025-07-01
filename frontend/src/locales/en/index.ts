@@ -1539,6 +1539,170 @@ export const en = {
         noProgramSelected: "Please select a training program",
         uploadFailed: "Upload failed. Please try again."
       }
+    },
+    
+    trainerSchedulePage: {
+      title: "My Weekly Schedule",
+      subtitle: "Overview of your sessions",
+      selectYear: "Select Year",
+      takeAttendance: "Take Attendance",
+      exitAttendance: "Exit Attendance",
+      weeklyScheduleDescription: "Weekly schedule",
+      day: "Day",
+      fetchError: "Error fetching schedules",
+      fetchStudentsError: "Failed to load students",
+      saveAttendanceError: "Failed to save attendance",
+      noSchedules: "No schedules found",
+      takeAttendanceFor: "Attendance for"
+    },
+    trainerAttendancePage: {
+      title: "Attendance",
+      subtitle: "Select a date to view attendance",
+      searchPlaceholder: "Search notes / session",
+      errorTitle: "Error",
+      noSession: "No session",
+      noSessions: "No sessions",
+      noRecords: "No records found"
+    },
+    attendance: {
+      status: {
+        present: "Present",
+        absent: "Absent",
+        late: "Late"
+      }
+    },
+    save: "Save",
+    saving: "Saving...",
+    
+    // Course Management Pages
+    courses: {
+      title: "Course Management",
+      details: "Course Details",
+      addCourse: "Add Course",
+      editCourse: "Edit Course",
+      deleteCourse: "Delete Course",
+      noCourses: "No courses found",
+      loading: "Loading courses...",
+      courseHierarchy: "Course Hierarchy",
+      
+      // Course structure
+      units: "Units",
+      sections: "Sections", 
+      lessons: "Lessons",
+      practices: "Practices",
+      
+      // Actions
+      addUnit: "Add Unit",
+      addSection: "Add Section",
+      addLesson: "Add Lesson",
+      addPractice: "Add Practice",
+      editUnit: "Edit Unit",
+      editSection: "Edit Section",
+      editLesson: "Edit Lesson",
+      viewLesson: "View Lesson",
+      
+      // Form labels
+      courseName: "Course Name",
+      courseDescription: "Course Description",
+      unitName: "Unit Name",
+      unitDescription: "Unit Description",
+      sectionName: "Section Name",
+      sectionDescription: "Section Description",
+      lessonTitle: "Lesson Title",
+      lessonDescription: "Lesson Description",
+      lessonContent: "Lesson Content",
+      lessonFile: "Lesson File (PDF)",
+      lessonVideo: "Lesson Video",
+      
+      // Course details page
+      courseInfo: "Course Information",
+      duration: "Duration",
+      instructor: "Instructor",
+      students: "Students",
+      progress: "Progress",
+      
+      // Unit management
+      unitOrder: "Unit Order",
+      totalSections: "Total Sections",
+      totalLessons: "Total Lessons",
+      
+      // Section management
+      sectionOrder: "Section Order",
+      lessonsInSection: "Lessons in Section",
+      
+      // Lesson viewer
+      lessonViewer: "Lesson Viewer",
+      openPdfLesson: "Open PDF Lesson",
+      downloadLesson: "Download Lesson",
+      lessonNotAvailable: "Lesson content not available",
+      openInNewTab: "Open in New Tab",
+      securityNote: "Due to security restrictions, PDF lessons open in a new tab for the best viewing experience.",
+      
+      // Messages
+      success: {
+        courseCreated: "Course created successfully!",
+        courseUpdated: "Course updated successfully!",
+        courseDeleted: "Course deleted successfully!",
+        unitCreated: "Unit created successfully!",
+        unitUpdated: "Unit updated successfully!",
+        unitDeleted: "Unit deleted successfully!",
+        sectionCreated: "Section created successfully!",
+        sectionUpdated: "Section updated successfully!",
+        sectionDeleted: "Section deleted successfully!",
+        lessonCreated: "Lesson created successfully!",
+        lessonUpdated: "Lesson updated successfully!",
+        lessonDeleted: "Lesson deleted successfully!"
+      },
+      
+      errors: {
+        fetchCourses: "Failed to fetch courses",
+        fetchCourseDetails: "Failed to fetch course details",
+        createCourse: "Failed to create course",
+        updateCourse: "Failed to update course",
+        deleteCourse: "Failed to delete course",
+        createUnit: "Failed to create unit",
+        updateUnit: "Failed to update unit",
+        deleteUnit: "Failed to delete unit",
+        createSection: "Failed to create section",
+        updateSection: "Failed to update section",
+        deleteSection: "Failed to delete section",
+        createLesson: "Failed to create lesson",
+        updateLesson: "Failed to update lesson",
+        deleteLesson: "Failed to delete lesson",
+        invalidFile: "Invalid file format. Please upload a PDF file.",
+        fileTooLarge: "File size too large. Maximum size is 10MB.",
+        required: "This field is required"
+      },
+      
+      // Confirmations
+      confirmations: {
+        deleteCourse: "Are you sure you want to delete this course? This action cannot be undone.",
+        deleteUnit: "Are you sure you want to delete this unit? All sections and lessons within it will be deleted.",
+        deleteSection: "Are you sure you want to delete this section? All lessons within it will be deleted.",
+        deleteLesson: "Are you sure you want to delete this lesson? This action cannot be undone."
+      },
+      
+      // Empty states
+      emptyStates: {
+        noUnits: "No units found. Add your first unit to get started.",
+        noSections: "No sections in this unit. Add a section to organize lessons.",
+        noLessons: "No lessons in this section. Add lessons to provide content.",
+        emptySection: "This section is empty"
+      },
+      
+      // Placeholders
+      placeholders: {
+        courseName: "Enter course name",
+        courseDescription: "Enter course description",
+        unitName: "Enter unit name",
+        unitDescription: "Enter unit description", 
+        sectionName: "Enter section name",
+        sectionDescription: "Enter section description",
+        lessonTitle: "Enter lesson title",
+        lessonDescription: "Enter lesson description",
+        searchCourses: "Search courses...",
+        searchLessons: "Search lessons..."
+      }
     }
   }
 }; 

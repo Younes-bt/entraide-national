@@ -1649,6 +1649,137 @@ export const ar = {
       }
     },
     save: "حفظ",
-    saving: "جارٍ الحفظ..."
+    saving: "جارٍ الحفظ...",
+    
+    // Course Management Pages
+    courses: {
+      title: "إدارة الدروس",
+      details: "تفاصيل المقرر",
+      addCourse: "إضافة مقرر",
+      editCourse: "تعديل المقرر",
+      deleteCourse: "حذف المقرر",
+      noCourses: "لم يتم العثور على مقررات",
+      loading: "جارٍ تحميل المقررات...",
+      courseHierarchy: "هيكل المقرر",
+      
+      // Course structure
+      units: "الوحدات",
+      sections: "الأقسام",
+      lessons: "الدروس",
+      practices: "التمارين",
+      
+      // Actions
+      addUnit: "إضافة وحدة",
+      addSection: "إضافة قسم",
+      addLesson: "إضافة درس",
+      addPractice: "إضافة تمرين",
+      editUnit: "تعديل الوحدة",
+      editSection: "تعديل القسم",
+      editLesson: "تعديل الدرس",
+      viewLesson: "عرض الدرس",
+      
+      // Form labels
+      courseName: "اسم المقرر",
+      courseDescription: "وصف المقرر",
+      unitName: "اسم الوحدة",
+      unitDescription: "وصف الوحدة",
+      sectionName: "اسم القسم",
+      sectionDescription: "وصف القسم",
+      lessonTitle: "عنوان الدرس",
+      lessonDescription: "وصف الدرس",
+      lessonContent: "محتوى الدرس",
+      lessonFile: "ملف الدرس (PDF)",
+      lessonVideo: "فيديو الدرس",
+      
+      // Course details page
+      courseInfo: "معلومات المقرر",
+      duration: "المدة",
+      instructor: "المدرب",
+      students: "الطلاب",
+      progress: "التقدم",
+      
+      // Unit management
+      unitOrder: "ترتيب الوحدة",
+      totalSections: "إجمالي الأقسام",
+      totalLessons: "إجمالي الدروس",
+      
+      // Section management
+      sectionOrder: "ترتيب القسم",
+      lessonsInSection: "الدروس في القسم",
+      
+      // Lesson viewer
+      lessonViewer: "عارض الدرس",
+      openPdfLesson: "فتح درس PDF",
+      downloadLesson: "تحميل الدرس",
+      lessonNotAvailable: "محتوى الدرس غير متوفر",
+      openInNewTab: "فتح في تبويب جديد",
+      securityNote: "نظراً للقيود الأمنية، تُفتح دروس PDF في تبويب جديد لتوفير أفضل تجربة مشاهدة.",
+      
+      // Messages
+      success: {
+        courseCreated: "تم إنشاء المقرر بنجاح!",
+        courseUpdated: "تم تحديث المقرر بنجاح!",
+        courseDeleted: "تم حذف المقرر بنجاح!",
+        unitCreated: "تم إنشاء الوحدة بنجاح!",
+        unitUpdated: "تم تحديث الوحدة بنجاح!",
+        unitDeleted: "تم حذف الوحدة بنجاح!",
+        sectionCreated: "تم إنشاء القسم بنجاح!",
+        sectionUpdated: "تم تحديث القسم بنجاح!",
+        sectionDeleted: "تم حذف القسم بنجاح!",
+        lessonCreated: "تم إنشاء الدرس بنجاح!",
+        lessonUpdated: "تم تحديث الدرس بنجاح!",
+        lessonDeleted: "تم حذف الدرس بنجاح!"
+      },
+      
+      errors: {
+        fetchCourses: "فشل في جلب المقررات",
+        fetchCourseDetails: "فشل في جلب تفاصيل المقرر",
+        createCourse: "فشل في إنشاء المقرر",
+        updateCourse: "فشل في تحديث المقرر",
+        deleteCourse: "فشل في حذف المقرر",
+        createUnit: "فشل في إنشاء الوحدة",
+        updateUnit: "فشل في تحديث الوحدة",
+        deleteUnit: "فشل في حذف الوحدة",
+        createSection: "فشل في إنشاء القسم",
+        updateSection: "فشل في تحديث القسم",
+        deleteSection: "فشل في حذف القسم",
+        createLesson: "فشل في إنشاء الدرس",
+        updateLesson: "فشل في تحديث الدرس",
+        deleteLesson: "فشل في حذف الدرس",
+        invalidFile: "تنسيق ملف غير صالح. يرجى رفع ملف PDF.",
+        fileTooLarge: "حجم الملف كبير جداً. الحد الأقصى 10 ميجابايت.",
+        required: "هذا الحقل مطلوب"
+      },
+      
+      // Confirmations
+      confirmations: {
+        deleteCourse: "هل أنت متأكد من رغبتك في حذف هذا المقرر؟ لا يمكن التراجع عن هذا الإجراء.",
+        deleteUnit: "هل أنت متأكد من رغبتك في حذف هذه الوحدة؟ ستُحذف جميع الأقسام والدروس الموجودة بها.",
+        deleteSection: "هل أنت متأكد من رغبتك في حذف هذا القسم؟ ستُحذف جميع الدروس الموجودة به.",
+        deleteLesson: "هل أنت متأكد من رغبتك في حذف هذا الدرس؟ لا يمكن التراجع عن هذا الإجراء."
+      },
+      
+      // Empty states
+      emptyStates: {
+        noUnits: "لم يتم العثور على وحدات. أضف وحدتك الأولى للبدء.",
+        noSections: "لا توجد أقسام في هذه الوحدة. أضف قسماً لتنظيم الدروس.",
+        noLessons: "لا توجد دروس في هذا القسم. أضف دروساً لتوفير المحتوى.",
+        emptySection: "هذا القسم فارغ"
+      },
+      
+      // Placeholders
+      placeholders: {
+        courseName: "أدخل اسم المقرر",
+        courseDescription: "أدخل وصف المقرر",
+        unitName: "أدخل اسم الوحدة",
+        unitDescription: "أدخل وصف الوحدة",
+        sectionName: "أدخل اسم القسم",
+        sectionDescription: "أدخل وصف القسم",
+        lessonTitle: "أدخل عنوان الدرس",
+        lessonDescription: "أدخل وصف الدرس",
+        searchCourses: "البحث في المقررات...",
+        searchLessons: "البحث في الدروس..."
+      }
+    }
   }
 }; 

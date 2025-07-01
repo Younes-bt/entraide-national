@@ -36,6 +36,13 @@ import TrainingProgramsPage from './pages/admin/TrainingProgramsPage'; // Import
 import AdminAddTrainingProgramPage from './pages/admin/AdminAddTrainingProgramPage'; // Import the Add Training Program page
 import AdminTrainingCoursesPage from './pages/admin/AdminTrainingCoursesPage'; // Import the new Training Courses page
 import AdminAddTrainingCoursePage from './pages/admin/AdminAddTrainingCoursePage'; // Import the Add Training Course page
+import AdminCourseDetailsPage from './pages/admin/AdminCourseDetailsPage'; // Import the Course Details page
+import AdminAddCoursePage from './pages/admin/AdminAddCoursePage'; // Import the Add Course page
+import AdminAddUnitPage from './pages/admin/AdminAddUnitPage'; // Import the Add Unit page
+import AdminEditUnitPage from './pages/admin/AdminEditUnitPage'; // Import the Edit Unit page
+import AdminAddSectionPage from './pages/admin/AdminAddSectionPage'; // Import the Add Section page
+import AdminAddLessonPage from './pages/admin/AdminAddLessonPage'; // Import the Add Lesson page
+import AdminLessonViewPage from './pages/admin/AdminLessonViewPage'; // Import the Lesson View page
 import logoImage from '@/assets/entraide-nationale-maroc-seeklogo.png'; // Import the logo
 import logoImageDark from '@/assets/entraide-nationale-maroc-seeklogo-dark.png'; // Import the dark mode logo
 import TrainerSchedulePage from './pages/trainer/TrainerSchedulePage';
@@ -167,6 +174,13 @@ const AdminRoutes = () => {
       <Route path="associations/edit/:id" element={<AdminEditAssociationPage />} /> {/* Added route for editing associations */}
       <Route path="training-programs" element={<TrainingProgramsPage />} /> {/* Added route for training programs */}
       <Route path="training-programs/add" element={<AdminAddTrainingProgramPage />} /> {/* Added route for adding training programs */}
+      <Route path="courses/add" element={<AdminAddCoursePage />} /> {/* Added route for adding courses */}
+      <Route path="courses/:courseId/units/add" element={<AdminAddUnitPage />} /> {/* Added route for adding units */}
+      <Route path="courses/:courseId/units/:unitId/edit" element={<AdminEditUnitPage />} /> {/* Added route for editing units */}
+      <Route path="courses/:courseId/units/:unitId/sections/add" element={<AdminAddSectionPage />} /> {/* Added route for adding sections */}
+      <Route path="courses/:courseId/sections/:sectionId/lessons/add" element={<AdminAddLessonPage />} /> {/* Added route for adding lessons */}
+      <Route path="courses/:courseId/lessons/:lessonId" element={<AdminLessonViewPage />} /> {/* Added route for lesson view */}
+      <Route path="courses/:id" element={<AdminCourseDetailsPage />} /> {/* Added route for course details */}
       <Route path="training-courses" element={<AdminTrainingCoursesPage />} /> {/* Added route for training courses */}
       <Route path="training-courses/add" element={<AdminAddTrainingCoursePage />} /> {/* Added route for adding training courses */}
       <Route path="trainers" element={<AdminTrainersPage />} /> {/* Added route for trainers */}
