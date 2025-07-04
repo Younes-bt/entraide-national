@@ -18,6 +18,7 @@ import {
   Eye,
   Clock
 } from 'lucide-react';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
@@ -216,36 +217,29 @@ const AdminCourseDetailsPage: React.FC = () => {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-6">
+        <Accordion type="multiple" className="space-y-4">
           {course.units.map((unit, unitIndex) => (
-            <Card key={unit.id}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      <Users className="w-5 h-5" />
-                      Unit {unit.order + 1}: {unit.name}
-                    </CardTitle>
-                    <CardDescription className="mt-1">
-                      {unit.description}
-                    </CardDescription>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="ghost" size="sm" asChild>
-                      <Link to={`/admin/courses/${course.id}/units/${unit.id}/sections/add`}>
-                        <Plus className="w-4 h-4" />
-                      </Link>
-                    </Button>
-                    <Button variant="ghost" size="sm" asChild>
-                      <Link to={`/admin/courses/${course.id}/units/${unit.id}/edit`}>
-                        <Edit className="w-4 h-4" />
-                      </Link>
-                    </Button>
-                  </div>
+            <AccordionItem value={`unit-${unit.id}`} key={unit.id} className="rounded-lg border bg-card shadow-sm">
+              <AccordionTrigger className="px-6">
+                <div className="flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  <span className="font-semibold">Unit {unit.order + 1}: {unit.name}</span>
                 </div>
-              </CardHeader>
-              
-              <CardContent>
+                <div className="flex gap-2 ml-auto">
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to={`/admin/courses/${course.id}/units/${unit.id}/sections/add`}>
+                      <Plus className="w-4 h-4" />
+                    </Link>
+                  </Button>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to={`/admin/courses/${course.id}/units/${unit.id}/edit`}>
+                      <Edit className="w-4 h-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="mb-2 text-muted-foreground text-sm">{unit.description}</div>
                 {unit.sections.length === 0 ? (
                   <div className="text-center py-8">
                     <p className="text-muted-foreground mb-4">No sections in this unit yet</p>
@@ -258,132 +252,134 @@ const AdminCourseDetailsPage: React.FC = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {unit.sections.map((section, sectionIndex) => (
-                      <div key={section.id} className="border rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-medium flex items-center gap-2">
-                            <BookOpen className="w-4 h-4" />
-                            Section {section.order + 1}: {section.name}
-                          </h4>
-                          <Button variant="ghost" size="sm" asChild>
-                            <Link to={`/admin/courses/${course.id}/sections/${section.id}/edit`}>
-                              <Edit className="w-4 h-4" />
-                            </Link>
-                          </Button>
-                        </div>
-                        
-                        {section.description && (
-                          <p className="text-sm text-muted-foreground mb-3">
-                            {section.description}
-                          </p>
-                        )}
-
-                        {section.about && (
-                          <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded mb-3 border border-blue-200 dark:border-blue-800">
-                            <p className="text-sm text-blue-900 dark:text-blue-100">{section.about}</p>
-                          </div>
-                        )}
-
-                        {/* Lessons */}
-                        <div className="mb-4">
-                          <div className="flex items-center justify-between mb-3">
-                            <h5 className="font-medium text-sm">
-                              Lessons ({section.lessons.length})
-                            </h5>
-                            <Button variant="outline" size="sm" asChild>
-                              <Link to={`/admin/courses/${course.id}/sections/${section.id}/lessons/add`}>
-                                <Plus className="w-4 h-4 mr-2" />
-                                Add Lesson
+                    <Accordion type="multiple" className="space-y-2">
+                      {unit.sections.map((section, sectionIndex) => (
+                        <AccordionItem value={`section-${section.id}`} key={section.id} className="border rounded-lg bg-muted/40">
+                          <AccordionTrigger className="px-4 py-2">
+                            <div className="flex items-center gap-2">
+                              <BookOpen className="w-4 h-4" />
+                              <span className="font-medium">Section {section.order + 1}: {section.name}</span>
+                            </div>
+                            <Button variant="ghost" size="sm" asChild className="ml-auto">
+                              <Link to={`/admin/courses/${course.id}/sections/${section.id}/edit`}>
+                                <Edit className="w-4 h-4" />
                               </Link>
                             </Button>
-                          </div>
-                          
-                          {section.lessons.length > 0 ? (
-                            <div className="grid gap-2">
-                              {section.lessons.map((lesson) => (
-                                <div 
-                                  key={lesson.id} 
-                                  className="flex items-center gap-3 p-2 bg-gray-50 dark:bg-gray-800 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                                  onClick={() => navigate(`/admin/courses/${course.id}/lessons/${lesson.id}`)}
-                                >
-                                  <div className={`p-1 rounded ${getLessonTypeColor(lesson.lesson_type)}`}>
-                                    {getLessonIcon(lesson.lesson_type)}
-                                  </div>
-                                  <div className="flex-1">
-                                    <p className="text-sm font-medium">{lesson.title}</p>
-                                    {lesson.duration_minutes && (
-                                      <p className="text-xs text-muted-foreground flex items-center gap-1">
-                                        <Clock className="w-3 h-3" />
-                                        {lesson.duration_minutes} min
-                                      </p>
-                                    )}
-                                  </div>
-                                  <Badge variant="outline" className="text-xs">
-                                    {lesson.lesson_type}
-                                  </Badge>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <div className="text-center py-4 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg">
-                              <p className="text-sm text-muted-foreground">No lessons yet</p>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Practice */}
-                        {section.practice && (
-                          <div>
-                            <h5 className="font-medium text-sm mb-2 flex items-center gap-2">
-                              <HelpCircle className="w-4 h-4" />
-                              Practice ({section.practice.questions.length} questions)
-                            </h5>
-                            {section.practice.instructions && (
-                              <p className="text-sm text-muted-foreground mb-2">
-                                {section.practice.instructions}
+                          </AccordionTrigger>
+                          <AccordionContent className="px-4 pb-4">
+                            {section.description && (
+                              <p className="text-sm text-muted-foreground mb-3">
+                                {section.description}
                               </p>
                             )}
-                            <div className="space-y-2">
-                              {section.practice.questions.map((question) => (
-                                <div key={question.id} className="p-2 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800 rounded">
-                                  <p className="text-sm font-medium text-orange-900 dark:text-orange-100">
-                                    Q{question.order + 1}: {question.question_text}
-                                  </p>
-                                  <div className="flex items-center gap-2 mt-1">
-                                    <Badge variant="outline" className="text-xs">
-                                      {question.question_type}
-                                    </Badge>
-                                    <span className="text-xs text-muted-foreground">
-                                      {question.points} points
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">
-                                      {question.options.length} options
-                                    </span>
-                                  </div>
-                                </div>
-                              ))}
+                            {section.about && (
+                              <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded mb-3 border border-blue-200 dark:border-blue-800">
+                                <p className="text-sm text-blue-900 dark:text-blue-100">{section.about}</p>
+                              </div>
+                            )}
+                            {/* Lessons */}
+                            <div className="mb-4">
+                              <Accordion type="single" collapsible className="w-full">
+                                <AccordionItem value="lessons">
+                                  <AccordionTrigger className="flex items-center justify-between px-2 py-2 bg-muted/60 rounded">
+                                    <h5 className="font-medium text-sm flex items-center gap-2">
+                                      Lessons ({section.lessons.length})
+                                    </h5>
+                                    <Button variant="outline" size="sm" asChild onClick={e => e.stopPropagation()}>
+                                      <Link to={`/admin/courses/${course.id}/sections/${section.id}/lessons/add`}>
+                                        <Plus className="w-4 h-4 mr-2" />
+                                        Add Lesson
+                                      </Link>
+                                    </Button>
+                                  </AccordionTrigger>
+                                  <AccordionContent className="pt-3">
+                                    {section.lessons.length > 0 ? (
+                                      <div className="grid gap-2">
+                                        {section.lessons.map((lesson) => (
+                                          <div 
+                                            key={lesson.id} 
+                                            className="flex items-center gap-3 p-2 bg-gray-50 dark:bg-gray-800 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                            onClick={() => navigate(`/admin/courses/${course.id}/lessons/${lesson.id}`)}
+                                          >
+                                            <div className={`p-1 rounded ${getLessonTypeColor(lesson.lesson_type)}`}>{getLessonIcon(lesson.lesson_type)}</div>
+                                            <div className="flex-1">
+                                              <p className="text-sm font-medium">{lesson.title}</p>
+                                              {lesson.duration_minutes && (
+                                                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                                  <Clock className="w-3 h-3" />
+                                                  {lesson.duration_minutes} min
+                                                </p>
+                                              )}
+                                            </div>
+                                            <Badge variant="outline" className="text-xs">
+                                              {lesson.lesson_type}
+                                            </Badge>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    ) : (
+                                      <div className="text-center py-4 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <p className="text-sm text-muted-foreground">No lessons yet</p>
+                                      </div>
+                                    )}
+                                  </AccordionContent>
+                                </AccordionItem>
+                              </Accordion>
                             </div>
-                          </div>
-                        )}
-
-                        {!section.practice && (
-                          <div className="text-center py-3">
-                            <Button variant="outline" size="sm" asChild>
-                              <Link to={`/admin/courses/${course.id}/sections/${section.id}/practice/add`}>
-                                <Plus className="w-4 h-4 mr-2" />
-                                Add Practice
-                              </Link>
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                            {/* Practice */}
+                            {section.practice && (
+                              <div>
+                                <h5 className="font-medium text-sm mb-2 flex items-center gap-2">
+                                  <HelpCircle className="w-4 h-4" />
+                                  Practice ({section.practice.questions.length} questions)
+                                </h5>
+                                {section.practice.instructions && (
+                                  <p className="text-sm text-muted-foreground mb-2">
+                                    {section.practice.instructions}
+                                  </p>
+                                )}
+                                <div className="space-y-2">
+                                  {section.practice.questions.map((question) => (
+                                    <div key={question.id} className="p-2 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800 rounded">
+                                      <p className="text-sm font-medium text-orange-900 dark:text-orange-100">
+                                        Q{question.order + 1}: {question.question_text}
+                                      </p>
+                                      <div className="flex items-center gap-2 mt-1">
+                                        <Badge variant="outline" className="text-xs">
+                                          {question.question_type}
+                                        </Badge>
+                                        <span className="text-xs text-muted-foreground">
+                                          {question.points} points
+                                        </span>
+                                        <span className="text-xs text-muted-foreground">
+                                          {question.options.length} options
+                                        </span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {!section.practice && (
+                              <div className="text-center py-3">
+                                <Button variant="outline" size="sm" asChild>
+                                  <Link to={`/admin/courses/${course.id}/sections/${section.id}/practice/add`}>
+                                    <Plus className="w-4 h-4 mr-2" />
+                                    Add Practice
+                                  </Link>
+                                </Button>
+                              </div>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </AccordionContent>
+            </AccordionItem>
           ))}
-        </div>
+        </Accordion>
       )}
 
       {/* Add Unit Button */}
