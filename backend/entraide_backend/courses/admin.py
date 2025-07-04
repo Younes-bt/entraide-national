@@ -42,7 +42,7 @@ class CourseAdmin(admin.ModelAdmin):
     
     fieldsets = (
         (None, {
-            'fields': ('name', 'description', 'cover_image')
+            'fields': ('name', 'description', 'cover_image', 'program')
         }),
         ('Settings', {
             'fields': ('is_active', 'order')

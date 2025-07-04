@@ -1,5 +1,6 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
+from programs.models import TrainingPrograme
 
 
 class Course(models.Model):
@@ -11,6 +12,7 @@ class Course(models.Model):
     cover_image = CloudinaryField('image', blank=True, null=True)
     is_active = models.BooleanField(default=True)
     order = models.PositiveIntegerField(default=0)  # For ordering courses
+    program = models.ForeignKey(TrainingPrograme, on_delete=models.CASCADE, null=False, blank=False, related_name='courses_program')
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
