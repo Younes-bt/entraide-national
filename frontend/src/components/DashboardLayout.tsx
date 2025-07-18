@@ -78,7 +78,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         </header>
 
         {/* Actual Page Content */}
-        <main className="flex-1 p-4 md:p-8 pt-0 md:pt-8 md:ml-64"> {/* Add left margin on md+ screens */} 
+        <main className="flex-1 p-4 md:p-8 pt-0 md:pt-8 md:ml-80"> {/* Add left margin on md+ screens, matches sidebar width */} 
           {children}
         </main>
       </div>
