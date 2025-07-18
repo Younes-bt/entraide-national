@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { BookOpen, Eye, Edit, Users, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+
 export interface Course {
   id: number;
   name: string;

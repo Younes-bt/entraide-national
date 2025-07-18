@@ -82,11 +82,12 @@ class CourseSerializer(serializers.ModelSerializer):
 # Simplified serializers for list views (without nested data)
 class CourseListSerializer(serializers.ModelSerializer):
     units_count = serializers.SerializerMethodField()
+    program = serializers.PrimaryKeyRelatedField(read_only=True)
     
     class Meta:
         model = Course
         fields = ['id', 'name', 'description', 'cover_image', 'is_active', 
-                 'order', 'units_count', 'created_at', 'updated_at']
+                 'order', 'units_count', 'created_at', 'updated_at', 'program']
     
     def get_units_count(self, obj):
         return obj.units.count()
